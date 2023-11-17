@@ -1,4 +1,5 @@
-﻿using Craft.MediaQuery.Models;
+﻿using Craft.MediaQuery.Enums;
+using Craft.MediaQuery.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
@@ -10,14 +11,15 @@ public class ViewportResizeListener(IJSRuntime jsRuntime,
     IOptions<ResizeOptions>? options = null)
         : IViewportResizeListener, IAsyncDisposable
 {
-    private readonly ResizeOptions _options = options?.Value ?? new ResizeOptions();
+    private readonly ResizeOptions _options = options?.Value ?? GlobalOptions.GetDefaultResizeOptions();
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask = new(()
         => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Craft.MediaQuery/resizeListener.js").AsTask());
 
     private bool _disposed;
-    private EventHandler<ViewportSize> _onResized;
+    private EventHandler<ResizeEventArgs> _onResized;
+    private readonly string jsListenerId = Guid.NewGuid().ToString();
 
-    public event EventHandler<ViewportSize> OnResized
+    public event EventHandler<ResizeEventArgs> OnResized
     {
         add => Subscribe(value);
         remove => Unsubscribe(value);
@@ -28,7 +30,15 @@ public class ViewportResizeListener(IJSRuntime jsRuntime,
         logger.LogDebug("[ViewportResizeListener] GetViewportSize Invoked");
 
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<ViewportSize>("getViewportSize");
+        return await module.InvokeAsync<ViewportSize>("getViewportSize", jsListenerId);
+    }
+
+    public async ValueTask<Breakpoint> GetBreakpoint()
+    {
+        logger.LogDebug("[ViewportResizeListener] GetViewportSize Invoked");
+
+        var module = await _moduleTask.Value;
+        return await module.InvokeAsync<Breakpoint>("getBreakpoint", jsListenerId);
     }
 
     public async ValueTask<bool> MatchMedia(string mediaQuery)
@@ -36,15 +46,16 @@ public class ViewportResizeListener(IJSRuntime jsRuntime,
         logger.LogDebug("[ViewportResizeListener] MatchMedia Invoked");
 
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<bool>("matchMedia", mediaQuery);
+        return await module.InvokeAsync<bool>("matchMediaQuery", mediaQuery, jsListenerId);
     }
 
     [JSInvokable]
-    public void RaiseOnResized(ViewportSize viewportSize)
+    public void RaiseOnResized(ViewportSize viewportSize, Breakpoint breakpoint)
     {
         logger.LogDebug($"[ViewportResizeListener] RaiseOnResized Invoked with Height: [{viewportSize.Height}] Width: [{viewportSize.Height}]");
+        logger.LogDebug($"[ViewportResizeListener] RaiseOnResized Invoked with Breakpoint: [{breakpoint}]");
 
-        _onResized?.Invoke(this, viewportSize);
+        _onResized?.Invoke(this, new ResizeEventArgs(viewportSize, breakpoint, false));
     }
 
     protected virtual void Dispose(bool disposing)
@@ -79,7 +90,7 @@ public class ViewportResizeListener(IJSRuntime jsRuntime,
 #pragma warning restore RCS1075 // Avoid empty catch clause that catches System.Exception.
     }
 
-    private void Subscribe(EventHandler<ViewportSize>? value)
+    private void Subscribe(EventHandler<ResizeEventArgs>? value)
     {
         logger.LogDebug($"[ViewportResizeListener] Subscribe Invoked with value: [{value}]");
 
@@ -89,7 +100,7 @@ public class ViewportResizeListener(IJSRuntime jsRuntime,
         _onResized += value;
     }
 
-    private void Unsubscribe(EventHandler<ViewportSize>? value)
+    private void Unsubscribe(EventHandler<ResizeEventArgs>? value)
     {
         logger.LogDebug($"[ViewportResizeListener] Unsubscribe Invoked with value: [{value}]");
 
@@ -102,8 +113,25 @@ public class ViewportResizeListener(IJSRuntime jsRuntime,
     {
         logger.LogDebug("[ViewportResizeListener] Start Invoked");
 
+        var optionsClone = _options.Clone();
+        optionsClone.Breakpoints = GlobalOptions.GetBreakpoints(optionsClone);
+
+        // TODO: Remove this later
+        optionsClone.EnableLogging = true;
+
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<bool>("listenForResize", DotNetObjectReference.Create(this), _options);
+
+        try
+        {
+            await module.InvokeVoidAsync("resizeListener", DotNetObjectReference.Create(this), optionsClone, jsListenerId);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "[ViewportResizeListener] Start Failed");
+            return false;
+        }
     }
 
     private async ValueTask Cancel()
@@ -111,6 +139,6 @@ public class ViewportResizeListener(IJSRuntime jsRuntime,
         logger.LogDebug("[ViewportResizeListener] Cancel Invoked");
 
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("cancelListener");
+        await module.InvokeVoidAsync("cancelListener", jsListenerId);
     }
 }

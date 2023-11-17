@@ -1,84 +1,202 @@
-﻿let instance;
+﻿let mapping = {};
+let logger = function (message) { };
 
-export function listenForResize(dotnetRef, options) {
-    instance =  = new ResizeListener();
-    instance.listenForResize(dotnetRef, options);
+export function resizeListener(dotnetReference, options, id) {
+    //logger = (options || {}).enableLogging ? console.log : (message) => { };
+
+    console.log('dotnetReference: ', dotnetReference);
+    var map = mapping;
+
+    if (map[id]) {
+        //logger('Resize listener already added');
+        console.log('Resize listener already added');
+        return;
+    }
+
+    var listener = new ResizeListener(id);
+    listener.addResizeListener(dotnetReference, options);
+    map[id] = listener;
 }
 
-export function cancelListener() {
-    instance.cancelListener();
-}
+export function cancelListener(id) {
+    console.log('Canceling listener with id: ', id);
 
-export function matchMedia(query) {
-    return instance.matchMedia(query);
-}
+    var map = mapping;
 
-export function getViewportSize() {
-    return instance.getViewportSize();
-}
-
-export class ViewportSize {
-    constructor(height, width) {
-        this.height = height;
-        this.width = width;
+    if (map[id]) {
+        map[id].cancelListener();
+        delete map[id];
     }
 }
 
-export class ResizeOptions {
-    constructor() {
+export function cancelAllListeners() {
+    console.log('Canceling all listeners');
+
+    var map = mapping;
+
+    for (var id in map) {
+        map[id].cancelListener();
+        delete map[id];
+    }
+}
+
+export function matchMediaQuery(query, id) {
+    console.log('Matching matchMediaQuery: ', query)
+
+    var map = mapping;
+
+    if (map[id]) {
+        return map[id].matchMedia(query);
+    }
+
+    return false;
+}
+
+export function getViewportSize(id) {
+    console.log('Getting browser window size');
+
+    var map = mapping;
+
+    if (map[id]) {
+        return map[id].getBrowserWindowSize();
+    }
+
+    return {
+        height: 0,
+        width: 0
+    };
+}
+
+export function getBreakpoint(id) {
+    console.log('Getting browser Breakpoint');
+
+    var map = mapping;
+
+    if (map[id]) {
+        return map[id].getCurrentBreakpoint();
+    }
+
+    return 14;  // Breakpoint.None
+}
+
+class ResizeListener {
+    constructor(id) {
+        this.options = {};
+        this.logger = function (message) { };
+        this.dotnetResizeService = undefined;
+        this.breakpoint = -1;
+        this.id = id;
         this.reportRate = 100;
-        this.enableLogging = false;
-        this.suppressFirstEvent = true;
-        this.notifyOnBreakpointOnly = true;
-        this.breakpoints = {};
-    }
-}
-
-export class ResizeListener {
-    constructor() {
-        this.logger = (message) => { };
-        this.options = new ResizeOptions();
         this.throttleResizeHandlerId = -1;
-        this.dotnet = null;
+        this.handleResize = this.throttleResizeHandler.bind(this);
     }
 
-    resizeHandler = () => {
-        this.dotnet.invokeMethodAsync(
-            'RaiseOnResized', {
-            height: window.innerHeight,
-            width: window.innerWidth
-        });
-        this.logger("[MediaQuery] RaiseOnResized invoked");
-    }
+    addResizeListener(dotnetReference, options) {
+        console.log('Options: ', options)
+        if (this.dotnetResizeService) {
+            //this.logger('Resize listener already added');
+            console.log('Resize listener already added');
+            this.options = options;
+            return;
+        }
 
-    throttleResizeHandler = () => {
-        clearTimeout(this.throttleResizeHandlerId);
-        this.throttleResizeHandlerId = window.setTimeout(this.resizeHandler, this.options.reportRate);
-    }
-
-    listenForResize(dotnetRef, options) {
-        console.log('listenForResize ', dotnetRef);
+        this.dotnetResizeService = dotnetReference;
         this.options = options;
-        this.dotnet = dotnetRef;
-        this.logger = this.options.enableLogging ? console.log : (message) => { };
-        this.logger(`[MediaQuery] Reporting resize events at rate of: ${this.options.reportRate}ms`);
-        window.addEventListener("resize", this.throttleResizeHandler);
-        if (!this.options.suppressInitEvent) {
-            this.resizeHandler();
+
+        console.log('dotnetResizeService', this.dotnetResizeService);
+        console.log('dotnetReference', dotnetReference);
+
+        this.reportRate = (options || {}).reportRate || 100;
+
+        this.logger = (options || {}).enableLogging ? console.log : (message) => { };
+
+        //this.logger(`Reporting resize events at rate of: ${this.reportRate}`);
+        console.log(`Reporting resize events at rate of: ${this.reportRate}`);
+
+        window.addEventListener('resize', this.handleResize, false);
+    }
+
+    throttleResizeHandler() {
+        clearTimeout(this.throttleResizeHandlerId);
+        this.throttleResizeHandlerId = window.setTimeout(this.resizeHandler.bind(this), ((this.options || {}).reportRate || 100));
+    }
+
+    resizeHandler() {
+        //this.logger('Resize event triggered');
+        console.log('Resize event triggered');
+        //console.log('dotnetResizeService', this.dotnetResizeService);
+
+        if (this.dotnetResizeService) {
+            const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+            let newBreakpoint = this.getBreakpoint(width);
+
+            if (this.options.notifyOnBreakpointOnly) {
+                if (this.breakPoint == newBreakpoint) {
+                    //this.logger("Breakpoint has not changed, skipping resize event");
+                    console.log("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
+                    return;
+                }
+
+                this.breakPoint = newBreakpoint;
+                console.log("Breakpoint changed to ", this.breakpoint);
+            }
+
+            try {
+                console.log('Invoking RaiseOnResized');
+                this.dotnetResizeService.invokeMethodAsync('RaiseOnResized',
+                    {
+                        height: height,
+                        width: width
+                    },
+                    newBreakpoint);
+
+            } catch (error) {
+                //this.logger(`Error invoking resize event: ${error}`);
+                console.log(`Error invoking resize event: ${error}`);
+            }
         }
     }
 
+    getBreakpoint(width) {
+        //this.logger(`Getting breakpoint for width: ${width}`);
+        console.log(`Getting breakpoint for width: ${width}`);
+        //console.log('this.options.breakpoints', this.options.breakpoints);
+
+        if (width >= this.options.breakpoints["FullHd"])
+            return 5;
+        else if (width >= this.options.breakpoints["Widescreen"])
+            return 4;
+        else if (width >= this.options.breakpoints["Desktop"])
+            return 3;
+        else if (width >= this.options.breakpoints["Tablet"])
+            return 2;
+        else if (width >= this.options.breakpoints["Mobile"])
+            return 1;
+        else
+            return 0;
+    }
+
+    getCurrentBreakpoint() {
+        const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+        return this.getBreakpoint(width);
+    }
+
     cancelListener() {
-        window.removeEventListener("resize", this.throttleResizeHandler);
+        console.log('Canceling resize listener');
+        this.dotnetResizeService = undefined;
+        window.removeEventListener("resize", this.handleResize);
     }
 
     matchMedia(query) {
         let m = window.matchMedia(query).matches;
-        this.logger(`[MediaQuery] matchMedia "${query}": ${m}`);
+        this.logger(`[BlazorSize] matchMedia "${query}": ${m}`);
         return m;
     }
 
-    getViewportSize() {
+    getBrowserWindowSize() {
         return {
             height: window.innerHeight,
             width: window.innerWidth
