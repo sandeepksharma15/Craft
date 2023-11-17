@@ -24,11 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Fixtures\" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\Craft.Utilities\Craft.Utilities.csproj" />
+	  <ProjectReference Include="..\..\Craft.Extensions\Craft.Extensions.csproj" />
 	</ItemGroup>
 
 </Project>
