@@ -114,6 +114,13 @@ class ResizeListener {
         console.log(`Reporting resize events at rate of: ${this.reportRate}`);
 
         window.addEventListener('resize', this.handleResize, false);
+
+        // Make The First Call
+        if (!this.options.suppressFirstEvent)
+            this.resizeHandler();
+
+        // Get The Current Breakpoint
+        this.breakpoint = this.getCurrentBreakpoint();
     }
 
     throttleResizeHandler() {

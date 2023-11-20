@@ -4,9 +4,9 @@ namespace Craft.MediaQuery.Models;
 
 public class ResizeOptions : IEquatable<ResizeOptions>
 {
-    public int ReportRate { get; set; } = 100;
+    public int ReportRate { get; set; } = 250;
     public bool EnableLogging { get; set; } = false;
-    public bool SuppressFirstEvent { get; set; } = true;
+    public bool SuppressFirstEvent { get; set; } = false;
     public bool NotifyOnBreakpointOnly { get; set; } = true;
     public Dictionary<Breakpoint, int> Breakpoints { get; set; } = [];
 

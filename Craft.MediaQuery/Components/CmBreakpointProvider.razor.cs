@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Craft.MediaQuery.Components;
 
-public partial class CmBreakpointProvider : ComponentBase, IAsyncDisposable
+public partial class CmBreakpointProvider : ComponentBase, IDisposable
 {
     [Inject] private IViewportResizeListener _viewportResizeListener { get; set; }
     [Inject] private ILogger<CmBreakpointProvider> _logger { get; set; }
@@ -33,8 +33,8 @@ public partial class CmBreakpointProvider : ComponentBase, IAsyncDisposable
         StateHasChanged();
     }
 
-    public ValueTask DisposeAsync()
+    public void Dispose()
     {
-        throw new NotImplementedException();
+        _viewportResizeListener.OnResized -= WindowResized;
     }
 }

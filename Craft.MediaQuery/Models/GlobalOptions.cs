@@ -30,7 +30,7 @@ public static class GlobalOptions
             EnableLogging = true,
             NotifyOnBreakpointOnly = true,
             ReportRate = 300,
-            SuppressFirstEvent = true
+            SuppressFirstEvent = false
         };
     }
 }
