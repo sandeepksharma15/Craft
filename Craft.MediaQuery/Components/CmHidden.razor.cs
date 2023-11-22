@@ -88,6 +88,8 @@ public partial class CmHidden : ComponentBase, IDisposable
 
         _currentBreakpoint = currentBreakpoint;
 
+        _logger.LogDebug($"Checking {currentBreakpoint} with {Breakpoint}");
+
         var hidden = currentBreakpoint.IsMatchingWith(Breakpoint);
 
         if (Invert)

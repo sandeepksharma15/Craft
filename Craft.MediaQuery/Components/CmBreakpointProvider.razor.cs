@@ -8,10 +8,10 @@ namespace Craft.MediaQuery.Components;
 
 public partial class CmBreakpointProvider : ComponentBase, IDisposable
 {
-    [Inject] private IViewportResizeListener _viewportResizeListener { get; set; }
-    [Inject] private ILogger<CmBreakpointProvider> _logger { get; set; }
+    [Inject] internal IViewportResizeListener _viewportResizeListener { get; set; }
+    [Inject] internal ILogger<CmBreakpointProvider> _logger { get; set; }
 
-    public Breakpoint Breakpoint { get; private set; } = Breakpoint.Always;
+    public Breakpoint Breakpoint { get; private set; } = Breakpoint.None;
 
     [Parameter] public EventCallback<Breakpoint> OnBreakpointChanged { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
