@@ -9,7 +9,7 @@ public enum Breakpoint
     Tablet,
     Desktop,
     Widescreen,
-    FullHD,
+    FullHd,
 
     MobileAndDown,
     TabletAndDown,
@@ -36,7 +36,7 @@ public static class BreakpointExtensions
             Breakpoint.Tablet => one == Breakpoint.Tablet,
             Breakpoint.Desktop => one == Breakpoint.Desktop,
             Breakpoint.Widescreen => one == Breakpoint.Widescreen,
-            Breakpoint.FullHD => one == Breakpoint.FullHD,
+            Breakpoint.FullHd => one == Breakpoint.FullHd,
 
             Breakpoint.MobileAndDown => one <= Breakpoint.Mobile,
             Breakpoint.TabletAndDown => one <= Breakpoint.Tablet,

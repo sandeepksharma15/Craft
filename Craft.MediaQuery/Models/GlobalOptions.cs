@@ -6,7 +6,7 @@ public static class GlobalOptions
 {
     public static Dictionary<Breakpoint, int> DefaultBreakpoints { get; set; } = new()
     {
-        [Breakpoint.FullHD] = 1920,
+        [Breakpoint.FullHd] = 1920,
         [Breakpoint.Widescreen] = 1600,
         [Breakpoint.Desktop] = 1200,
         [Breakpoint.Tablet] = 900,

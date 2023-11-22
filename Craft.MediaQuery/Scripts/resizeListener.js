@@ -139,6 +139,9 @@ class ResizeListener {
 
             let newBreakpoint = this.getBreakpoint(width);
 
+            console.log("Width: ", width, "Height: ", height);
+            console.log("Breakpoints [Old]: ", this.breakpoint, "[New]: ", newBreakpoint);
+
             if (this.options.notifyOnBreakpointOnly) {
                 if (this.breakPoint == newBreakpoint) {
                     //this.logger("Breakpoint has not changed, skipping resize event");
@@ -147,7 +150,8 @@ class ResizeListener {
                 }
 
                 this.breakPoint = newBreakpoint;
-                console.log("Breakpoint changed to ", this.breakpoint);
+
+                console.log("Breakpoint changed to ", this.breakPoint);
             }
 
             try {
@@ -168,8 +172,10 @@ class ResizeListener {
 
     getBreakpoint(width) {
         //this.logger(`Getting breakpoint for width: ${width}`);
-        console.log(`Getting breakpoint for width: ${width}`);
+        //console.log(`Getting breakpoint for width: ${width}`);
         //console.log('this.options.breakpoints', this.options.breakpoints);
+        //console.log(`FullHd breakpoint: ${this.options.breakpoints["FullHd"]}`);
+        //console.log(`Is width >= FullHd? ${width >= this.options.breakpoints["FullHd"]}`);
 
         if (width >= this.options.breakpoints["FullHd"])
             return 5;
