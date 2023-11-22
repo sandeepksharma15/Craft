@@ -7,15 +7,13 @@ namespace Craft.Utilities.Tests.Managers;
 
 public class ObserverManagerTests
 {
-    private Mock<ILogger<ObserverManager<int, string>>> loggerMock;
-    private ObserverManager<int, string> observerManager;
-    private Mock<IObserver<string>> observerMock;
+    private readonly Mock<ILogger<ObserverManager<int, string>>> loggerMock;
+    private readonly ObserverManager<int, string> observerManager;
 
     public ObserverManagerTests()
     {
         loggerMock = new Mock<ILogger<ObserverManager<int, string>>>();
         observerManager = new ObserverManager<int, string>(loggerMock.Object);
-        observerMock = new Mock<IObserver<string>>();
     }
 
     [Fact]
@@ -89,22 +87,19 @@ public class ObserverManagerTests
     {
         // Arrange
         observerManager.Clear();
-        var observer1 = "Observer1";
-        var observer2 = "Observer2";
-        var observer3 = "Observer3";
+        const string observer1 = "Observer1";
+        const string observer2 = "Observer2";
+        const string observer3 = "Observer3";
 
         observerManager.Subscribe(1, observer1);
         observerManager.Subscribe(2, observer2);
         observerManager.Subscribe(3, observer3);
 
-
         // Act
-        Task NotificationAsync(string observer)
+        static Task NotificationAsync(string observer)
         {
             if (observer == observer2)
-            {
                 throw new Exception("Notification failed");
-            }
 
             return Task.CompletedTask;
         }
