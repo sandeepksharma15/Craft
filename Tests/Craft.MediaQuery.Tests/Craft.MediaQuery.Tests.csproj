@@ -28,4 +28,8 @@
 	  <ProjectReference Include="..\..\Craft.MediaQuery\Craft.MediaQuery.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Components\" />
+	</ItemGroup>
+
 </Project>

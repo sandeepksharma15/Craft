@@ -7,103 +7,111 @@ namespace Craft.Utilities.Tests.Managers;
 
 public class ObserverManagerTests
 {
-    private readonly Mock<ILogger<ObserverManager<int>>> loggerMock;
+    private Mock<ILogger<ObserverManager<int, string>>> loggerMock;
+    private ObserverManager<int, string> observerManager;
+    private Mock<IObserver<string>> observerMock;
 
     public ObserverManagerTests()
     {
-        loggerMock = new Mock<ILogger<ObserverManager<int>>>();
+        loggerMock = new Mock<ILogger<ObserverManager<int, string>>>();
+        observerManager = new ObserverManager<int, string>(loggerMock.Object);
+        observerMock = new Mock<IObserver<string>>();
     }
 
     [Fact]
-    public void Subscribe_AddsObserverToList()
+    public void Subscribe_AddsObserverToObserversDictionary()
     {
         // Arrange
-        var observerManager = new ObserverManager<int>(loggerMock.Object);
-        var observerMock = new Mock<IObserver<int>>();
+        observerManager.Clear();
 
         // Act
-        observerManager.Subscribe(observerMock.Object);
+        observerManager.Subscribe(1, observerMock.Object);
 
         // Assert
-        observerManager.Observers.Should().Contain(observerMock.Object);
+        observerManager.Observers.Should().ContainKey(1);
+        observerManager.Observers[1].Should().Be(observerMock.Object);
     }
 
     [Fact]
-    public void Subscribe_DoesNotAddDuplicateObserver()
+    public void Subscribe_UpdatesObserverIfAlreadyExists()
     {
         // Arrange
-        var observerManager = new ObserverManager<int>(loggerMock.Object);
-        var observerMock = new Mock<IObserver<int>>();
-        observerManager.Subscribe(observerMock.Object);
+        observerManager.Clear();
+        var observerMock1 = new Mock<IObserver<string>>();
+        var observerMock2 = new Mock<IObserver<string>>();
+        observerManager.Subscribe(1, observerMock1.Object);
 
         // Act
-        observerManager.Subscribe(observerMock.Object);
+        observerManager.Subscribe(1, observerMock2.Object);
 
         // Assert
-        observerManager.Observers.Should().HaveCount(1);
+        observerManager.Observers.Should().ContainKey(1);
+        observerManager.Observers[1].Should().Be(observerMock2.Object);
     }
 
     [Fact]
-    public void Unsubscribe_RemovesObserverFromList()
+    public void Unsubscribe_RemovesObserverFromObserversDictionary()
     {
         // Arrange
-        var observerManager = new ObserverManager<int>(loggerMock.Object);
-        var observerMock = new Mock<IObserver<int>>();
-        observerManager.Subscribe(observerMock.Object);
+        observerManager.Clear();
+        observerManager.Subscribe(1, observerMock.Object);
 
         // Act
-        observerManager.Unsubscribe(observerMock.Object);
+        observerManager.Unsubscribe(1);
 
         // Assert
-        observerManager.Observers.Should().NotContain(observerMock.Object);
+        observerManager.Observers.Should().NotContainKey(1);
     }
 
     [Fact]
-    public void Notify_CallsOnNextOnObservers()
+    public void Notify_CallsOnNextForAllObservers()
     {
         // Arrange
-        var observerManager = new ObserverManager<int>(loggerMock.Object);
-        var observerMock1 = new Mock<IObserver<int>>();
-        var observerMock2 = new Mock<IObserver<int>>();
-        observerManager.Subscribe(observerMock1.Object);
-        observerManager.Subscribe(observerMock2.Object);
+        observerManager.Clear();
+        var observerMock1 = new Mock<IObserver<string>>();
+        var observerMock2 = new Mock<IObserver<string>>();
+        observerManager.Subscribe(1, observerMock1.Object);
+        observerManager.Subscribe(2, observerMock2.Object);
 
         // Act
-        observerManager.Notify(42);
+        observerManager.Notify("test");
 
         // Assert
-        observerMock1.Verify(observer => observer.OnNext(42), Times.Once);
-        observerMock2.Verify(observer => observer.OnNext(42), Times.Once);
+        observerMock1.Verify(x => x.OnNext("test"), Times.Once);
+        observerMock2.Verify(x => x.OnNext("test"), Times.Once);
     }
 
     [Fact]
-    public void Notify_HandlesExceptionAndRemovesDefunctObservers()
+    public void Notify_RemovesErroredObservers()
     {
         // Arrange
-        var observerManager = new ObserverManager<int>(loggerMock.Object);
-        var observerMock1 = new Mock<IObserver<int>>();
-        var observerMock2 = new Mock<IObserver<int>>();
-        observerManager.Subscribe(observerMock1.Object);
-        observerManager.Subscribe(observerMock2.Object);
-        observerMock2.Setup(observer => observer.OnNext(It.IsAny<int>())).Throws<Exception>();
+        observerManager.Clear();
+        var observerMock1 = new Mock<IObserver<string>>();
+        var observerMock2 = new Mock<IObserver<string>>();
+        observerManager.Subscribe(1, observerMock1.Object);
+        observerManager.Subscribe(2, observerMock2.Object);
+
+        // Setup an observer that throws an exception
+        observerMock1.Setup(x => x.OnNext(It.IsAny<string>())).Throws<Exception>();
 
         // Act
-        observerManager.Notify(42);
+        observerManager.Notify("test");
 
         // Assert
-        observerMock1.Verify(observer => observer.OnNext(42), Times.Once);
-        observerManager.Observers.Should().NotContain(observerMock2.Object);
+        observerManager.Observers.Should().NotContainKey(1);
+        observerMock1.Verify(x => x.OnNext("test"), Times.Once);
+        observerMock2.Verify(x => x.OnNext("test"), Times.Once);
     }
 
     [Fact]
     public void Count_ReturnsCorrectNumberOfObservers()
     {
         // Arrange
-        var observerManager = new ObserverManager<int>(loggerMock.Object);
-        var observerMock1 = new Mock<IObserver<int>>();
-        var observerMock2 = new Mock<IObserver<int>>();
-        observerManager.Subscribe(observerMock1.Object);
-        observerManager.Subscribe(observerMock2.Object);
+        observerManager.Clear();
+        var observerMock1 = new Mock<IObserver<string>>();
+        var observerMock2 = new Mock<IObserver<string>>();
+        observerManager.Subscribe(1, observerMock1.Object);
+        observerManager.Subscribe(2, observerMock2.Object);
 
         // Act
         var count = observerManager.Count;
@@ -116,11 +124,11 @@ public class ObserverManagerTests
     public void Clear_RemovesAllObservers()
     {
         // Arrange
-        var observerManager = new ObserverManager<int>(loggerMock.Object);
-        var observerMock1 = new Mock<IObserver<int>>();
-        var observerMock2 = new Mock<IObserver<int>>();
-        observerManager.Subscribe(observerMock1.Object);
-        observerManager.Subscribe(observerMock2.Object);
+        observerManager.Clear();
+        var observerMock1 = new Mock<IObserver<string>>();
+        var observerMock2 = new Mock<IObserver<string>>();
+        observerManager.Subscribe(1, observerMock1.Object);
+        observerManager.Subscribe(2, observerMock2.Object);
 
         // Act
         observerManager.Clear();
@@ -133,11 +141,11 @@ public class ObserverManagerTests
     public void GetEnumerator_ReturnsAllObservers()
     {
         // Arrange
-        var observerManager = new ObserverManager<int>(loggerMock.Object);
-        var observerMock1 = new Mock<IObserver<int>>();
-        var observerMock2 = new Mock<IObserver<int>>();
-        observerManager.Subscribe(observerMock1.Object);
-        observerManager.Subscribe(observerMock2.Object);
+        observerManager.Clear();
+        var observerMock1 = new Mock<IObserver<string>>();
+        var observerMock2 = new Mock<IObserver<string>>();
+        observerManager.Subscribe(1, observerMock1.Object);
+        observerManager.Subscribe(2, observerMock2.Object);
 
         // Act
         var observers = observerManager.ToList();

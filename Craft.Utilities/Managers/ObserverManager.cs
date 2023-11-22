@@ -3,50 +3,58 @@ using Microsoft.Extensions.Logging;
 
 namespace Craft.Utilities.Managers;
 
-public class ObserverManager<T>(ILogger<ObserverManager<T>> logger) : IEnumerable<IObserver<T>>
+public class ObserverManager<TId, T>(ILogger<ObserverManager<TId, T>> logger) : IEnumerable<IObserver<T>>
 {
     public int Count => Observers.Count;
     public void Clear() => Observers.Clear();
-    public List<IObserver<T>> Observers { get; } = [];
-    public IEnumerator<IObserver<T>> GetEnumerator() => Observers.GetEnumerator();
+
+    public Dictionary<TId, IObserver<T>> Observers { get; } = [];
+    public IEnumerator<IObserver<T>> GetEnumerator()
+        => Observers.Select(observer => observer.Value).GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public void Subscribe(IObserver<T> observer)
+    public void Subscribe(TId id, IObserver<T> observer)
     {
-        if (Observers.Contains(observer))
-            return;
+        bool isNewObserver = !Observers.TryGetValue(id, out var entry);
+        Observers[id] = observer;
 
-        Observers.Add(observer);
-        logger.LogDebug("Observer subscribed");
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            string action = isNewObserver ? "Adding" : "Updating";
+            logger.LogDebug($"{action} entry for {id}/{observer}. {Count} total observers after {action}.", action, id, observer, Observers.Count);
+        }
     }
 
-    public void Unsubscribe(IObserver<T> observer)
+    public void Unsubscribe(TId id)
     {
-        if (!Observers.Contains(observer))
-            return;
+        Observers.Remove(id, out _);
 
-        Observers.Remove(observer);
         logger.LogDebug("Observer unsubscribed");
     }
 
-    public void Notify(T value)
+    public void Notify(T value, Func<TId, IObserver<T>, bool>? predicate = null)
     {
-        var defunctObservers = new List<IObserver<T>>();
+        var defunctObservers = default(List<TId>); 
 
         foreach (var observer in Observers)
         {
+            // Skip observers which don't match the provided predicate.
+            if (predicate != null && !predicate(observer.Key, observer.Value))
+                continue;
+
             try
             {
-                observer.OnNext(value);
+                observer.Value.OnNext(value);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error notifying observer");
-                defunctObservers.Add(observer);
+                defunctObservers ??= [];
+                defunctObservers.Add(observer.Key);
             }
         }
 
         // Remove any observers that errored out
-        defunctObservers.ForEach(observer => Unsubscribe(observer));
+        defunctObservers?.ForEach(id => Unsubscribe(id));
     }
 }
