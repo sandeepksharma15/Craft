@@ -6,7 +6,8 @@ namespace Craft.MediaQuery.Configuration;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddViewportResizeListener(this IServiceCollection services, Action<ResizeOptions> resizeOptions = null)
+    public static IServiceCollection AddViewportResizeListener(this IServiceCollection services,
+        Action<ResizeOptions> resizeOptions = null)
     {
         services.Configure(resizeOptions ?? (_ => { }));
 

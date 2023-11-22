@@ -61,35 +61,15 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         return await module.InvokeAsync<bool>("matchMediaQuery", mediaQuery, jsListenerId);
     }
 
+    public bool AreBreakpointsMatching(Breakpoint one, Breakpoint another)
+        => one.IsMatchingWith(another);
+
     public async ValueTask<bool> IsBreakpointMatching(Breakpoint withBreakpoint)
     {
         if (_lastBreakpoint == Breakpoint.None)
             _lastBreakpoint = await GetBreakpoint();
 
-        return withBreakpoint switch
-        {
-            Breakpoint.ExtraSmall => _lastBreakpoint == Breakpoint.ExtraSmall,
-            Breakpoint.Mobile => _lastBreakpoint == Breakpoint.Mobile,
-            Breakpoint.Tablet => _lastBreakpoint == Breakpoint.Tablet,
-            Breakpoint.Desktop => _lastBreakpoint == Breakpoint.Desktop,
-            Breakpoint.Widescreen => _lastBreakpoint == Breakpoint.Widescreen,
-            Breakpoint.FullHD => _lastBreakpoint == Breakpoint.FullHD,
-
-            Breakpoint.MobileAndDown => _lastBreakpoint <= Breakpoint.Mobile,
-            Breakpoint.TabletAndDown => _lastBreakpoint <= Breakpoint.Tablet,
-            Breakpoint.DesktopAndDown => _lastBreakpoint <= Breakpoint.Desktop,
-            Breakpoint.WidescreenAndDown => _lastBreakpoint <= Breakpoint.Widescreen,
-
-            Breakpoint.MobileAndUp => _lastBreakpoint >= Breakpoint.Mobile,
-            Breakpoint.TabletAndUp => _lastBreakpoint >= Breakpoint.Tablet,
-            Breakpoint.DesktopAndUp => _lastBreakpoint >= Breakpoint.Desktop,
-            Breakpoint.WidescreenAndUp => _lastBreakpoint >= Breakpoint.Widescreen,
-
-            Breakpoint.None => false,
-            Breakpoint.Always => true,
-
-            _ => false
-        };
+        return _lastBreakpoint.IsMatchingWith(withBreakpoint);
     }
 
     public async ValueTask<bool> MatchMediaQuery(int? minWidth = null, int? maxWidth = null)

@@ -15,5 +15,7 @@ public interface IViewportResizeListener
 
     ValueTask<bool> IsBreakpointMatching(Breakpoint withBreakpoint);
 
+    bool AreBreakpointsMatching(Breakpoint one, Breakpoint another);
+
     ValueTask<bool> MatchMediaQuery(int? minWidth = null, int? maxWidth = null);
 }

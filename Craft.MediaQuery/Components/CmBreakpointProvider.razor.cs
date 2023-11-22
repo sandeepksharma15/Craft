@@ -18,6 +18,8 @@ public partial class CmBreakpointProvider : ComponentBase, IDisposable
 
     protected override void OnAfterRender(bool firstRender)
     {
+        base.OnAfterRender(firstRender);
+
         if (firstRender)
             _viewportResizeListener.OnResized += WindowResized;
     }
