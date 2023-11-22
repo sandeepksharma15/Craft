@@ -5,8 +5,6 @@ using Bunit;
 using Craft.MediaQuery.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using FluentAssertions;
-using Microsoft.JSInterop.Implementation;
 using Craft.MediaQuery.Enums;
 
 namespace Craft.MediaQuery.Tests.Services;
@@ -35,7 +33,7 @@ public class ViewportResizeListenerServiceTests : TestContext
         var listener = CreateViewportResizeListener(JSInterop.JSRuntime);
 
         // Act
-        await listener.GetViewportSize();
+        await listener.GetViewportSizeAsync();
 
         // Assert
         JSInterop.VerifyInvoke("getViewportSize");
@@ -54,7 +52,7 @@ public class ViewportResizeListenerServiceTests : TestContext
         var listener = CreateViewportResizeListener(JSInterop.JSRuntime);
 
         // Act
-        await listener.GetBreakpoint();
+        await listener.GetBreakpointAsync();
 
         // Assert
         JSInterop.VerifyInvoke("getBreakpoint");
@@ -73,23 +71,10 @@ public class ViewportResizeListenerServiceTests : TestContext
         var listener = CreateViewportResizeListener(JSInterop.JSRuntime);
 
         // Act
-        await listener.MatchMedia("someMediaQuery");
+        await listener.MatchMediaAsync("someMediaQuery");
 
         // Assert
         JSInterop.VerifyInvoke("matchMediaQuery");
-    }
-
-    [Fact]
-    public void AreBreakpointsMatching_ShouldReturnTrueForEqualBreakpoints()
-    {
-        // Arrange
-        var listener = CreateViewportResizeListener();
-
-        // Act
-        var result = listener.AreBreakpointsMatching(Breakpoint.Mobile, Breakpoint.Mobile);
-
-        // Assert
-        result.Should().BeTrue();
     }
 
     [Fact]
@@ -105,7 +90,7 @@ public class ViewportResizeListenerServiceTests : TestContext
         var listener = CreateViewportResizeListener(JSInterop.JSRuntime);
 
         // Act
-        await listener.IsBreakpointMatching(Breakpoint.Mobile);
+        await listener.IsBreakpointMatchingAsync(Breakpoint.Mobile);
 
         // Assert
         JSInterop.VerifyInvoke("getBreakpoint");

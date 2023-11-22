@@ -1,23 +1,12 @@
-﻿using Craft.MediaQuery.Enums;
-using Craft.MediaQuery.Models;
+﻿using Craft.MediaQuery.Models;
 
 namespace Craft.MediaQuery.Services;
 
 public interface IContainerObserver
 {
-    delegate void ResizeEventHandler(object sender, ResizeEventArgs e);
+    Guid Id { get; }
 
-    event EventHandler<ResizeEventArgs> OnResized;
+    ResizeOptions ResizeOptions => null;
 
-    ValueTask<ViewportSize> GetViewportSize();
-
-    ValueTask<Breakpoint> GetBreakpoint();
-
-    ValueTask<bool> MatchMedia(string mediaQuery);
-
-    ValueTask<bool> IsBreakpointMatching(Breakpoint withBreakpoint);
-
-    bool AreBreakpointsMatching(Breakpoint one, Breakpoint another);
-
-    ValueTask<bool> MatchMediaQuery(int? minWidth = null, int? maxWidth = null);
+    Task NotifyChangeAsync(ResizeEventArgs resizeEventArgs);
 }

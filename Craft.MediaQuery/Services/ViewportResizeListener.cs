@@ -37,7 +37,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         remove => Unsubscribe(value);
     }
 
-    public async ValueTask<ViewportSize> GetViewportSize()
+    public async ValueTask<ViewportSize> GetViewportSizeAsync()
     {
         _logger.LogDebug("[ViewportResizeListener] GetViewportSize Invoked");
 
@@ -45,7 +45,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         return await module.InvokeAsync<ViewportSize>("getViewportSize", jsListenerId);
     }
 
-    public async ValueTask<Breakpoint> GetBreakpoint()
+    public async ValueTask<Breakpoint> GetBreakpointAsync()
     {
         _logger.LogDebug("[ViewportResizeListener] GetViewportSize Invoked");
 
@@ -53,7 +53,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         return await module.InvokeAsync<Breakpoint>("getBreakpoint", jsListenerId);
     }
 
-    public async ValueTask<bool> MatchMedia(string mediaQuery)
+    public async ValueTask<bool> MatchMediaAsync(string mediaQuery)
     {
         _logger.LogDebug("[ViewportResizeListener] MatchMedia Invoked");
 
@@ -61,27 +61,24 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         return await module.InvokeAsync<bool>("matchMediaQuery", mediaQuery, jsListenerId);
     }
 
-    public bool AreBreakpointsMatching(Breakpoint one, Breakpoint another)
-        => one.IsMatchingWith(another);
-
-    public async ValueTask<bool> IsBreakpointMatching(Breakpoint withBreakpoint)
+    public async ValueTask<bool> IsBreakpointMatchingAsync(Breakpoint withBreakpoint)
     {
         if (_lastBreakpoint == Breakpoint.None)
-            _lastBreakpoint = await GetBreakpoint();
+            _lastBreakpoint = await GetBreakpointAsync();
 
         return _lastBreakpoint.IsMatchingWith(withBreakpoint);
     }
 
-    public async ValueTask<bool> MatchMediaQuery(int? minWidth = null, int? maxWidth = null)
+    public async ValueTask<bool> MatchMediaAsync(int? minWidth = null, int? maxWidth = null)
     {
         if (minWidth is not null && maxWidth is not null)
-            return await MatchMedia($"(min-width: {minWidth}px) and (max-width: {maxWidth}px)");
+            return await MatchMediaAsync($"(min-width: {minWidth}px) and (max-width: {maxWidth}px)");
 
         if (minWidth is not null)
-            return await MatchMedia($"(min-width: {minWidth}px)");
+            return await MatchMediaAsync($"(min-width: {minWidth}px)");
 
         if (maxWidth is not null)
-            return await MatchMedia($"(max-width: {maxWidth}px)");
+            return await MatchMediaAsync($"(max-width: {maxWidth}px)");
 
         return false;
     }

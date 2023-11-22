@@ -24,4 +24,8 @@
 	  <None Include="wwwroot\ResizeListener.min.js" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Craft.Utilities\Craft.Utilities.csproj" />
+	</ItemGroup>
+
 </Project>

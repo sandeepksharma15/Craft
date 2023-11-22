@@ -7,15 +7,13 @@ public interface IViewportResizeListener
 {
     event EventHandler<ResizeEventArgs> OnResized;
 
-    ValueTask<ViewportSize> GetViewportSize();
+    ValueTask<ViewportSize> GetViewportSizeAsync();
 
-    ValueTask<Breakpoint> GetBreakpoint();
+    ValueTask<Breakpoint> GetBreakpointAsync();
 
-    ValueTask<bool> MatchMedia(string mediaQuery);
+    ValueTask<bool> MatchMediaAsync(string mediaQuery);
 
-    ValueTask<bool> IsBreakpointMatching(Breakpoint withBreakpoint);
+    ValueTask<bool> IsBreakpointMatchingAsync(Breakpoint withBreakpoint);
 
-    bool AreBreakpointsMatching(Breakpoint one, Breakpoint another);
-
-    ValueTask<bool> MatchMediaQuery(int? minWidth = null, int? maxWidth = null);
+    ValueTask<bool> MatchMediaAsync(int? minWidth = null, int? maxWidth = null);
 }
