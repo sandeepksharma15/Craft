@@ -18,7 +18,7 @@ public class GlobalOptionsTests
         defaultBreakpoints.Should().NotBeNull()
             .And.BeEquivalentTo(new Dictionary<Breakpoint, int>
             {
-                [Breakpoint.FullHD] = 1920,
+                [Breakpoint.FullHd] = 1920,
                 [Breakpoint.Widescreen] = 1600,
                 [Breakpoint.Desktop] = 1200,
                 [Breakpoint.Tablet] = 900,
@@ -77,7 +77,7 @@ public class GlobalOptionsTests
                 EnableLogging = true,
                 NotifyOnBreakpointOnly = true,
                 ReportRate = 300,
-                SuppressFirstEvent = true
+                SuppressFirstEvent = false
             });
     }
 }

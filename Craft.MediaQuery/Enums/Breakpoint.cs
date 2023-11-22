@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Craft.MediaQuery.Enums;
+﻿namespace Craft.MediaQuery.Enums;
 
 public enum Breakpoint
 {
@@ -29,6 +27,9 @@ public static class BreakpointExtensions
 {
     public static bool IsMatchingWith(this Breakpoint one, Breakpoint another)
     {
+        if (one > Breakpoint.FullHd)
+            throw new ArgumentException($"{nameof(one)} should only be a standard Breakpoint");
+
         return another switch
         {
             Breakpoint.ExtraSmall => one == Breakpoint.ExtraSmall,

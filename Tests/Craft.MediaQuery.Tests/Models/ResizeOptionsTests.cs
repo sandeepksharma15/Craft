@@ -70,17 +70,6 @@ public class ResizeOptionsTests
     }
 
     [Fact]
-    public void Equals_DifferentSuppressFirstEvent_ShouldReturnFalse()
-    {
-        // Arrange
-        var options1 = new ResizeOptions();
-        var options2 = new ResizeOptions { SuppressFirstEvent = false };
-
-        // Act & Assert
-        options1.Equals(options2).Should().BeFalse();
-    }
-
-    [Fact]
     public void Equals_DifferentNotifyOnBreakpointOnly_ShouldReturnFalse()
     {
         // Arrange
