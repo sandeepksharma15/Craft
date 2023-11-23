@@ -55,7 +55,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
 
     public async ValueTask<bool> MatchMediaAsync(string mediaQuery)
     {
-        _logger.LogDebug("[ViewportResizeListener] MatchMedia Invoked");
+        _logger.LogDebug("[ViewportResizeListener] MatchMediaAsync Invoked");
 
         var module = await _moduleTask.Value;
         return await module.InvokeAsync<bool>("matchMediaQuery", mediaQuery, jsListenerId);

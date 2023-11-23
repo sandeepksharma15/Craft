@@ -9,15 +9,15 @@ public interface IContainerResizeListener
 
     Task SubscribeAsync(string elementId, IContainerObserver observer, bool fireImmediately = true);
 
-    Task UnsubscribeAsync(IContainerObserver observer);
+    Task UnsubscribeAsync(Guid observerId);
 
-    ValueTask<ViewportSize> GetContainerSizeAsync();
+    ValueTask<ViewportSize> GetContainerSizeAsync(Guid observerId);
 
-    ValueTask<Breakpoint> GetContainerBreakpointAsync();
+    ValueTask<Breakpoint> GetContainerBreakpointAsync(Guid observerId);
 
-    ValueTask<bool> MatchContainerQuery(string mediaQuery);
+    ValueTask<bool> MatchContainerQueryAsync(Guid observerId, string containerQuery);
 
-    ValueTask<bool> IsContainerBreakpointMatching(Breakpoint withBreakpoint);
+    ValueTask<bool> IsContainerBreakpointMatchingAsync(Guid observerId, Breakpoint withBreakpoint);
 
-    ValueTask<bool> MatchContainerQuery(int? minWidth = null, int? maxWidth = null);
+    ValueTask<bool> MatchContainerQueryAsync(Guid observerId, int? minWidth = null, int? maxWidth = null);
 }

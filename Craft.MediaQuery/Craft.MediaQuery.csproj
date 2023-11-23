@@ -6,6 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\containerObserver.js" />
 	  <Content Remove="wwwroot\resizeListener.js" />
 	  <Content Remove="wwwroot\ResizeListener.min.js" />
 	</ItemGroup>
@@ -20,6 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="wwwroot\containerObserver.js" />
 	  <None Include="wwwroot\resizeListener.js" />
 	  <None Include="wwwroot\ResizeListener.min.js" />
 	</ItemGroup>

@@ -15,4 +15,14 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddContainerObserver(this IServiceCollection services,
+        Action<ResizeOptions> resizeOptions = null)
+    {
+        services.Configure(resizeOptions ?? (_ => { }));
+
+        services.AddScoped<IContainerResizeListener, ContainerResizeListener>();
+
+        return services;
+    }
 }
