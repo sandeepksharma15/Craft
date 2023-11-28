@@ -10,13 +10,13 @@ namespace Craft.MediaQuery.Services;
 public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposable
 {
     private readonly SemaphoreSlim _semaphore;
-    private readonly ILogger<ViewportResizeListener> _logger;
+    private readonly ILogger<ContainerResizeListener> _logger;
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
     private readonly ObserverManager<ObserverSubscription, IContainerObserver> _observerManager;
 
     public ResizeOptions ResizeOptions { get; }
 
-    public ContainerResizeListener(IJSRuntime jsRuntime, ILogger<ViewportResizeListener> logger, IOptions<ResizeOptions>? options = null)
+    public ContainerResizeListener(IJSRuntime jsRuntime, ILogger<ContainerResizeListener> logger, IOptions<ResizeOptions>? options = null)
     {
         _semaphore = new(1, 5);
         _logger = logger;

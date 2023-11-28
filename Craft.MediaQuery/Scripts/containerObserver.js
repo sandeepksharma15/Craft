@@ -33,7 +33,7 @@ export function removeContainerObserver(elementId) {
 
     if (observer) {
         console.log('Removing Container Observer for Id: ', elementId);
-        observer.cancelObserver(elementId);
+        observer.cancelObserver();
         delete mapping[elementId];
     }
 }
@@ -80,6 +80,7 @@ class CustomObserver {
         this.breakpoint = -1;
         this.logger = function (message) { };
         this.resizeObserver = new ResizeObserver(this.resizeHandler.bind(this));
+        this.cancelObserver = this.cancelObserver.bind(this);
     }
 
     addResizeObserver(elementId, dotnetObserver, options) {
@@ -109,12 +110,12 @@ class CustomObserver {
             let newBreakpoint = this.getBreakpoint(size.width);
 
             if (this.options.notifyOnBreakpointOnly) {
-                if (this.breakPoint == newBreakpoint) {
+                if (this.breakpoint == newBreakpoint) {
                     console.log("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
                     return;
                 }
 
-                this.breakPoint = newBreakpoint;
+                this.breakpoint = newBreakpoint;
             }
 
             try {
@@ -124,7 +125,7 @@ class CustomObserver {
                 }
 
                 this.resizeTimers[elementId] = setTimeout(() => {
-                    this.dotnetObserver.invokeMethodAsync('RaiseOnResized', size, this.breakPoint, elementId);
+                    this.dotnetObserver.invokeMethodAsync('RaiseOnResized', size, this.breakpoint, elementId);
                 }, this.reportRate);
             }
             catch (error) {
@@ -145,9 +146,11 @@ class CustomObserver {
         return { height: 0, width: 0 };
     }
 
-    cancelObserver(elementId) {
-        console.log('Canceling Resize Observer:', elementId);
+    cancelObserver() {
+        console.log('Canceling Resize Observer:', this.elementId);
+
         this.dotnetObserver = undefined;
+        this.resizeObserver.unobserve(this.element);
         this.resizeObserver.disconnect;
     }
 
