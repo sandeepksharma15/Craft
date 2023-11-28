@@ -143,15 +143,15 @@ class ResizeListener {
             console.log("Breakpoints [Old]: ", this.breakpoint, "[New]: ", newBreakpoint);
 
             if (this.options.notifyOnBreakpointOnly) {
-                if (this.breakPoint == newBreakpoint) {
+                if (this.breakpoint == newBreakpoint) {
                     //this.logger("Breakpoint has not changed, skipping resize event");
                     console.log("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
                     return;
                 }
 
-                this.breakPoint = newBreakpoint;
+                this.breakpoint = newBreakpoint;
 
-                console.log("Breakpoint changed to ", this.breakPoint);
+                console.log("Breakpoint changed to ", this.breakpoint);
             }
 
             try {
