@@ -1,11 +1,14 @@
 ﻿let mapping = {};
 let logger = function (message) { };
 
-export function containerObserver(dotnetReference, options, elementId, id) {
-    //logger = (options || {}).enableLogging ? console.log : (message) => { };
+export function containerObserver(dotnetReference, options, elementId) {
+    const logger = (options && options.enableLogging) ? console.log : () => { };
 
     console.log('dotnetReference: ', dotnetReference);
-    var map = mapping;
+    console.log('ElementId: ', elementId);
+
+    logger('dotnetReference: ', dotnetReference);
+    logger('ElementId: ', elementId);
 
     const element = document.getElementById(elementId);
 
@@ -14,79 +17,93 @@ export function containerObserver(dotnetReference, options, elementId, id) {
         return false;
     }
 
-    if (map[id]) {
-        //logger('Resize listener already added');
-        console.log('Container Observer already added for Id: ', id);
+    var map = mapping;
+
+    if (mapping[elementId]) {
+        console.log('Container Observer already added for Id: ', elementId);
         return true;
     }
 
-    var observer = new CustomObserver(id);
-    observer.addResizeObserver(dotnetReference, options, elementId);
-    map[id] = observer;
+    const observer = new CustomObserver(elementId);
+    observer.addResizeObserver(elementId, dotnetReference, options);
+    mapping[elementId] = observer;
 
     return true;
 }
 
-export function removeContainerObserver(id) {
+export function removeContainerObserver(elementId) {
 }
 
-export function removeObservers(ids) {
+export function removeObservers(elementIds) {
 }
 
-export function getContainerBreakpoint(id) {
+export function getContainerBreakpoint(elementId) {
     return 14;  // Breakpoint.None
 }
 
-export function getContainerSize(id) {
+export function getContainerSize(elementId) {
     return {
         height: 0,
         width: 0
     };
 }
 
-export function matchContainerQuery(query, id) {
+export function matchContainerQuery(query, elementId) {
     return false;
 }
 
 class CustomObserver {
-    constructor(id) {
-        this.id = id;
-        this.options = {};
-        this.elementId = '';
-        this.element = undefined;
-        this.logger = function (message) { };
-        this.dotnetObserver = undefined;
-        this.breakpoint = -1;
-        this.reportRate = 250;
-        this.throttleObserverHandlerId = -1;
-        this.handleObserver = this.throttleObserverHandler.bind(this);
-    }
+    constructor(elementId) {
+        console.log('Custom Observer created for Id: ', elementId);
 
-    addResizeObserver(dotnetReference, options, elementId) {
-        this.dotnetObserver = dotnetReference;
-        this.options = options;
         this.elementId = elementId;
-
-        this.element = document.getElementById(this.elementId);
-
-        this.reportRate = (this.options || {}).reportRate || 250;
-
-        this.logger = (this.options || {}).enableLogging ? console.log : (message) => { };
-
-        this.resizeObserver = new ResizeObserver(this.handleObserver);
-        this.resizeObserver.observe(this.element, { box: "border-box"});
+        this.dotnetObserver = undefined;
+        this.options = {};
+        this.resizeTimers = {};
+        this.reportRate = 250;
+        this.logger = function (message) { };
+        this.resizeObserver = new ResizeObserver(this.resizeHandler);
+        this.resizeHandler = this.resizeHandler.bind(this);
     }
 
-    throttleObserverHandler() {
-        clearTimeout(this.throttleObserverHandlerId);
-        this.throttleObserverHandlerId = window.setTimeout(this.resizeHandler.bind(this), ((this.options || {}).reportRate || 250));
+    addResizeObserver(elementId, dotnetObserver, options) {
+        console.log('Adding Resize Observer for Id: ', this.elementId);
+
+        this.elementId = elementId;
+        this.dotnetObserver = dotnetObserver;
+        this.options = options || {};
+        this.element = document.getElementById(elementId);
+        this.reportRate = this.options.reportRate || 250;
+        this.logger = this.options.enableLogging ? console.log : () => { };
+
+        this.resizeObserver.observe(this.element, { box: "border-box" });
     }
 
     resizeHandler(entries) {
+        var elementId = entries[0].target.id;
         console.log('Resize Observer called');
+        console.log('Target: ', entries[0].target.id);
+        console.log('Content Rect: ', entries[0].contentRect);
+        console.log('Dotnet Observer: ', this.dotnetObserver);
 
-        //entires.ForEach(entry => {
-        //    console.log('Entry: ', entry);
-        //})
+        //if (this.resizeTimers[elementId])
+        //    clearTimeout(this.resizeTimers[elementId]);
+
+    //    this.resizeTimers[elementId] = setTimeout(() => {
+    //        this.dotnetObserver.invokeMethodAsync('RaiseOnResized', {
+    //            height: entries[0].target.clientHeight,
+    //            width: entries[0].target.clientWidth
+    //        }, 1, elementId);
+    //    }, this.reportRate);
+    }
+
+    throttleObserverHandler() {
+        clearTimeout(this.resizeTimers[this.elementId]);
+        this.resizeTimers[this.elementId] = setTimeout(() => {
+            this.dotnetObserver.invokeMethodAsync('RaiseOnResized', {
+                height: this.element.clientHeight,
+                width: this.element.clientWidth
+            }, 1, this.elementId);
+        }, this.reportRate);
     }
 }

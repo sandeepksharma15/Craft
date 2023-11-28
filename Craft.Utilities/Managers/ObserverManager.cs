@@ -33,9 +33,9 @@ public class ObserverManager<TId, T>(ILogger logger) : IEnumerable<T>
         }
     }
 
-    public void Unsubscribe(TId id)
+    public void Unsubscribe(TId key)
     {
-        _observers.Remove(id, out _);
+        _observers.Remove(key, out _);
 
         logger.LogDebug("Observer unsubscribed");
     }

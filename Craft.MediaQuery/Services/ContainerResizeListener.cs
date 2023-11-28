@@ -35,7 +35,9 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
     {
         _logger.LogDebug("[ContainerResizeListener] OnResized Invoked");
 
-        var resizeEventArgs = new ResizeEventArgs(viewportSize, breakpoint);
+        var resizeEventArgs = new ContainerResizeEventArgs(elementId, viewportSize, breakpoint);
+
+        _logger.LogDebug($"{resizeEventArgs}");
 
         return _observerManager.NotifyAsync(observer => observer.NotifyChangeAsync(resizeEventArgs),
             predicate: (subscription, _) => subscription.ElementId == elementId);
@@ -47,13 +49,12 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
 
         try
         {
-            // Get All Observer Ids
-            var observerIds = _observerManager.Observers.Select(x => x.Key.ObserverId).ToList();
+            var elementIds = _observerManager.Observers.Select(x => x.Key.ElementId).ToList();
 
-            if (observerIds.Count > 0)
+            if (elementIds.Count > 0)
             {
                 var module = await _moduleTask.Value;
-                await module.InvokeVoidAsync("removeObservers", observerIds);
+                await module.InvokeVoidAsync("removeObservers", elementIds);
             }
 
             _observerManager.Clear();
@@ -72,47 +73,47 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
         }
     }
 
-    public async ValueTask<Breakpoint> GetContainerBreakpointAsync(Guid observerId)
+    public async ValueTask<Breakpoint> GetContainerBreakpointAsync(string elementId)
     {
         _logger.LogDebug("[ContainerResizeListener] GetContainerBreakpointAsync Invoked");
 
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<Breakpoint>("getContainerBreakpoint", observerId);
+        return await module.InvokeAsync<Breakpoint>("getContainerBreakpoint", elementId);
     }
 
-    public async ValueTask<ViewportSize> GetContainerSizeAsync(Guid observerId)
+    public async ValueTask<ViewportSize> GetContainerSizeAsync(string elementId)
     {
         _logger.LogDebug("[ContainerResizeListener] GetContainerSizeAsync Invoked");
 
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<ViewportSize>("getContainerSize", observerId);
+        return await module.InvokeAsync<ViewportSize>("getContainerSize", elementId);
     }
 
-    public async ValueTask<bool> IsContainerBreakpointMatchingAsync(Guid observerId, Breakpoint withBreakpoint)
+    public async ValueTask<bool> IsContainerBreakpointMatchingAsync(string elementId, Breakpoint withBreakpoint)
     {
-        var breakpoint = await GetContainerBreakpointAsync(observerId);
+        var breakpoint = await GetContainerBreakpointAsync(elementId);
 
         return breakpoint.IsMatchingWith(withBreakpoint);
     }
 
-    public async ValueTask<bool> MatchContainerQueryAsync(Guid observerId, string containerQuery)
+    public async ValueTask<bool> MatchContainerQueryAsync(string elementId, string containerQuery)
     {
         _logger.LogDebug("[ContainerResizeListener] MatchContainerQuery Invoked");
 
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<bool>("matchContainerQuery", containerQuery, observerId);
+        return await module.InvokeAsync<bool>("matchContainerQuery", containerQuery, elementId);
     }
 
-    public async ValueTask<bool> MatchContainerQueryAsync(Guid observerId, int? minWidth = null, int? maxWidth = null)
+    public async ValueTask<bool> MatchContainerQueryAsync(string elementId, int? minWidth = null, int? maxWidth = null)
     {
         if (minWidth is not null && maxWidth is not null)
-            return await MatchContainerQueryAsync(observerId, $"(min-width: {minWidth}px) and (max-width: {maxWidth}px)");
+            return await MatchContainerQueryAsync(elementId, $"(min-width: {minWidth}px) and (max-width: {maxWidth}px)");
 
         if (minWidth is not null)
-            return await MatchContainerQueryAsync(observerId, $"(min-width: {minWidth}px)");
+            return await MatchContainerQueryAsync(elementId, $"(min-width: {minWidth}px)");
 
         if (maxWidth is not null)
-            return await MatchContainerQueryAsync(observerId, $"(max-width: {maxWidth}px)");
+            return await MatchContainerQueryAsync(elementId, $"(max-width: {maxWidth}px)");
 
         return false;
     }
@@ -126,17 +127,18 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
             var clonedOptions = (observer.ResizeOptions ?? ResizeOptions).Clone();
             clonedOptions.Breakpoints = GlobalOptions.GetBreakpoints(clonedOptions);
 
-            var subscription = await CreateJsContainerObserver(elementId, clonedOptions, observer.Id);
+            var subscription = await CreateJsContainerObserver(elementId, clonedOptions);
 
             if (subscription is not null)
             {
                 // If The Observer Is Not Already Subscribed, Fire Immediately
                 if (!_observerManager.Observers.ContainsKey(subscription) && fireImmediately)
                 {
-                    var viewportSize = await GetContainerSizeAsync(observer.Id);
-                    var breakpoint = await GetContainerBreakpointAsync(observer.Id);
+                    var viewportSize = await GetContainerSizeAsync(elementId);
+                    var breakpoint = await GetContainerBreakpointAsync(elementId);
 
-                    await observer.NotifyChangeAsync(new ResizeEventArgs(viewportSize, breakpoint));
+                    await observer.NotifyChangeAsync(
+                        new ContainerResizeEventArgs(elementId, viewportSize, breakpoint));
                 }
 
                 // Either Subscribe Or ReSubscribe, As May Be The Case
@@ -149,24 +151,24 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
         }
     }
 
-    private async Task<ObserverSubscription> CreateJsContainerObserver(string elementId, ResizeOptions options, Guid id)
+    private async Task<ObserverSubscription> CreateJsContainerObserver(string elementId, ResizeOptions options)
     {
         bool result = false;
 
-        var observerId = _observerManager
+        var id = _observerManager
             .Observers
-            .Where(x => x.Key.ObserverId == id)
-            .Select(x => x.Key.ObserverId)
+            .Where(x => x.Key.ElementId == elementId)
+            .Select(x => x.Key.ElementId)
             .FirstOrDefault();
 
-        if (observerId == default)
+        if (id == default)
         {
             var dotNetReference = DotNetObjectReference.Create(this);
 
             try
             {
                 var module = await _moduleTask.Value;
-                result = await module.InvokeAsync<bool>("containerObserver", dotNetReference, options, elementId, id);
+                result = await module.InvokeAsync<bool>("containerObserver", dotNetReference, options, elementId);
             }
             catch (Exception ex)
             {
@@ -177,19 +179,19 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
             if (!result)
                 throw new ArgumentException($"Element with id {elementId} not found");
 
-            return new ObserverSubscription(elementId, id, options);
+            return new ObserverSubscription(elementId, Guid.NewGuid(), options);
         }
 
-        return _observerManager.Observers.FirstOrDefault(x => x.Key.ObserverId == id).Key;
+        return _observerManager.Observers.FirstOrDefault(x => x.Key.ElementId == elementId).Key;
     }
 
-    public async Task UnsubscribeAsync(Guid observerId)
+    public async Task UnsubscribeAsync(string elementId)
     {
         try
         {
             await _semaphore.WaitAsync();
 
-            var subscrption = await RemoveJsCoontainerObserver(observerId);
+            var subscrption = await RemoveJsCoontainerObserver(elementId);
 
             if (subscrption is not null)
                 _observerManager.Unsubscribe(subscrption);
@@ -200,18 +202,18 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
         }
     }
 
-    private async Task<ObserverSubscription> RemoveJsCoontainerObserver(Guid observerId)
+    private async Task<ObserverSubscription> RemoveJsCoontainerObserver(string elementId)
     {
         var subscription = _observerManager
             .Observers
             .Select(x => x.Key)
-            .FirstOrDefault(x => x.ObserverId == observerId);
+            .FirstOrDefault(x => x.ElementId == elementId);
 
         if (subscription is null)
             return null;
 
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("removeObserver", observerId);
+        await module.InvokeVoidAsync("removeObserver", elementId);
 
         return subscription;
     }
