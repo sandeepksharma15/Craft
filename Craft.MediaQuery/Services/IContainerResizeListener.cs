@@ -19,5 +19,6 @@ public interface IContainerResizeListener
 
     ValueTask<bool> IsContainerBreakpointMatchingAsync(string elementId, Breakpoint withBreakpoint);
 
-    ValueTask<bool> MatchContainerQueryAsync(string elementId, int? minWidth = null, int? maxWidth = null);
+    ValueTask<bool> MatchContainerQueryAsync(string elementId, int? minWidth = null, int? maxWidth = null,
+        int? minHeight = null, int? maxHeight = null);
 }

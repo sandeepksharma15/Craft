@@ -37,7 +37,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
 
         var resizeEventArgs = new ContainerResizeEventArgs(elementId, viewportSize, breakpoint);
 
-        _logger.LogDebug($"{resizeEventArgs}");
+        _logger.LogDebug($"Element Id: {elementId} Breakpoint: {breakpoint}");
 
         return _observerManager.NotifyAsync(observer => observer.NotifyChangeAsync(resizeEventArgs),
             predicate: (subscription, _) => subscription.ElementId == elementId);
@@ -54,7 +54,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
             if (elementIds.Count > 0)
             {
                 var module = await _moduleTask.Value;
-                await module.InvokeVoidAsync("removeObservers", elementIds);
+                await module.InvokeVoidAsync("removeAllObservers", elementIds);
             }
 
             _observerManager.Clear();
@@ -104,16 +104,17 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
         return await module.InvokeAsync<bool>("matchContainerQuery", containerQuery, elementId);
     }
 
-    public async ValueTask<bool> MatchContainerQueryAsync(string elementId, int? minWidth = null, int? maxWidth = null)
+    public async ValueTask<bool> MatchContainerQueryAsync(string elementId, int? minWidth = null, int? maxWidth = null,
+        int? minHeight = null, int? maxHeight = null)
     {
-        if (minWidth is not null && maxWidth is not null)
-            return await MatchContainerQueryAsync(elementId, $"(min-width: {minWidth}px) and (max-width: {maxWidth}px)");
+        //if (minWidth is not null && maxWidth is not null)
+        //    return await MatchContainerQueryAsync(elementId, $"(min-width: {minWidth}px) and (max-width: {maxWidth}px)");
 
-        if (minWidth is not null)
-            return await MatchContainerQueryAsync(elementId, $"(min-width: {minWidth}px)");
+        //if (minWidth is not null)
+        //    return await MatchContainerQueryAsync(elementId, $"(min-width: {minWidth}px)");
 
-        if (maxWidth is not null)
-            return await MatchContainerQueryAsync(elementId, $"(max-width: {maxWidth}px)");
+        //if (maxWidth is not null)
+        //    return await MatchContainerQueryAsync(elementId, $"(max-width: {maxWidth}px)");
 
         return false;
     }
@@ -213,7 +214,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
             return null;
 
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("removeObserver", elementId);
+        await module.InvokeVoidAsync("removeContainerObserver", elementId);
 
         return subscription;
     }
