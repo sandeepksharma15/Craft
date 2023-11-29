@@ -1,10 +1,11 @@
 ﻿let mapping = {};
+var logger = function (message) { };
 
 export function containerObserver(dotnetReference, options, elementId) {
-    const logger = (options && options.enableLogging) ? console.log : () => { };
+    logger = (options && options.enableLogging) ? console.log : (message) => { };
 
-    console.log('dotnetReference: ', dotnetReference);
-    console.log('ElementId: ', elementId);
+    // console.log('dotnetReference: ', dotnetReference);
+    // console.log('ElementId: ', elementId);
 
     logger('dotnetReference: ', dotnetReference);
     logger('ElementId: ', elementId);
@@ -12,12 +13,15 @@ export function containerObserver(dotnetReference, options, elementId) {
     const element = document.getElementById(elementId);
 
     if (!element) {
-        console.log('Element with ', elementId, ' not found');
+
+        logger('Element with ', elementId, ' not found');
+        //console.log('Element with ', elementId, ' not found');
         return false;
     }
 
     if (mapping[elementId]) {
-        console.log('Container Observer already added for Id: ', elementId);
+        logger('Container Observer already added for Id: ', elementId);
+        //console.log('Container Observer already added for Id: ', elementId);
         return true;
     }
 
@@ -32,7 +36,8 @@ export function removeContainerObserver(elementId) {
     const observer = mapping[elementId];
 
     if (observer) {
-        console.log('Removing Container Observer for Id: ', elementId);
+        logger('Removing Container Observer for Id: ', elementId);
+        //console.log('Removing Container Observer for Id: ', elementId);
         observer.cancelObserver();
         delete mapping[elementId];
     }
@@ -70,7 +75,8 @@ export function matchContainerQuery(query, elementId) {
 
 class CustomObserver {
     constructor(elementId) {
-        console.log('Custom Observer created for Id: ', elementId);
+        logger('Custom Observer created for Id: ', elementId);
+        //console.log('Custom Observer created for Id: ', elementId);
 
         this.elementId = elementId;
         this.dotnetObserver = undefined;
@@ -84,7 +90,8 @@ class CustomObserver {
     }
 
     addResizeObserver(elementId, dotnetObserver, options) {
-        console.log('Adding Resize Observer for Id: ', this.elementId);
+        logger('Adding Resize Observer for Id: ', this.elementId);
+        //console.log('Adding Resize Observer for Id: ', this.elementId);
 
         this.elementId = elementId;
         this.dotnetObserver = dotnetObserver;
@@ -98,20 +105,18 @@ class CustomObserver {
     }
 
     resizeHandler(entries) {
-        console.log('Resize Observer called');
-        console.log('Target: ', entries[0].target.id);
-        console.log('Content Rect: ', entries[0].contentRect);
-
-        const elementId = entries[0].target.id;
+        logger('Resize Observer called. Target: ', entries[0].target.id);
+        // console.log('Resize Observer called. Target: ', entries[0].target.id);
 
         if (this.dotnetObserver) {
-            const size = this.getContainerSize(elementId);
+            const size = this.getContainerSize(this.elementId);
 
             let newBreakpoint = this.getBreakpoint(size.width);
 
             if (this.options.notifyOnBreakpointOnly) {
                 if (this.breakpoint == newBreakpoint) {
-                    console.log("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
+                    logger("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
+                    //console.log("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
                     return;
                 }
 
@@ -120,16 +125,17 @@ class CustomObserver {
 
             try {
 
-                if (this.resizeTimers[elementId]) {
-                    clearTimeout(this.resizeTimers[elementId]);
+                if (this.resizeTimers[this.elementId]) {
+                    clearTimeout(this.resizeTimers[this.elementId]);
                 }
 
-                this.resizeTimers[elementId] = setTimeout(() => {
-                    this.dotnetObserver.invokeMethodAsync('RaiseOnResized', size, this.breakpoint, elementId);
+                this.resizeTimers[this.elementId] = setTimeout(() => {
+                    this.dotnetObserver.invokeMethodAsync('RaiseOnResized', size, this.breakpoint, this.elementId);
                 }, this.reportRate);
             }
             catch (error) {
-                console.log(`Error invoking resize event: ${error}`);
+                logger(`Error invoking resize event: ${error}`);
+                //console.log(`Error invoking resize event: ${error}`);
             }
         }
     }
@@ -147,9 +153,14 @@ class CustomObserver {
     }
 
     cancelObserver() {
-        console.log('Canceling Resize Observer:', this.elementId);
+        logger('Canceling Resize Observer:', this.elementId);
+        //console.log('Canceling Resize Observer:', this.elementId);
 
         this.dotnetObserver = undefined;
+
+        if (this.resizeTimers[this.elementId]) 
+            clearTimeout(this.resizeTimers[this.elementId]);
+
         this.resizeObserver.unobserve(this.element);
         this.resizeObserver.disconnect;
     }
