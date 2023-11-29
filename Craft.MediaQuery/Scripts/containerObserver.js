@@ -64,10 +64,6 @@ export function getContainerSize(elementId) {
     return { height: 0, width: 0 };
 }
 
-export function matchContainerQuery(query, elementId) {
-    return false;
-}
-
 class CustomObserver {
     constructor(elementId) {
         logger('Custom Observer created for Id: ', elementId);
@@ -100,7 +96,7 @@ class CustomObserver {
     }
 
     resizeHandler(entries) {
-        logger('Resize Observer called. Target: ', entries[0].target.id);
+        logger('Resize Observer called. Target: ', this.elementId);
 
         if (this.dotnetObserver) {
             const size = this.getContainerSize(this.elementId);

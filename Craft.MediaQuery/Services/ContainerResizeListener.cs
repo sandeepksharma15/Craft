@@ -95,29 +95,6 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
         return breakpoint.IsMatchingWith(withBreakpoint);
     }
 
-    public async ValueTask<bool> MatchContainerQueryAsync(string elementId, string containerQuery)
-    {
-        _logger.LogDebug("[ContainerResizeListener] MatchContainerQuery Invoked");
-
-        var module = await _moduleTask.Value;
-        return await module.InvokeAsync<bool>("matchContainerQuery", containerQuery, elementId);
-    }
-
-    public async ValueTask<bool> MatchContainerQueryAsync(string elementId, int? minWidth = null, int? maxWidth = null,
-        int? minHeight = null, int? maxHeight = null)
-    {
-        //if (minWidth is not null && maxWidth is not null)
-        //    return await MatchContainerQueryAsync(elementId, $"(min-width: {minWidth}px) and (max-width: {maxWidth}px)");
-
-        //if (minWidth is not null)
-        //    return await MatchContainerQueryAsync(elementId, $"(min-width: {minWidth}px)");
-
-        //if (maxWidth is not null)
-        //    return await MatchContainerQueryAsync(elementId, $"(max-width: {maxWidth}px)");
-
-        return false;
-    }
-
     public async Task SubscribeAsync(string elementId, IContainerObserver observer, bool fireImmediately = true)
     {
         try
