@@ -2,14 +2,15 @@
 let logger = function (message) { };
 
 export function resizeListener(dotnetReference, options, id) {
-    //logger = (options || {}).enableLogging ? console.log : (message) => { };
+    logger = (options && options.enableLogging) ? console.log : (message) => { };
 
-    console.log('dotnetReference: ', dotnetReference);
+    logger('dotnetReference: ', dotnetReference);
+    //console.log('dotnetReference: ', dotnetReference);
     var map = mapping;
 
     if (map[id]) {
-        //logger('Resize listener already added');
-        console.log('Resize listener already added');
+        logger('Resize listener already added');
+        //console.log('Resize listener already added');
         return;
     }
 
@@ -19,7 +20,8 @@ export function resizeListener(dotnetReference, options, id) {
 }
 
 export function cancelListener(id) {
-    console.log('Canceling listener with id: ', id);
+    logger('Canceling listener with id: ', id);
+    //console.log('Canceling listener with id: ', id);
 
     var map = mapping;
 
@@ -30,7 +32,8 @@ export function cancelListener(id) {
 }
 
 export function cancelAllListeners() {
-    console.log('Canceling all listeners');
+    logger('Canceling all listeners');
+    //console.log('Canceling all listeners');
 
     var map = mapping;
 
@@ -41,7 +44,8 @@ export function cancelAllListeners() {
 }
 
 export function matchMediaQuery(query, id) {
-    console.log('Matching matchMediaQuery: ', query)
+    logger('Matching matchMediaQuery: ', query);
+    //console.log('Matching matchMediaQuery: ', query)
 
     var map = mapping;
 
@@ -53,7 +57,8 @@ export function matchMediaQuery(query, id) {
 }
 
 export function getViewportSize(id) {
-    console.log('Getting browser window size');
+    logger('Getting browser window size');
+    //console.log('Getting browser window size');
 
     var map = mapping;
 
@@ -68,7 +73,8 @@ export function getViewportSize(id) {
 }
 
 export function getBreakpoint(id) {
-    console.log('Getting browser Breakpoint');
+    logger('Getting browser Breakpoint');
+    //console.log('Getting browser Breakpoint');
 
     var map = mapping;
 
@@ -82,7 +88,6 @@ export function getBreakpoint(id) {
 class ResizeListener {
     constructor(id) {
         this.options = {};
-        this.logger = function (message) { };
         this.dotnetResizeService = undefined;
         this.breakpoint = -1;
         this.id = id;
@@ -92,10 +97,11 @@ class ResizeListener {
     }
 
     addResizeListener(dotnetReference, options) {
-        console.log('Options: ', options)
+        logger('Adding resize listener, Options: ', options);
+
         if (this.dotnetResizeService) {
-            //this.logger('Resize listener already added');
-            console.log('Resize listener already added');
+            logger('Resize listener already added');
+            // console.log('Resize listener already added');
             this.options = options;
             return;
         }
@@ -103,15 +109,10 @@ class ResizeListener {
         this.dotnetResizeService = dotnetReference;
         this.options = options;
 
-        console.log('dotnetResizeService', this.dotnetResizeService);
-        console.log('dotnetReference', dotnetReference);
-
         this.reportRate = (options || {}).reportRate || 100;
 
-        this.logger = (options || {}).enableLogging ? console.log : (message) => { };
-
-        //this.logger(`Reporting resize events at rate of: ${this.reportRate}`);
-        console.log(`Reporting resize events at rate of: ${this.reportRate}`);
+        logger(`Reporting resize events at rate of: ${this.reportRate}`);
+        // console.log(`Reporting resize events at rate of: ${this.reportRate}`);
 
         window.addEventListener('resize', this.handleResize, false);
 
@@ -129,9 +130,8 @@ class ResizeListener {
     }
 
     resizeHandler() {
-        //this.logger('Resize event triggered');
-        console.log('Resize event triggered');
-        //console.log('dotnetResizeService', this.dotnetResizeService);
+        logger('Resize event triggered');
+        // console.log('Resize event triggered');
 
         if (this.dotnetResizeService) {
             const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -139,23 +139,27 @@ class ResizeListener {
 
             let newBreakpoint = this.getBreakpoint(width);
 
-            console.log("Width: ", width, "Height: ", height);
-            console.log("Breakpoints [Old]: ", this.breakpoint, "[New]: ", newBreakpoint);
+            logger("Width: ", width, "Height: ", height);
+            //console.log("Width: ", width, "Height: ", height);
+            logger("Breakpoints [Old]: ", this.breakpoint, "[New]: ", newBreakpoint);
+            // console.log("Breakpoints [Old]: ", this.breakpoint, "[New]: ", newBreakpoint);
 
             if (this.options.notifyOnBreakpointOnly) {
                 if (this.breakpoint == newBreakpoint) {
-                    //this.logger("Breakpoint has not changed, skipping resize event");
-                    console.log("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
+                    logger("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
+                    // console.log("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
                     return;
                 }
 
                 this.breakpoint = newBreakpoint;
 
-                console.log("Breakpoint changed to ", this.breakpoint);
+                logger("Breakpoint changed to ", this.breakpoint);
+                // console.log("Breakpoint changed to ", this.breakpoint);
             }
 
             try {
-                console.log('Invoking RaiseOnResized');
+                logger('Invoking RaiseOnResized');
+                // console.log('Invoking RaiseOnResized');
                 this.dotnetResizeService.invokeMethodAsync('RaiseOnResized',
                     {
                         height: height,
@@ -164,18 +168,14 @@ class ResizeListener {
                     newBreakpoint);
 
             } catch (error) {
-                //this.logger(`Error invoking resize event: ${error}`);
-                console.log(`Error invoking resize event: ${error}`);
+                logger(`Error invoking resize event: ${error}`);
+                // console.log(`Error invoking resize event: ${error}`);
             }
         }
     }
 
     getBreakpoint(width) {
-        //this.logger(`Getting breakpoint for width: ${width}`);
-        //console.log(`Getting breakpoint for width: ${width}`);
-        //console.log('this.options.breakpoints', this.options.breakpoints);
-        //console.log(`FullHd breakpoint: ${this.options.breakpoints["FullHd"]}`);
-        //console.log(`Is width >= FullHd? ${width >= this.options.breakpoints["FullHd"]}`);
+        logger(`Getting breakpoint for width: ${width}`);
 
         if (width >= this.options.breakpoints["FullHd"])
             return 5;
@@ -198,14 +198,18 @@ class ResizeListener {
     }
 
     cancelListener() {
-        console.log('Canceling resize listener');
+        // console.log('Canceling resize listener');
+        logger('Canceling resize listener');
+
         this.dotnetResizeService = undefined;
         window.removeEventListener("resize", this.handleResize);
     }
 
     matchMedia(query) {
         let m = window.matchMedia(query).matches;
-        this.logger(`[BlazorSize] matchMedia "${query}": ${m}`);
+
+        logger(`[BlazorSize] matchMedia "${query}": ${m}`);
+
         return m;
     }
 

@@ -4,9 +4,6 @@ var logger = function (message) { };
 export function containerObserver(dotnetReference, options, elementId) {
     logger = (options && options.enableLogging) ? console.log : (message) => { };
 
-    // console.log('dotnetReference: ', dotnetReference);
-    // console.log('ElementId: ', elementId);
-
     logger('dotnetReference: ', dotnetReference);
     logger('ElementId: ', elementId);
 
@@ -15,13 +12,11 @@ export function containerObserver(dotnetReference, options, elementId) {
     if (!element) {
 
         logger('Element with ', elementId, ' not found');
-        //console.log('Element with ', elementId, ' not found');
         return false;
     }
 
     if (mapping[elementId]) {
         logger('Container Observer already added for Id: ', elementId);
-        //console.log('Container Observer already added for Id: ', elementId);
         return true;
     }
 
@@ -37,7 +32,7 @@ export function removeContainerObserver(elementId) {
 
     if (observer) {
         logger('Removing Container Observer for Id: ', elementId);
-        //console.log('Removing Container Observer for Id: ', elementId);
+
         observer.cancelObserver();
         delete mapping[elementId];
     }
@@ -76,7 +71,6 @@ export function matchContainerQuery(query, elementId) {
 class CustomObserver {
     constructor(elementId) {
         logger('Custom Observer created for Id: ', elementId);
-        //console.log('Custom Observer created for Id: ', elementId);
 
         this.elementId = elementId;
         this.dotnetObserver = undefined;
@@ -84,21 +78,18 @@ class CustomObserver {
         this.resizeTimers = {};
         this.reportRate = 250;
         this.breakpoint = -1;
-        this.logger = function (message) { };
         this.resizeObserver = new ResizeObserver(this.resizeHandler.bind(this));
         this.cancelObserver = this.cancelObserver.bind(this);
     }
 
     addResizeObserver(elementId, dotnetObserver, options) {
         logger('Adding Resize Observer for Id: ', this.elementId);
-        //console.log('Adding Resize Observer for Id: ', this.elementId);
 
         this.elementId = elementId;
         this.dotnetObserver = dotnetObserver;
         this.options = options || {};
         this.element = document.getElementById(elementId);
         this.reportRate = this.options.reportRate || 250;
-        this.logger = this.options.enableLogging ? console.log : function (message) { };
 
         this.resizeObserver.observe(this.element, { box: "border-box" });
         this.breakpoint = this.getContainerBreakpoint(elementId);
@@ -110,7 +101,6 @@ class CustomObserver {
 
     resizeHandler(entries) {
         logger('Resize Observer called. Target: ', entries[0].target.id);
-        // console.log('Resize Observer called. Target: ', entries[0].target.id);
 
         if (this.dotnetObserver) {
             const size = this.getContainerSize(this.elementId);
@@ -120,7 +110,6 @@ class CustomObserver {
             if (this.options.notifyOnBreakpointOnly) {
                 if (this.breakpoint == newBreakpoint) {
                     logger("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
-                    //console.log("Breakpoint has not changed, skipping resize event", this.breakpoint, newBreakpoint);
                     return;
                 }
 
@@ -139,7 +128,6 @@ class CustomObserver {
             }
             catch (error) {
                 logger(`Error invoking resize event: ${error}`);
-                //console.log(`Error invoking resize event: ${error}`);
             }
         }
     }
@@ -158,7 +146,6 @@ class CustomObserver {
 
     cancelObserver() {
         logger('Canceling Resize Observer:', this.elementId);
-        //console.log('Canceling Resize Observer:', this.elementId);
 
         this.dotnetObserver = undefined;
 
@@ -167,6 +154,7 @@ class CustomObserver {
 
         this.resizeObserver.unobserve(this.element);
         this.resizeObserver.disconnect;
+        delete this.resizeObserver;
     }
 
     getBreakpoint(width) {

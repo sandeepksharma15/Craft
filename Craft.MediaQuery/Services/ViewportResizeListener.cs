@@ -23,8 +23,9 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
     {
         _logger = logger;
 
-        _moduleTask = new(()
-            => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Craft.MediaQuery/resizeListener.js").AsTask());
+        _moduleTask = new(() => jsRuntime
+            .InvokeAsync<IJSObjectReference>("import", "./_content/Craft.MediaQuery/resizeListener.js")
+            .AsTask());
 
         // Get the user options and set Defaults if not provided
         _options = options?.Value ?? GlobalOptions.GetDefaultResizeOptions();
