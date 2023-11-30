@@ -376,3 +376,5 @@ dotnet_diagnostic.S3604.severity = none
 # No explanation why this is needed, but it is. Try commenting it and building again.
 # If there are no warnings CS8032, then it is not needed.
 dotnet_diagnostic.CS8032.severity =none
+
+dotnet_diagnostic.IDE0290.severity =none

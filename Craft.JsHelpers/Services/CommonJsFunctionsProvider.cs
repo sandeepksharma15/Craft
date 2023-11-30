@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Craft.JsHelpers.Services;
 
@@ -14,7 +13,7 @@ public class CommonJsFunctionsProvider : IAsyncDisposable
         _logger = logger;
 
         _moduleTask = new(() => jsRuntime
-            .InvokeAsync<IJSObjectReference>("import", "./_content/Craft.JsHelpers/commoonMethods.js")
+            .InvokeAsync<IJSObjectReference>("import", "./_content/Craft.JsHelpers/commonMethods.js")
             .AsTask());
     }
 
@@ -97,6 +96,42 @@ public class CommonJsFunctionsProvider : IAsyncDisposable
         var module = await _moduleTask.Value;
 
         return await module.InvokeAsync<bool>("isTouchSupported");
+    }
+
+    public async Task Alert(string message)
+    {
+        _logger.LogDebug("[CommonFunctionsProvider] Alert Invoked");
+
+        var module = await _moduleTask.Value;
+
+        await module.InvokeVoidAsync("jsAlert", message);
+    }
+
+    public async Task<bool> Confirm(string message)
+    {
+        _logger.LogDebug("[CommonFunctionsProvider] Confirm Invoked");
+
+        var module = await _moduleTask.Value;
+
+        return await module.InvokeAsync<bool>("jsConfirm", message);
+    }
+
+    public async Task<string> Prompt(string message, string defaultValue)
+    {
+        _logger.LogDebug("[CommonFunctionsProvider] Prompt Invoked");
+
+        var module = await _moduleTask.Value;
+
+        return await module.InvokeAsync<string>("jsPrompt", message, defaultValue);
+    }
+
+    public async Task Log(string message)
+    {
+        _logger.LogDebug("[CommonFunctionsProvider] Log Invoked");
+
+        var module = await _moduleTask.Value;
+
+        await module.InvokeVoidAsync("jsLog", message);
     }
 
     public async ValueTask DisposeAsync()
