@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Craft.Extensions.Expressions;
 
@@ -30,5 +31,22 @@ public static class ExpressionExtensions
         {
             throw new ArgumentException($"Property {propertyName} not found on type {nameof(T)}");
         }
+    }
+
+    public static MemberInfo GetPropertyMemberInfo<T>(this Expression<Func<T, object>> expression)
+    {
+        if (expression == null) return null;
+
+        try
+        {
+            if (expression.Body is not MemberExpression body)
+            {
+                UnaryExpression ubody = (UnaryExpression)expression.Body;
+                body = ubody.Operand as MemberExpression;
+            }
+
+            return body.Member;
+        }
+        catch { return null; }
     }
 }

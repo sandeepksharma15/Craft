@@ -35,30 +35,6 @@ public class OtherStringExtensionTests
     }
 
     [Theory]
-    [InlineData("48656C6C6F", new byte[] { 72, 101, 108, 108, 111 })]
-    [InlineData("010203", new byte[] { 1, 2, 3 })]
-    [InlineData("", new byte[0])]
-    [InlineData(null, null)]
-    public void HexToBytes_ValidInput_ReturnsExpectedByteArray(string input, byte[] expected)
-    {
-        // Act
-        var result = input.HexToBytes();
-
-        // Assert
-        result.Should().BeEquivalentTo(expected);
-    }
-
-    [Theory]
-    [InlineData("InvalidHex")]
-    [InlineData("12345")]
-    [InlineData("ABCDEF012G")]
-    public void HexToBytes_InvalidInput_ThrowsFormatException(string input)
-    {
-        // Act & Assert
-        input.Invoking(i => i.HexToBytes()).Should().Throw<FormatException>();
-    }
-
-    [Theory]
     [InlineData(null, null)]
     [InlineData("", "")]
     [InlineData("Test\r\nString", "Test\r\nString")]

@@ -23,41 +23,6 @@ public static class OtherStringExtensions
     }
 
     /// <summary>
-    /// Converts a hexadecimal string to a byte array.
-    /// </summary>
-    /// <param name="hex">The hexadecimal string to convert.</param>
-    /// <returns>
-    /// A byte array representing the converted values.
-    /// Returns null if the input string is null or empty.
-    /// </returns>
-    /// <exception cref="FormatException">
-    /// Thrown if parsing fails for any hex code within the string, or string is not in proper format
-    /// </exception>
-    public static byte[] HexToBytes(this string hex)
-    {
-        if (hex is null) return null;
-
-        hex = hex.Trim();
-
-        if (hex.Length % 2 != 0)
-            throw new FormatException("Hex string must have an even number of characters.");
-
-        byte[] bytes = new byte[hex.Length / 2];
-
-        for (int i = 0; i < hex.Length / 2; i++)
-        {
-            string code = hex.Substring(i * 2, 2);
-
-            if (byte.TryParse(code, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte result))
-                bytes[i] = result;
-            else
-                throw new FormatException($"Failed to parse hex string at position {i * 2}: '{code}'");
-        }
-
-        return bytes;
-    }
-
-    /// <summary>
     /// Normalizes line endings in a string by replacing different line ending formats
     /// (CRLF, CR, LF) with the system's default line ending (Environment.NewLine).
     /// </summary>
