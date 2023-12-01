@@ -27,15 +27,14 @@ public interface IGenericInterface<T> { }
 
 public interface INonGenericInterface { }
 
+#pragma warning disable IDE0051, RCS1213, CS0169, CS0067
 public class MyTestClass
 {
-#pragma warning disable IDE0051, RCS1213, CS0169, CS0067
     private readonly int _myField;
-#pragma warning restore CS0169, RCS1213, IDE0051, CS0067
-
     public string MyProperty { get; set; }
     public event EventHandler MyEvent;
 }
+#pragma warning restore CS0169, RCS1213, IDE0051, CS0067
 
 public class TypeTests
 {
