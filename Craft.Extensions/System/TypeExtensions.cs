@@ -128,7 +128,7 @@ public static class TypeExtensions
     }
 
     /// <summary>
-    /// Gets a list of class names that are inherited from the specified <paramref name="type"/> 
+    /// Gets a list of class names that are inherited from the specified <paramref name="type"/>
     /// and do not have the specified attribute <typeparamref name="T"/>.
     /// </summary>
     /// <typeparam name="T">The type of attribute to check for.</typeparam>

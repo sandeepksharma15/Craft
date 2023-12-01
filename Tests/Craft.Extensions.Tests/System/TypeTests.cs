@@ -1,4 +1,5 @@
-﻿using Craft.Extensions.Tests.Expressions;
+﻿using System.Reflection;
+using Craft.Extensions.Tests.Expressions;
 using FluentAssertions;
 
 namespace Craft.Extensions.Tests.System;
@@ -242,5 +243,54 @@ public class TypeTests
         // Assert
         result.Should().NotBeNull();
         result.Count.Should().Be(expectedCount);
+    }
+
+    [Fact]
+    public void GivenFieldInfo_ShouldReturnFieldType()
+    {
+        // Arrange
+        var fieldInfo = typeof(MyTestClass).GetField("_myField", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        // Act
+        var underlyingType = fieldInfo.GetMemberUnderlyingType();
+
+        // Assert
+        underlyingType.Should().Be(typeof(int));
+    }
+
+    [Fact]
+    public void GivenPropertyInfo_ShouldReturnPropertyType()
+    {
+        // Arrange
+        var propertyInfo = typeof(MyTestClass).GetProperty("MyProperty");
+
+        // Act
+        var underlyingType = propertyInfo.GetMemberUnderlyingType();
+
+        // Assert
+        underlyingType.Should().Be(typeof(string));
+    }
+
+    [Fact]
+    public void GivenEventInfo_ShouldReturnEventHandlerType()
+    {
+        // Arrange
+        var eventInfo = typeof(MyTestClass).GetEvent("MyEvent");
+
+        // Act
+        var underlyingType = eventInfo.GetMemberUnderlyingType();
+
+        // Assert
+        underlyingType.Should().Be(typeof(EventHandler));
+    }
+
+    [Fact]
+    public void GivenInvalidMemberType_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var invalidMemberInfo = typeof(MyTestClass);
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => invalidMemberInfo.GetMemberUnderlyingType());
     }
 }
