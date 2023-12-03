@@ -29,7 +29,7 @@ public static class RoleManagerExtensions
     /// <param name="roleClaim">The role claim to be created and added.</param>
     /// <returns>The result of the asynchronous operation.</returns>
     public static async Task<IdentityResult> CreateRoleClaimAsync<TRole, TId>(this RoleManager<TRole> roleManager, IdentityRoleClaim<TId> roleClaim)
-        where TRole : IdentityRole<TId>
+        where TRole : class
         where TId : IEquatable<TId>
     {
         var appRole = await roleManager.FindByIdAsync(roleClaim.RoleId.ToString());
