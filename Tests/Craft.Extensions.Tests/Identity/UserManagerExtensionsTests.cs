@@ -1,4 +1,4 @@
-﻿namespace Craft.Extensions.Tests.Fixtures;
+﻿namespace Craft.Extensions.Tests.Identity;
 
 public class UserManagerExtensionsTests
 {

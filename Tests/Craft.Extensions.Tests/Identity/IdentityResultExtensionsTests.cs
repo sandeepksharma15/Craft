@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 
-namespace Craft.Extensions.Tests.Fixtures;
+namespace Craft.Extensions.Tests.Identity;
 
 public class IdentityResultExtensionsTests
 {
