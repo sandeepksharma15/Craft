@@ -201,8 +201,7 @@ class TestService : ITestService { }
 class TestService1 : ITestService { }
 class TestService2 : ITestService { }
 
-class TestService3
+class TestService3(ITestService testService = null)
 {
-    public TestService3(ITestService testService = null) => TestService = testService;
-    public ITestService TestService { get; set; }
+    public ITestService TestService { get; set; } = testService;
 }
