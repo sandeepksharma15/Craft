@@ -1,5 +1,7 @@
-﻿using Craft.Extensions.Expressions;
+﻿using System.Linq.Expressions;
+using Craft.Extensions.Expressions;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Craft.Extensions.Tests.Expressions;
 
@@ -53,8 +55,8 @@ public class ExpressionExtensionsTests
     [Fact]
     public void CreateMemberExpression_ValidProperty_ReturnsExpression()
     {
-        MyClass myClass = new() { PropertyName = "Property", AnotherProperty = 10 };
         // Arrange
+        MyClass myClass = new() { PropertyName = "Property", AnotherProperty = 10 };
         const string propertyName = "PropertyName";
 
         // Act
@@ -63,5 +65,38 @@ public class ExpressionExtensionsTests
         // Assert
         expression.Should().NotBeNull();
         expression.Compile().Invoke(myClass).Should().Be("Property");
+    }
+
+    [Fact]
+    public void CreateMemberExpression_WithValidProperty_ShouldReturnValidLambdaExpression()
+    {
+        // Arrange
+        MyClass myClass = new() { PropertyName = "Property", AnotherProperty = 10 };
+        var type = typeof(MyClass);
+        const string propertyName = "PropertyName";
+
+        // Act
+        var result = type.CreateMemberExpression(propertyName);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<LambdaExpression>();
+
+        var compiledLambda = result.Compile();
+        compiledLambda.DynamicInvoke(myClass).Should().Be("Property");
+    }
+
+    [Fact]
+    public void CreateMemberExpression_WithInvalidProperty_ShouldThrowArgumentException()
+    {
+        // Arrange
+        var type = typeof(MyClass);
+        const string invalidPropertyName = "InvalidProperty";
+
+        // Act
+        Action act = () => type.CreateMemberExpression(invalidPropertyName);
+
+        // Assert
+        act.Should().Throw<ArgumentException>();
     }
 }
