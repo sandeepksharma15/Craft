@@ -1,5 +1,5 @@
-﻿using System.Data;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using Craft.TestHelper;
 using Craft.TestHelper.Identity;
 using Craft.TestHelper.Models;
 using FluentAssertions;
