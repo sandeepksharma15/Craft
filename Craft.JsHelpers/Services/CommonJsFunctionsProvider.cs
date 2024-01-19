@@ -8,6 +8,7 @@ public class CommonJsFunctionsProvider : IAsyncDisposable
     private readonly ILogger<CommonJsFunctionsProvider> _logger;
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
     public CommonJsFunctionsProvider(IJSRuntime jsRuntime, ILogger<CommonJsFunctionsProvider> logger)
     {
         _logger = logger;

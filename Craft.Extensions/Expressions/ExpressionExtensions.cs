@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Craft.Extensions.Expressions;
 

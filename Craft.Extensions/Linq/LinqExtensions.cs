@@ -6,12 +6,22 @@ namespace System.Linq;
 
 public static class LinqExtensions
 {
+    /// <summary>
+    /// Extension method for IQueryable<T> to dynamically apply sorting based on a comma-separated list of property names and optional ASC or DESC indicators.
+    /// </summary>
+    /// <typeparam name="T">Type of elements in the IQueryable.</typeparam>
+    /// <param name="source">The IQueryable to apply sorting to.</param>
+    /// <param name="orderList">Comma-separated list of property names for sorting, with optional ASC or DESC indicators.</param>
+    /// <returns>New IQueryable<T> with the specified sorting applied.</returns>
     public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, string orderList)
     {
+        // Check for null source or orderList
         if (source is null || orderList is  null) return source;
 
+        // Initial expression based on the source
         Expression queryExpr = source.Expression;
 
+        // Method names for ascending and descending order
         string methodAsc = "OrderBy";
         string methodDesc = "OrderByDescending";
 
@@ -28,18 +38,18 @@ public static class LinqExtensions
         // Get The Entity
         Type entity = typeof(T);
 
-        // That Is Our Left Parameter
+        // Left parameter for lambda expressions
         ParameterExpression parameter = Expression.Parameter(entity, "p");
 
         // Process Order Items One By One
         foreach (string orderItem in orderItems)
         {
-            // Do We Need Ascending Or Descending
+            // Determine ascending or descending
             string command = orderItem.EndsWith("DESC", StringComparison.OrdinalIgnoreCase)
                 ? methodDesc
                 : methodAsc;
 
-            //Get propertyname and remove optional ASC or DESC
+            // Get propertyname and remove optional ASC or DESC
             string propertyName = orderItem.Split(' ')[0].Trim();
 
             // Get The Ordering Property
@@ -65,13 +75,22 @@ public static class LinqExtensions
         return source.Provider.CreateQuery<T>(queryExpr);
     }
 
+    /// <summary>
+    /// Orders an IQueryable<T> sequence in ascending or descending order based on a specified property name.
+    /// Supports dynamic sorting using string property names.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the source queryable.</typeparam>
+    /// <param name="source">The source queryable to order.</param>
+    /// <param name="propertyName">The name of the property to order by.</param>
+    /// <param name="isDescending">Whether to order in descending order (default is ascending).</param>
+    /// <returns>An IQueryable<T> representing the ordered queryable.</returns>
     public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, string propertyName, bool isDescending = false)
     {
         if (source is null || propertyName is null) return source;
 
-        var propertyInfo = typeof(T).GetPropertyInfo(propertyName);
+        var propertyInfo = typeof(T).GetProperty(propertyName);
         var parameter = Expression.Parameter(typeof(T), "p");
-        var property = Expression.Property(parameter, propertyInfo);
+        var property = Expression.MakeMemberAccess(parameter, propertyInfo);
         var lambda = Expression.Lambda(property, parameter);
 
         var methodName = isDescending ? "OrderByDescending" : "OrderBy";

@@ -4,9 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Craft.TestHelper.Identity;
 
-public class TestDbContext : IdentityDbContext<TestUser, TestRole, int>
+public class TestDbContext(DbContextOptions<TestDbContext> options) : IdentityDbContext<TestUser, TestRole, int>(options)
 {
-    public TestDbContext(DbContextOptions<TestDbContext> options): base(options)
-    {
-    }
 }

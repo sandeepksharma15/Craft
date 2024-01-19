@@ -23,9 +23,7 @@ public class ExpressionSemanticEqualityComparer : IEqualityComparer<Expression>
     }
 
     public int GetHashCode(Expression obj)
-    {
-        return NormalizeExpression(obj).ToString().GetHashCode();
-    }
+        => NormalizeExpression(obj).ToString().GetHashCode();
 
     // The private sealed class ExpressionNormalizer is responsible for normalizing binary expressions.
     // It extends ExpressionVisitor to traverse and modify expression trees.

@@ -16,6 +16,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
 
     public ResizeOptions ResizeOptions { get; }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
     public ContainerResizeListener(IJSRuntime jsRuntime, ILogger<ContainerResizeListener> logger, IOptions<ResizeOptions>? options = null)
     {
         _semaphore = new(1, 5);
