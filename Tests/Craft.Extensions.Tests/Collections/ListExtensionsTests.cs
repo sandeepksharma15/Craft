@@ -2,7 +2,7 @@
 
 namespace Craft.Extensions.Tests.Collections;
 
-public class ListTests
+public class ListExtensionsTests
 {
     [Fact]
     public void IsIn_Should_Return_False_When_Item_Is_Not_In_List()
