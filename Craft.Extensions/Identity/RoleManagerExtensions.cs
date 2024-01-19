@@ -103,7 +103,6 @@ public static class RoleManagerExtensions
     /// Asynchronously retrieves the value of a specific claim associated with a role.
     /// </summary>
     /// <typeparam name="TRole">The type representing a role.</typeparam>
-    /// <typeparam name="TId">The type of the role's primary key.</typeparam>
     /// <param name="roleManager">The RoleManager to use for role management.</param>
     /// <param name="role">The role to retrieve the claim value from.</param>
     /// <param name="claimType">The type of the claim to retrieve.</param>

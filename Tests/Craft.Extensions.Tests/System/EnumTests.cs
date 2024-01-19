@@ -26,12 +26,11 @@ public enum SomeEnum
 public class EnumTests
 {
     public static IEnumerable<object[]> EnumValuesTestData =>
-       new List<object[]>
-       {
-                new object[] { TestEnum.First, "First", "First description" },
-                new object[] { TestEnum.Second, "Second", "Second description" },
-                new object[] { TestEnum.Third, "Third", "Third" },
-       };
+       [
+                [TestEnum.First, "First", "First description"],
+                [TestEnum.Second, "Second", "Second description"],
+                [TestEnum.Third, "Third", "Third"],
+       ];
 
     [Fact]
     public void GetDescription_ShouldReturnDescriptionAttribute_WhenEnumHasOne()
