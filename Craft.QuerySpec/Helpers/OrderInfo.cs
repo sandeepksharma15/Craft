@@ -7,6 +7,7 @@ using Craft.QuerySpec.Enums;
 namespace Craft.QuerySpec.Helpers;
 
 [Serializable]
+//[JsonConverter(typeof(OrderInfoJsonConverter<>))]
 public class OrderInfo<T>(LambdaExpression orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy) where T : class
 {
     public LambdaExpression OrderItem { get; internal set; } = orderItem;

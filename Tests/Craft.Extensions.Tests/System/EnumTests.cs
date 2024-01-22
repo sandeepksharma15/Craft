@@ -178,6 +178,7 @@ public class EnumTests
 
     [Theory]
     [MemberData(nameof(EnumValuesTestData))]
+    [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
     public void GetName_ReturnsCorrectName(TestEnum value, string expectedName, string _)
     {
         string actualName = EnumValues<TestEnum>.GetName(value);
@@ -186,6 +187,7 @@ public class EnumTests
 
     [Theory]
     [MemberData(nameof(EnumValuesTestData))]
+    [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
     public void GetDescription_ReturnsCorrectDescription(TestEnum value, string _, string expectedDescription)
     {
         string actualDescription = EnumValues<TestEnum>.GetDescription(value);
@@ -230,6 +232,7 @@ public class EnumTests
 
     [Theory]
     [MemberData(nameof(EnumValuesTestData))]
+    [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
     public void TryGetSingleName_ReturnsTrueAndCorrectName(TestEnum value, string expectedName, string _)
     {
         bool result = EnumValues<TestEnum>.TryGetSingleName(value, out string actualName);
@@ -239,6 +242,7 @@ public class EnumTests
 
     [Theory]
     [MemberData(nameof(EnumValuesTestData))]
+    [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
     public void TryGetSingleDescription_ReturnsTrueAndCorrectDescription(TestEnum value, string _, string expectedDescription)
     {
         bool result = EnumValues<TestEnum>.TryGetSingleDescription(value, out string actualDescription);
