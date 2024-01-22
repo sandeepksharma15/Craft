@@ -15,17 +15,20 @@ public static class ExpressionExtensions
     /// <exception cref="ArgumentException">
     /// Thrown if the property name is null or empty, or if the property is not found on the type.
     /// </exception>
-    public static Expression<Func<T, object>> CreateMemberExpression<T>(this string propertyName)
+    public static LambdaExpression CreateMemberExpression<T>(this string propertyName)
     {
         ArgumentException.ThrowIfNullOrEmpty(propertyName, nameof(propertyName));
 
         try
         {
+            // Create a parameter expression for the lambda
             var parameter = Expression.Parameter(typeof(T), "x");
-            var property = Expression.Property(parameter, propertyName);
-            UnaryExpression convertedExpression = Expression.Convert(property, typeof(object));
 
-            return Expression.Lambda<Func<T, object>>(convertedExpression, parameter);
+            // Create a member expression for accessing the specified member
+            MemberExpression memberExpression = Expression.PropertyOrField(parameter, propertyName);
+
+            // Create and return the LambdaExpression
+            return Expression.Lambda(memberExpression, parameter);
         }
         catch (NullReferenceException)
         {

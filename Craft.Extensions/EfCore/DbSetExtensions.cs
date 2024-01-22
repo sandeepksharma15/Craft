@@ -27,15 +27,12 @@ public static class DbSetExtensions
     /// Conditionally includes or excludes automatically included navigation properties in a query.
     /// Provides flexibility in controlling the eager loading behavior of related data.
     /// </summary>
-    /// <typeparam name="TEntity">The type of entity in the queryable.</typeparam>
+    /// <typeparam name="T">The type of entity in the queryable.</typeparam>
     /// <param name="source">The source IQueryable<TEntity> to potentially modify.</param>
     /// <param name="includeDetails">A boolean indicating whether to include or exclude automatically included navigation properties.</param>
     /// <returns>The modified IQueryable<TEntity> with navigation properties included or excluded based on the includeDetails parameter.</returns>
-    public static IQueryable<TEntity> IncludeDetails<TEntity>(this IQueryable<TEntity> source, bool includeDetails)
-       where TEntity : class
-    {
-        return (includeDetails) ? source : source.IgnoreAutoIncludes();
-    }
+    public static IQueryable<T> IncludeDetails<T>(this IQueryable<T> source, bool includeDetails) where T : class
+        => (includeDetails) ? source : source.IgnoreAutoIncludes();
 
     /// <summary>
     /// Removes a specific condition from the existing query filter for a given DbSet, if present.

@@ -64,7 +64,10 @@ public class ExpressionExtensionsTests
 
         // Assert
         expression.Should().NotBeNull();
-        expression.Compile().Invoke(myClass).Should().Be("Property");
+
+        var compiledDelegate = expression.Compile();
+        var propertyValue = compiledDelegate.DynamicInvoke(myClass);
+        propertyValue.Should().Be("Property");
     }
 
     [Fact]
