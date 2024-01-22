@@ -7,7 +7,6 @@ using Craft.QuerySpec.Enums;
 namespace Craft.QuerySpec.Helpers;
 
 [Serializable]
-//[JsonConverter(typeof(OrderInfoJsonConverter<>))]
 public class OrderInfo<T>(LambdaExpression orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy) where T : class
 {
     public LambdaExpression OrderItem { get; internal set; } = orderItem;
@@ -40,16 +39,7 @@ public class OrderInfoJsonConverter<T> : JsonConverter<OrderInfo<T>> where T : c
                 reader.Read();
 
                 if (propertyName == nameof(OrderInfo<T>.OrderItem))
-                {
-                    try
-                    {
-                        orderInfo.OrderItem = typeof(T).CreateMemberExpression(reader.GetString());
-                    }
-                    catch (Exception)
-                    {
-                        throw new ArgumentException($"Property {propertyName} not found on type {nameof(T)}");
-                    }
-                }
+                    orderInfo.OrderItem = typeof(T).CreateMemberExpression(reader.GetString());
 
                 if (propertyName == nameof(OrderInfo<T>.OrderType))
                     orderInfo.OrderType = (OrderTypeEnum)reader.GetInt32();

@@ -6,12 +6,6 @@ using System.Text.Json;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
-public class MyResult
-{
-    public long Id { get; set; }
-    public string ResultName { get; set; }
-}
-
 public class SelectInfoTests
 {
     [Fact]
@@ -157,5 +151,11 @@ public class SelectInfoTests
         // Assert
         deserializedSelectInfo.Assignor.Should().BeEquivalentTo(assignorExpression);
         deserializedSelectInfo.Assignee.Should().BeEquivalentTo(assigneeExpression);
+    }
+
+    private class MyResult
+    {
+        public long Id { get; set; }
+        public string ResultName { get; set; }
     }
 }

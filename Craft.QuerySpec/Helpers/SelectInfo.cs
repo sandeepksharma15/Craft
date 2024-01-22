@@ -5,6 +5,8 @@ using Craft.Extensions.Expressions;
 
 namespace Craft.QuerySpec.Helpers;
 
+// Summary: Represents information about a select operation.
+//          This class is designed to store assignor and assignee LambdaExpressions.
 [Serializable]
 public class SelectInfo<T, TResult>
     where T : class
@@ -61,10 +63,12 @@ public class SelectInfo<T, TResult>
     }
 }
 
+// Summary: JSON converter for SelectInfo<T, TResult>.
 public class SelectInfoJsonConverter<T, TResult> : JsonConverter<SelectInfo<T, TResult>>
     where T : class
     where TResult : class
 {
+    // Summary: Reads JSON and converts it to a SelectInfo<T, TResult> instance.
     public override SelectInfo<T, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -94,14 +98,15 @@ public class SelectInfoJsonConverter<T, TResult> : JsonConverter<SelectInfo<T, T
         return selectInfo;
     }
 
+    // Summary: Writes a SelectInfo<T, TResult> instance to JSON.
     public override void Write(Utf8JsonWriter writer, SelectInfo<T, TResult> value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 
-        var assinor = value.Assignor.Body as MemberExpression;
+        var assignor = value.Assignor.Body as MemberExpression;
         var assignee = value.Assignee.Body as MemberExpression;
 
-        writer.WriteString(nameof(SelectInfo<T, TResult>.Assignor), assinor.Member.Name);
+        writer.WriteString(nameof(SelectInfo<T, TResult>.Assignor), assignor.Member.Name);
         writer.WriteString(nameof(SelectInfo<T, TResult>.Assignee), assignee.Member.Name);
 
         writer.WriteEndObject();
