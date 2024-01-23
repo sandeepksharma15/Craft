@@ -124,12 +124,11 @@ public class ExpressionTreeBuilderTests
     [Fact]
     public void ToBinaryTree_BuildsExpression()
     {
-        var col = new[]
-        {
-                new TestClass{Id = "1", NumericValue  =1, StringValue = "1"},
-                new TestClass{Id = "2", NumericValue  =1, StringValue = "2"},
-                new TestClass{Id = "3", NumericValue  =3},
-            };
+        var col = new[] {
+            new TestClass{Id = "1", NumericValue  =1, StringValue = "1"},
+            new TestClass{Id = "2", NumericValue  =1, StringValue = "2"},
+            new TestClass{Id = "3", NumericValue  =3},
+        };
 
         var filter1 = new Dictionary<string, string> { { nameof(TestClass.NumericValue), "1" } };
         var f1 = ExpressionTreeBuilder.BuildBinaryTreeExpression<TestClass>(filter1);
@@ -138,9 +137,10 @@ public class ExpressionTreeBuilderTests
         res1.Length.Should().Be(2);
 
         var filter2 = new Dictionary<string, string> {
-                {nameof(TestClass.StringValue), "1" } ,
-                {nameof(TestClass.NumericValue), "1" } ,
-                };
+            {nameof(TestClass.StringValue), "1" } ,
+            {nameof(TestClass.NumericValue), "1" } ,
+        };
+
         var f2 = ExpressionTreeBuilder.BuildBinaryTreeExpression<TestClass>(filter2);
         f2.Should().NotBeNull();
         var res2 = col.Where(f2).ToArray();

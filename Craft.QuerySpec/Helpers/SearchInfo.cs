@@ -6,6 +6,7 @@ using Craft.Extensions.Expressions;
 namespace Craft.QuerySpec.Helpers;
 
 // Used For an SQL LIKE Search Functionality
+[Serializable]
 public class SearchInfo<T> where T : class
 {
     public int SearchGroup { get; internal set; }
