@@ -4,6 +4,46 @@ namespace Craft.Extensions.Tests.System;
 
 public class OtherExtensionsTests
 {
+    #region Public Methods
+
+    [Theory]
+    [InlineData(null, null)] // Null input should return null
+    [InlineData(new byte[0], "")] // Empty byte array should return an empty string
+    [InlineData(new byte[] { 0x01, 0xAB, 0xFF }, "01ABFF")] // Typical byte values
+    [InlineData(new byte[] { 0x00, 0x0F, 0xFF }, "000FFF")] // Byte values with leading zeros
+    public void BytesToHex_ReturnsExpectedResult(byte[] inputBytes, string expectedResult)
+    {
+        // Act
+        var result = inputBytes.BytesToHex();
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [Theory]
+    [InlineData("InvalidHex")]
+    [InlineData("12345")]
+    [InlineData("ABCDEF012G")]
+    public void HexToBytes_InvalidInput_ThrowsFormatException(string input)
+    {
+        // Act & Assert
+        input.Invoking(i => i.HexToBytes()).Should().Throw<FormatException>();
+    }
+
+    [Theory]
+    [InlineData("48656C6C6F", new byte[] { 72, 101, 108, 108, 111 })]
+    [InlineData("010203", new byte[] { 1, 2, 3 })]
+    [InlineData("", new byte[0])]
+    [InlineData(null, new byte[0])]
+    public void HexToBytes_ValidInput_ReturnsExpectedByteArray(string input, byte[] expected)
+    {
+        // Act
+        var result = input.HexToBytes();
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+    }
+
     [Theory]
     [InlineData(0, "0%")]
     [InlineData(0.1234, "12.34%")]
@@ -58,41 +98,5 @@ public class OtherExtensionsTests
         result.Should().Be(expected);
     }
 
-    [Theory]
-    [InlineData(null, null)] // Null input should return null
-    [InlineData(new byte[0], "")] // Empty byte array should return an empty string
-    [InlineData(new byte[] { 0x01, 0xAB, 0xFF }, "01ABFF")] // Typical byte values
-    [InlineData(new byte[] { 0x00, 0x0F, 0xFF }, "000FFF")] // Byte values with leading zeros
-    public void BytesToHex_ReturnsExpectedResult(byte[] inputBytes, string expectedResult)
-    {
-        // Act
-        var result = inputBytes.BytesToHex();
-
-        // Assert
-        result.Should().Be(expectedResult);
-    }
-
-    [Theory]
-    [InlineData("48656C6C6F", new byte[] { 72, 101, 108, 108, 111 })]
-    [InlineData("010203", new byte[] { 1, 2, 3 })]
-    [InlineData("", new byte[0])]
-    [InlineData(null, null)]
-    public void HexToBytes_ValidInput_ReturnsExpectedByteArray(string input, byte[] expected)
-    {
-        // Act
-        var result = input.HexToBytes();
-
-        // Assert
-        result.Should().BeEquivalentTo(expected);
-    }
-
-    [Theory]
-    [InlineData("InvalidHex")]
-    [InlineData("12345")]
-    [InlineData("ABCDEF012G")]
-    public void HexToBytes_InvalidInput_ThrowsFormatException(string input)
-    {
-        // Act & Assert
-        input.Invoking(i => i.HexToBytes()).Should().Throw<FormatException>();
-    }
+    #endregion Public Methods
 }

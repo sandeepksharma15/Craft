@@ -1,6 +1,8 @@
 ﻿using Craft.QuerySpec.Helpers;
 using Craft.TestHelper.Models;
+
 using FluentAssertions;
+
 using System.Linq.Expressions;
 using System.Text.Json;
 
@@ -8,6 +10,46 @@ namespace Craft.QuerySpec.Tests.Helpers;
 
 public class SelectInfoTests
 {
+    #region Public Methods
+
+    [Fact]
+    public void Constructor_WithInvalidPropName_ShouldThrowArgumentNullException()
+    {
+        // Arrange
+
+        // Act
+        Action act = () => new SelectInfo<Company, Company>("InvalidProperty");
+
+        // Assert
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void Constructor_WithNullExpression_ShouldThrowArgumentNullException()
+    {
+        // Arrange
+        Expression<Func<Company, object>> nullExpression = null;
+
+        // Act
+        Action act = () => new SelectInfo<Company, Company>(nullExpression);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Constructor_WithNullPropName_ShouldThrowArgumentNullException()
+    {
+        // Arrange
+        const string propName = null;
+
+        // Act
+        Action act = () => new SelectInfo<Company, Company>(propName);
+
+        // Assert
+        act.Should().Throw<ArgumentException>();
+    }
+
     [Fact]
     public void Constructor_WithValidExpression_ShouldSetSelectItemAndSelectItemFunc()
     {
@@ -34,54 +76,6 @@ public class SelectInfoTests
     }
 
     [Fact]
-    public void Constructor_WithInvalidPropName_ShouldThrowArgumentNullException()
-    {
-        // Arrange
-
-        // Act
-        Action act = () => new SelectInfo<Company, Company>("InvalidProperty");
-
-        // Assert
-        act.Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
-    public void Constructor_WithNullPropName_ShouldThrowArgumentNullException()
-    {
-        // Arrange
-        const string propName = null;
-
-        // Act
-        Action act = () => new SelectInfo<Company, Company>(propName);
-
-        // Assert
-        act.Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
-    public void Constructor_WithNullExpression_ShouldThrowArgumentNullException()
-    {
-        // Arrange
-        Expression<Func<Company, object>> nullExpression = null;
-
-        // Act
-        Action act = () => new SelectInfo<Company, Company>(nullExpression);
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>();
-    }
-
-    [Fact]
-    public void SelectInfo_ConstructAssignor_WhenTAndTResultAreSame_ShouldNotThrow()
-    {
-        // Arrange
-        Expression<Func<Company, object>> assignor = e => e.Name;
-
-        // Act & Assert
-        new Action(() => new SelectInfo<Company, Company>(assignor)).Should().NotThrow();
-    }
-
-    [Fact]
     public void SelectInfo_ConstructAssignor_WhenTAndTResultAreNotSame_ShouldCreateAssignee()
     {
         // Arrange
@@ -93,6 +87,16 @@ public class SelectInfoTests
         // Assert
         selectInfo.Assignor.Should().Be(assignor);
         selectInfo.Assignee.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void SelectInfo_ConstructAssignor_WhenTAndTResultAreSame_ShouldNotThrow()
+    {
+        // Arrange
+        Expression<Func<Company, object>> assignor = e => e.Name;
+
+        // Act & Assert
+        new Action(() => new SelectInfo<Company, Company>(assignor)).Should().NotThrow();
     }
 
     [Fact]
@@ -153,9 +157,19 @@ public class SelectInfoTests
         deserializedSelectInfo.Assignee.Should().BeEquivalentTo(assigneeExpression);
     }
 
+    #endregion Public Methods
+
+    #region Private Classes
+
     private class MyResult
     {
+        #region Public Properties
+
         public long Id { get; set; }
-        public string ResultName { get; set; }
+        public string ResultName { get; set; } = default!;
+
+        #endregion Public Properties
     }
+
+    #endregion Private Classes
 }

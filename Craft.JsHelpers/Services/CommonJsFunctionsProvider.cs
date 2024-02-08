@@ -139,7 +139,7 @@ public class CommonJsFunctionsProvider : IAsyncDisposable
     {
         _logger.LogDebug("[CommonFunctionsProvider] DisposeAsync Invoked");
 
-#pragma warning disable RCS1075 // Avoid empty catch clause that catches System.Exception.
+#pragma warning disable RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
         try
         {
             if (_moduleTask.IsValueCreated)
@@ -151,6 +151,6 @@ public class CommonJsFunctionsProvider : IAsyncDisposable
             GC.SuppressFinalize(this);
         }
         catch (Exception) { }
-#pragma warning restore RCS1075 // Avoid empty catch clause that catches System.Exception.
+#pragma warning restore RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
     }
 }

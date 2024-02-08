@@ -2,6 +2,8 @@
 
 public static class ServiceProviderExtensions
 {
+    #region Public Methods
+
     /// <summary>
     /// Adds a service to the dependency injection container with the specified service lifetime.
     /// Provides a concise syntax for registering services with different lifetimes.
@@ -97,16 +99,6 @@ public static class ServiceProviderExtensions
         => services.IsAdded(typeof(T));
 
     /// <summary>
-    /// Determines whether the concrete implementation type of the specified service type has been added to the dependency injection container.
-    /// Focuses specifically on the implementation type, ensuring it's registered regardless of interface mappings.
-    /// </summary>
-    /// <typeparam name="T">The type of the service to check for implementation registration.</typeparam>
-    /// <param name="services">The IServiceCollection to check.</param>
-    /// <returns>True if the implementation type is registered, false otherwise.</returns>
-    public static bool IsImplementationAdded<T>(this IServiceCollection services)
-        => services.IsImplementationAdded(typeof(T));
-
-    /// <summary>
     /// Determines whether a service of the specified type has been added to the dependency injection container.
     /// Offers flexibility by checking for registration using a Type instance directly.
     /// </summary>
@@ -115,6 +107,16 @@ public static class ServiceProviderExtensions
     /// <returns>True if the service is registered, false otherwise.</returns>
     public static bool IsAdded(this IServiceCollection services, Type type)
         => services.Any(d => d.ServiceType == type);
+
+    /// <summary>
+    /// Determines whether the concrete implementation type of the specified service type has been added to the dependency injection container.
+    /// Focuses specifically on the implementation type, ensuring it's registered regardless of interface mappings.
+    /// </summary>
+    /// <typeparam name="T">The type of the service to check for implementation registration.</typeparam>
+    /// <param name="services">The IServiceCollection to check.</param>
+    /// <returns>True if the implementation type is registered, false otherwise.</returns>
+    public static bool IsImplementationAdded<T>(this IServiceCollection services)
+        => services.IsImplementationAdded(typeof(T));
 
     /// <summary>
     /// Determines whether the concrete implementation type of the specified Type has been added to the dependency injection container.
@@ -137,4 +139,6 @@ public static class ServiceProviderExtensions
     /// <returns>The resolved instance of the service.</returns>
     public static T ResolveWith<T>(this IServiceProvider provider, params object[] parameters) where T : class
         => ActivatorUtilities.CreateInstance<T>(provider, parameters);
+
+    #endregion Public Methods
 }

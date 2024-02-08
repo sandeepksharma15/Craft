@@ -1,6 +1,7 @@
 ﻿using Craft.MediaQuery.Enums;
 using Craft.MediaQuery.Models;
 using Craft.Utilities.Managers;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
@@ -32,7 +33,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
     }
 
     [JSInvokable]
-    public Task RaiseOnResized(ViewportSize viewportSize, Breakpoint breakpoint, string elementId)
+    public Task RaiseOnResized(ViewportSizeEventArgs viewportSize, Breakpoint breakpoint, string elementId)
     {
         _logger.LogDebug("[ContainerResizeListener] OnResized Invoked");
 
@@ -48,7 +49,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
     {
         _logger.LogDebug("[ContainerResizeListener] DisposeAsync Invoked");
 
-#pragma warning disable RCS1075 // Avoid empty catch clause that catches System.Exception.
+#pragma warning disable RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
         try
         {
             var elementIds = _observerManager.Observers.Select(x => x.Key.ElementId).ToList();
@@ -70,7 +71,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
             GC.SuppressFinalize(this);
         }
         catch (Exception) { }
-#pragma warning restore RCS1075 // Avoid empty catch clause that catches System.Exception.
+#pragma warning restore RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
     }
 
     public async ValueTask<Breakpoint> GetContainerBreakpointAsync(string elementId)
@@ -81,12 +82,12 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
         return await module.InvokeAsync<Breakpoint>("getContainerBreakpoint", elementId);
     }
 
-    public async ValueTask<ViewportSize> GetContainerSizeAsync(string elementId)
+    public async ValueTask<ViewportSizeEventArgs> GetContainerSizeAsync(string elementId)
     {
         _logger.LogDebug("[ContainerResizeListener] GetContainerSizeAsync Invoked");
 
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<ViewportSize>("getContainerSize", elementId);
+        return await module.InvokeAsync<ViewportSizeEventArgs>("getContainerSize", elementId);
     }
 
     public async ValueTask<bool> IsContainerBreakpointMatchingAsync(string elementId, Breakpoint withBreakpoint)

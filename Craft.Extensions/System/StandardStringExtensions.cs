@@ -4,6 +4,62 @@ namespace System;
 
 public static class StandardStringExtensions
 {
+    #region Public Methods
+
+    /// <summary>
+    /// Ensures that a given string ends with a specified character.
+    /// If the string is null or empty, the original string is returned unchanged.
+    /// </summary>
+    /// <param name="source">The source string to ensure the ending of.</param>
+    /// <param name="c">The character to ensure the string ends with.</param>
+    /// <param name="comparisonType">The type of string comparison to use (default is Ordinal).</param>
+    /// <returns>
+    /// The original string if it already ends with the specified character,
+    /// otherwise, a new string with the specified character appended to the end.
+    /// </returns>
+    public static string EnsureEndsWith(this string source, char c, StringComparison comparisonType = StringComparison.Ordinal)
+    {
+        if (source is null) return source;
+
+        return source.EndsWith(c.ToString(), comparisonType) ? source : source + c;
+    }
+
+    /// <summary>
+    /// Ensures that a given string starts with a specified character.
+    /// If the string is null, the original string is returned unchanged.
+    /// </summary>
+    /// <param name="source">The source string to ensure the starting of.</param>
+    /// <param name="c">The character to ensure the string starts with.</param>
+    /// <param name="comparisonType">The type of string comparison to use (default is Ordinal).</param>
+    /// <returns>
+    /// The original string if it already starts with the specified character,
+    /// otherwise, a new string with the specified character prepended to the beginning.
+    /// </returns>
+    public static string EnsureStartsWith(this string source, char c, StringComparison comparisonType = StringComparison.Ordinal)
+    {
+        if (source is null) return source;
+
+        return source.StartsWith(c.ToString(), comparisonType) ? source : c + source;
+    }
+
+    /// <summary>
+    /// Converts the first character of a string to uppercase using the casing rules of the invariant culture.
+    /// If the input string is null or empty, the original string is returned unchanged.
+    /// </summary>
+    /// <param name="source">The input string to convert.</param>
+    /// <returns>
+    /// A new string with the first character converted to uppercase,
+    /// or the original string if it is null or empty.
+    /// </returns>
+    public static string FirstCharToUpper(this string source)
+    {
+        if (string.IsNullOrEmpty(source)) return source;
+
+        return string.Concat(source[0]
+            .ToString(CultureInfo.InvariantCulture)
+            .ToUpperInvariant(), source.AsSpan(1));
+    }
+
     /// <summary>
     /// Extension method for strings that extracts and returns the substring after the last occurrence
     /// of a specified delimiter. If the source string is null, the method returns null.
@@ -60,57 +116,18 @@ public static class StandardStringExtensions
     public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
 
     /// <summary>
-    /// Ensures that a given string ends with a specified character.
-    /// If the string is null or empty, the original string is returned unchanged.
+    /// Takes a string and an integer length and returns a substring from the beginning of the string
+    /// with a length not exceeding the minimum of the specified length and the source string's length.
     /// </summary>
-    /// <param name="source">The source string to ensure the ending of.</param>
-    /// <param name="c">The character to ensure the string ends with.</param>
-    /// <param name="comparisonType">The type of string comparison to use (default is Ordinal).</param>
-    /// <returns>
-    /// The original string if it already ends with the specified character,
-    /// otherwise, a new string with the specified character appended to the end.
-    /// </returns>
-    public static string EnsureEndsWith(this string source, char c, StringComparison comparisonType = StringComparison.Ordinal)
+    /// <param name="source">The input string.</param>
+    /// <param name="len">The maximum length of the substring to be returned.</param>
+    /// <returns>A substring from the beginning of the input string.</returns>
+    public static string Left(this string source, int len)
     {
-        if (source is null) return source;
+        if (string.IsNullOrEmpty(source) || len >= source.Length)
+            return source;
 
-        return source.EndsWith(c.ToString(), comparisonType) ? source : source + c;
-    }
-
-    /// <summary>
-    /// Ensures that a given string starts with a specified character.
-    /// If the string is null, the original string is returned unchanged.
-    /// </summary>
-    /// <param name="source">The source string to ensure the starting of.</param>
-    /// <param name="c">The character to ensure the string starts with.</param>
-    /// <param name="comparisonType">The type of string comparison to use (default is Ordinal).</param>
-    /// <returns>
-    /// The original string if it already starts with the specified character,
-    /// otherwise, a new string with the specified character prepended to the beginning.
-    /// </returns>
-    public static string EnsureStartsWith(this string source, char c, StringComparison comparisonType = StringComparison.Ordinal)
-    {
-        if (source is null) return source;
-
-        return source.StartsWith(c.ToString(), comparisonType) ? source : c + source;
-    }
-
-    /// <summary>
-    /// Converts the first character of a string to uppercase using the casing rules of the invariant culture.
-    /// If the input string is null or empty, the original string is returned unchanged.
-    /// </summary>
-    /// <param name="source">The input string to convert.</param>
-    /// <returns>
-    /// A new string with the first character converted to uppercase,
-    /// or the original string if it is null or empty.
-    /// </returns>
-    public static string FirstCharToUpper(this string source)
-    {
-        if (string.IsNullOrEmpty(source)) return source;
-
-        return string.Concat(source?[0]
-            .ToString(CultureInfo.InvariantCulture)
-            .ToUpperInvariant(), source.AsSpan(1));
+        return source[..len];
     }
 
     /// <summary>
@@ -137,21 +154,6 @@ public static class StandardStringExtensions
     }
 
     /// <summary>
-    /// Takes a string and an integer length and returns a substring from the beginning of the string
-    /// with a length not exceeding the minimum of the specified length and the source string's length.
-    /// </summary>
-    /// <param name="source">The input string.</param>
-    /// <param name="len">The maximum length of the substring to be returned.</param>
-    /// <returns>A substring from the beginning of the input string.</returns>
-    public static string Left(this string source, int len)
-    {
-        if (string.IsNullOrEmpty(source) || len >= source.Length)
-            return source;
-
-        return source[..len];
-    }
-
-    /// <summary>
     /// Extracts the right substring of a given length from the source string.
     /// If the source string is null or empty, or if the specified length is greater than or equal to the source string's length,
     /// it returns the source string as is.
@@ -166,4 +168,6 @@ public static class StandardStringExtensions
 
         return source[^len..];
     }
+
+    #endregion Public Methods
 }

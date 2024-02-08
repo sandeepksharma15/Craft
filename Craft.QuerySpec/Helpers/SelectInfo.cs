@@ -12,10 +12,21 @@ public class SelectInfo<T, TResult>
     where T : class
     where TResult : class
 {
-    public LambdaExpression Assignor { get; internal set; }
-    public LambdaExpression Assignee { get; internal set; }
+    #region Public Properties
 
-    internal SelectInfo() { }
+    public LambdaExpression Assignee { get; internal set; }
+    public LambdaExpression Assignor { get; internal set; }
+
+    #endregion Public Properties
+
+    #region Internal Constructors
+
+    internal SelectInfo()
+    { }
+
+    #endregion Internal Constructors
+
+    #region Public Constructors
 
     public SelectInfo(LambdaExpression assignor)
         => Initialize(assignor);
@@ -29,9 +40,24 @@ public class SelectInfo<T, TResult>
     public SelectInfo(string assignorPropName, string assigneePropName)
         => Initialize(assignorPropName.CreateMemberExpression<T>(), assigneePropName.CreateMemberExpression<TResult>());
 
+    #endregion Public Constructors
+
+    #region Private Methods
+
+    private static LambdaExpression GetAssignee(LambdaExpression assignor)
+    {
+        var memberExpression = assignor.Body as MemberExpression;
+        var assignorPropName = memberExpression.Member.Name;
+
+        _ = typeof(TResult).GetProperty(assignorPropName)
+            ?? throw new ArgumentException($"You should pass a lambda for the {assignorPropName} if TResult is not T");
+
+        return assignorPropName.CreateMemberExpression<TResult>();
+    }
+
     private void Initialize(LambdaExpression assignor)
     {
-        ArgumentNullException.ThrowIfNull(assignor, nameof(assignor));
+        ArgumentNullException.ThrowIfNull(assignor);
 
         Assignor = assignor;
 
@@ -51,16 +77,7 @@ public class SelectInfo<T, TResult>
         Assignee = assignee ?? throw new ArgumentException($"You must pass a lambda for the {nameof(assignee)}");
     }
 
-    private static LambdaExpression GetAssignee(LambdaExpression assignor)
-    {
-        var memberExpression = assignor.Body as MemberExpression;
-        var assignorPropName = memberExpression.Member.Name;
-
-        _ = typeof(TResult).GetProperty(assignorPropName)
-            ?? throw new ArgumentException($"You should pass a lambda for the {assignorPropName} if TResult is not T");
-
-        return assignorPropName.CreateMemberExpression<TResult>();
-    }
+    #endregion Private Methods
 }
 
 // Summary: JSON converter for SelectInfo<T, TResult>.
@@ -68,6 +85,8 @@ public class SelectInfoJsonConverter<T, TResult> : JsonConverter<SelectInfo<T, T
     where T : class
     where TResult : class
 {
+    #region Public Methods
+
     // Summary: Reads JSON and converts it to a SelectInfo<T, TResult> instance.
     public override SelectInfo<T, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -87,7 +106,7 @@ public class SelectInfoJsonConverter<T, TResult> : JsonConverter<SelectInfo<T, T
 
                 reader.Read();
 
-                if (propertyName == nameof(SelectInfo<T,TResult>.Assignor))
+                if (propertyName == nameof(SelectInfo<T, TResult>.Assignor))
                     selectInfo.Assignor = typeof(T).CreateMemberExpression(reader.GetString());
 
                 if (propertyName == nameof(SelectInfo<T, TResult>.Assignee))
@@ -111,4 +130,6 @@ public class SelectInfoJsonConverter<T, TResult> : JsonConverter<SelectInfo<T, T
 
         writer.WriteEndObject();
     }
+
+    #endregion Public Methods
 }

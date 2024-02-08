@@ -8,6 +8,8 @@ namespace Craft.Extensions.Expressions;
 /// </summary>
 public static class ConditionRemover
 {
+    #region Public Methods
+
     /// <summary>
     /// Removes the specified condition from the given expression.
     /// </summary>
@@ -18,8 +20,8 @@ public static class ConditionRemover
     public static Expression<Func<T, bool>> RemoveCondition<T>(this Expression<Func<T, bool>> expression,
                 Expression<Func<T, bool>> condition)
     {
-        ArgumentNullException.ThrowIfNull(expression, nameof(expression));
-        ArgumentNullException.ThrowIfNull(condition, nameof(condition));
+        ArgumentNullException.ThrowIfNull(expression);
+        ArgumentNullException.ThrowIfNull(condition);
 
         if (ConditionRemoverVisitor<T>.IsEquivalentCondition(expression, condition))
             return null;
@@ -30,12 +32,22 @@ public static class ConditionRemover
         return Expression.Lambda<Func<T, bool>>(modifiedBody, expression.Parameters);
     }
 
+    #endregion Public Methods
+
+    #region Private Classes
+
     /// <summary>
     /// A visitor class responsible for removing conditions from an expression.
     /// </summary>
     private sealed class ConditionRemoverVisitor<T>(Expression<Func<T, bool>> conditionToRemove) : ExpressionVisitor
     {
+        #region Private Fields
+
         private readonly Expression _conditionToRemove = conditionToRemove.Body;
+
+        #endregion Private Fields
+
+        #region Protected Methods
 
         protected override Expression VisitBinary(BinaryExpression node)
         {
@@ -54,6 +66,10 @@ public static class ConditionRemover
             return base.VisitBinary(node);
         }
 
+        #endregion Protected Methods
+
+        #region Public Methods
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Roslynator", "RCS1158:Static member in generic type should use a type parameter", Justification = "<Pending>")]
         public static bool IsEquivalentCondition(Expression expression1, Expression expression2)
         {
@@ -66,5 +82,9 @@ public static class ConditionRemover
             return ExpressionEqualityComparer.Instance.Equals(expression1, expression2)
                 || equalityComparer.Equals(expression1, expression2);
         }
+
+        #endregion Public Methods
     }
+
+    #endregion Private Classes
 }

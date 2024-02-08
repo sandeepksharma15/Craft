@@ -5,6 +5,8 @@ namespace Craft.Extensions.Expressions;
 
 public static class ExpressionExtensions
 {
+    #region Public Methods
+
     /// <summary>
     /// Creates a member expression for the specified property name of a given type.
     /// The resulting expression is a conversion to object to allow representing properties of various types uniformly.
@@ -31,7 +33,7 @@ public static class ExpressionExtensions
     /// </exception>
     public static LambdaExpression CreateMemberExpression(this Type type, string memberName)
     {
-        ArgumentException.ThrowIfNullOrEmpty(memberName, nameof(memberName));
+        ArgumentException.ThrowIfNullOrEmpty(memberName);
 
         // Ensure the specified member exists on the given Type
         _ = type.GetMemberByName(memberName)
@@ -46,4 +48,6 @@ public static class ExpressionExtensions
         // Create and return the LambdaExpression
         return Expression.Lambda(memberExpression, parameter);
     }
+
+    #endregion Public Methods
 }

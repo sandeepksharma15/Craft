@@ -5,40 +5,29 @@ namespace Craft.Utilities.Managers;
 
 public class ObserverManager<TId, T>(ILogger logger) : IEnumerable<T>
 {
-    public int Count => _observers.Count;
-    public void Clear() => _observers.Clear();
+    #region Private Properties
 
     private Dictionary<TId, ObserverEntry> _observers { get; } = [];
+
+    #endregion Private Properties
+
+    #region Public Properties
+
+    public int Count => _observers.Count;
 
     public IDictionary<TId, T> Observers
         => _observers.ToDictionary(_ => _.Key, _ => _.Value.Observer);
 
+    #endregion Public Properties
+
+    #region Public Methods
+
+    public void Clear() => _observers.Clear();
+
     public IEnumerator<T> GetEnumerator()
         => _observers.Select(observer => observer.Value.Observer).GetEnumerator();
+
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-    public void Subscribe(TId id, T observer)
-    {
-        if (_observers.TryGetValue(id, out var entry))
-        {
-            entry.Observer = observer;
-
-            logger.LogDebug("Updating entry for {Id}/{Observer}. {Count} total observers.", id, observer, _observers.Count);
-        }
-        else
-        {
-            _observers[id] = new ObserverEntry(observer);
-
-            logger.LogDebug("Adding entry for {Id}/{Observer}. {Count} total observers after add.", id, observer, _observers.Count);
-        }
-    }
-
-    public void Unsubscribe(TId key)
-    {
-        _observers.Remove(key, out _);
-
-        logger.LogDebug("Observer unsubscribed");
-    }
 
     public async Task NotifyAsync(Func<T, Task> notification, Func<TId, T, bool>? predicate = null)
     {
@@ -66,8 +55,41 @@ public class ObserverManager<TId, T>(ILogger logger) : IEnumerable<T>
         defunctObservers?.ForEach(id => Unsubscribe(id));
     }
 
-    private class ObserverEntry(T observer)
+    public void Subscribe(TId id, T observer)
     {
-        public T Observer { get; set; } = observer;
+        if (_observers.TryGetValue(id, out var entry))
+        {
+            entry.Observer = observer;
+
+            logger.LogDebug("Updating entry for {Id}/{Observer}. {Count} total observers.", id, observer, _observers.Count);
+        }
+        else
+        {
+            _observers[id] = new ObserverEntry(observer);
+
+            logger.LogDebug("Adding entry for {Id}/{Observer}. {Count} total observers after add.", id, observer, _observers.Count);
+        }
     }
+
+    public void Unsubscribe(TId key)
+    {
+        _observers.Remove(key, out _);
+
+        logger.LogDebug("Observer unsubscribed");
+    }
+
+    #endregion Public Methods
+
+    #region Private Classes
+
+    private sealed class ObserverEntry(T observer)
+    {
+        #region Public Properties
+
+        public T Observer { get; set; } = observer;
+
+        #endregion Public Properties
+    }
+
+    #endregion Private Classes
 }

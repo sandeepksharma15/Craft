@@ -2,9 +2,9 @@
 
 namespace Craft.MediaQuery.Models;
 
-public class ResizeEventArgs(ViewportSize viewportSize, Breakpoint breakpoint, bool isFirst = false) : EventArgs
+public class ResizeEventArgs(ViewportSizeEventArgs viewportSize, Breakpoint breakpoint, bool isFirst = false) : EventArgs
 {
-    public ViewportSize ViewportSize { get; set; } = viewportSize;
+    public ViewportSizeEventArgs ViewportSize { get; set; } = viewportSize;
 
     public Breakpoint Breakpoint { get; set; } = breakpoint;
 
@@ -12,7 +12,7 @@ public class ResizeEventArgs(ViewportSize viewportSize, Breakpoint breakpoint, b
 }
 
 public class ContainerResizeEventArgs(string elementId,
-    ViewportSize viewportSize,
+    ViewportSizeEventArgs viewportSize,
     Breakpoint breakpoint,
     bool isFirst = false) : ResizeEventArgs (viewportSize, breakpoint, isFirst)
 {

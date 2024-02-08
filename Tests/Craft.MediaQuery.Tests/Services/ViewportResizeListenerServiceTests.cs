@@ -26,8 +26,8 @@ public class ViewportResizeListenerServiceTests : TestContext
         // Arrange
         JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
         JSInterop
-            .Setup<ViewportSize>("getViewportSize", "084b2348")
-            .SetResult(new ViewportSize { Height = 400, Width = 400 });
+            .Setup<ViewportSizeEventArgs>("getViewportSize", "084b2348")
+            .SetResult(new ViewportSizeEventArgs { Height = 400, Width = 400 });
         JSInterop.Mode = JSRuntimeMode.Loose;
 
         var listener = CreateViewportResizeListener(JSInterop.JSRuntime);

@@ -2,13 +2,21 @@
 
 namespace Craft.MediaQuery.Models;
 
-public class ResizeOptions : IEquatable<ResizeOptions>
+public sealed class ResizeOptions : IEquatable<ResizeOptions>
 {
-    public int ReportRate { get; set; } = 250;
-    public bool EnableLogging { get; set; } = false;
-    public bool SuppressFirstEvent { get; set; } = false;
-    public bool NotifyOnBreakpointOnly { get; set; } = true;
+    #region Public Properties
+
     public Dictionary<Breakpoint, int> Breakpoints { get; set; } = [];
+    public bool EnableLogging { get; set; } = false;
+    public bool NotifyOnBreakpointOnly { get; set; } = true;
+    public int ReportRate { get; set; } = 250;
+    public bool SuppressFirstEvent { get; set; } = false;
+
+    #endregion Public Properties
+
+    #region Public Methods
+
+    public static bool operator !=(ResizeOptions left, ResizeOptions right) => !(left == right);
 
     public static bool operator ==(ResizeOptions left, ResizeOptions right)
     {
@@ -19,8 +27,6 @@ public class ResizeOptions : IEquatable<ResizeOptions>
 
         return left.Equals(right);
     }
-
-    public static bool operator !=(ResizeOptions left, ResizeOptions right) => !(left == right);
 
     public override bool Equals(object obj) => obj is ResizeOptions options && Equals(options);
 
@@ -70,10 +76,14 @@ public class ResizeOptions : IEquatable<ResizeOptions>
 
         return hashCode.ToHashCode();
     }
+
+    #endregion Public Methods
 }
 
 public static class ResizeOptionsExtensions
 {
+    #region Public Methods
+
     public static ResizeOptions Clone(this ResizeOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -87,4 +97,6 @@ public static class ResizeOptionsExtensions
             SuppressFirstEvent = options.SuppressFirstEvent
         };
     }
+
+    #endregion Public Methods
 }

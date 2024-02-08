@@ -6,6 +6,128 @@ namespace Craft.Extensions.Tests.Reflection;
 
 public class ReflectionTests
 {
+    #region Public Methods
+
+    [Fact]
+    public void GetMemberByName_NestedProperty_ReturnsCorrectPropertyDescriptor()
+    {
+        // Arrange
+        var type = typeof(MyClass);
+        const string propertyName = "MyNestedClass.MyNestedProperty";
+
+        // Act
+        var result = type.GetMemberByName(propertyName);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Name.Should().Be("MyNestedProperty");
+    }
+
+    [Fact]
+    public void GetMemberByName_SingleLevelProperty_ReturnsCorrectPropertyDescriptor()
+    {
+        // Arrange
+        var type = typeof(MyClass);
+        const string propertyName = "MyProperty";
+
+        // Act
+        var result = type.GetMemberByName(propertyName);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Name.Should().Be(propertyName);
+    }
+
+    [Fact]
+    public void GetMemberName_ValidPropertyExpression_ReturnsCorrectName()
+    {
+        // Arrange
+        Expression<Func<MyClass, int>> propertyExpression = x => x.MyProperty;
+
+        // Act
+        var result = propertyExpression.GetMemberName();
+
+        // Assert
+        result.Should().Be("MyProperty");
+    }
+
+    [Fact]
+    public void GetMemberType_NestedPropertyExpression_ReturnsCorrectType()
+    {
+        // Arrange
+        Expression<Func<MyClass, string>> propertyExpression = x => x.MyNestedClass.MyNestedProperty;
+
+        // Act
+        var result = propertyExpression.GetMemberType();
+
+        // Assert
+        result.Should().Be(typeof(string));
+    }
+
+    [Fact]
+    public void GetMemberType_ValidPropertyExpression_ReturnsCorrectType()
+    {
+        // Arrange
+        Expression<Func<MyClass, int>> propertyExpression = x => x.MyProperty;
+
+        // Act
+        var result = propertyExpression.GetMemberType();
+
+        // Assert
+        result.Should().Be(typeof(int));
+    }
+
+    [Fact]
+    public void GetPropertyInfo_DirectPropertyAccess_ShouldReturnCorrectPropertyInfo()
+    {
+        // Arrange
+        Expression<Func<MyClass, object>> expression = x => x.MyProperty;
+
+        // Act
+        var result = expression.GetPropertyInfo();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Name.Should().Be(nameof(MyClass.MyProperty));
+    }
+
+    [Fact]
+    public void GetPropertyInfo_InvalidExpression_ShouldThrowArgumentException()
+    {
+        // Arrange
+        Expression<Func<MyClass, object>> expression = x => x.ToString();
+
+        // Act & Assert
+        expression.Invoking(e => e.GetPropertyInfo())
+                  .Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void GetPropertyInfo_InvalidExpression_ThrowsArgumentException()
+    {
+        // Arrange
+        Expression<Func<MyClass, int>> expression = _ => MyClass.MyMethod();
+
+        // Act & Assert
+        expression.Invoking(e => e.GetPropertyInfo())
+            .Should().Throw<ArgumentException>()
+            .WithMessage("Invalid expression. Expected a property access expression.");
+    }
+
+    [Fact]
+    public void GetPropertyInfo_NestedPropertyAccess_ShouldReturnCorrectPropertyInfo()
+    {
+        // Arrange
+        Expression<Func<MyClass, object>> expression = x => x.MyNestedClass.MyNestedProperty;
+
+        // Act
+        var result = expression.GetPropertyInfo();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Name.Should().Be(nameof(MyClass.MyNestedClass.MyNestedProperty));
+    }
+
     [Fact]
     public void GetPropertyInfo_ShouldReturnMatchingProperty_WhenPropertyExists()
     {
@@ -46,135 +168,38 @@ public class ReflectionTests
         propertyInfo.Name.Should().Be(nameof(MyClass.MyProperty));
     }
 
-    [Fact]
-    public void GetPropertyInfo_InvalidExpression_ThrowsArgumentException()
-    {
-        // Arrange
-        Expression<Func<MyClass, int>> expression = _ => MyClass.MyMethod();
+    #endregion Public Methods
 
-        // Act & Assert
-        expression.Invoking(e => e.GetPropertyInfo())
-            .Should().Throw<ArgumentException>()
-            .WithMessage("Invalid expression. Expected a property access expression.");
-    }
-
-    [Fact]
-    public void GetPropertyInfo_DirectPropertyAccess_ShouldReturnCorrectPropertyInfo()
-    {
-        // Arrange
-        Expression<Func<MyClass, object>> expression = x => x.MyProperty;
-
-        // Act
-        var result = expression.GetPropertyInfo();
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Name.Should().Be(nameof(MyClass.MyProperty));
-    }
-
-    [Fact]
-    public void GetPropertyInfo_NestedPropertyAccess_ShouldReturnCorrectPropertyInfo()
-    {
-        // Arrange
-        Expression<Func<MyClass, object>> expression = x => x.MyNestedClass.MyNestedProperty;
-
-        // Act
-        var result = expression.GetPropertyInfo();
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Name.Should().Be(nameof(MyClass.MyNestedClass.MyNestedProperty));
-    }
-
-    [Fact]
-    public void GetPropertyInfo_InvalidExpression_ShouldThrowArgumentException()
-    {
-        // Arrange
-        Expression<Func<MyClass, object>> expression = x => x.ToString();
-
-        // Act & Assert
-        expression.Invoking(e => e.GetPropertyInfo())
-                  .Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
-    public void GetMemberName_ValidPropertyExpression_ReturnsCorrectName()
-    {
-        // Arrange
-        Expression<Func<MyClass, int>> propertyExpression = x => x.MyProperty;
-
-        // Act
-        var result = propertyExpression.GetMemberName();
-
-        // Assert
-        result.Should().Be("MyProperty");
-    }
-
-    [Fact]
-    public void GetMemberType_ValidPropertyExpression_ReturnsCorrectType()
-    {
-        // Arrange
-        Expression<Func<MyClass, int>> propertyExpression = x => x.MyProperty;
-
-        // Act
-        var result = propertyExpression.GetMemberType();
-
-        // Assert
-        result.Should().Be(typeof(int));
-    }
-
-    [Fact]
-    public void GetMemberType_NestedPropertyExpression_ReturnsCorrectType()
-    {
-        // Arrange
-        Expression<Func<MyClass, string>> propertyExpression = x => x.MyNestedClass.MyNestedProperty;
-
-        // Act
-        var result = propertyExpression.GetMemberType();
-
-        // Assert
-        result.Should().Be(typeof(string));
-    }
-
-    [Fact]
-    public void GetMemberByName_SingleLevelProperty_ReturnsCorrectPropertyDescriptor()
-    {
-        // Arrange
-        var type = typeof(MyClass);
-        const string propertyName = "MyProperty";
-
-        // Act
-        var result = type.GetMemberByName(propertyName);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Name.Should().Be(propertyName);
-    }
-
-    [Fact]
-    public void GetMemberByName_NestedProperty_ReturnsCorrectPropertyDescriptor()
-    {
-        // Arrange
-        var type = typeof(MyClass);
-        const string propertyName = "MyNestedClass.MyNestedProperty";
-
-        // Act
-        var result = type.GetMemberByName(propertyName);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Name.Should().Be("MyNestedProperty");
-    }
+    #region Private Classes
 
     private class MyClass
     {
-        public int MyProperty { get; set; }
+        #region Public Properties
+
+        public MyNestedClass MyNestedClass { get; set; } = new();
+        public int MyProperty { get; set; } = default!;
+
+        #endregion Public Properties
+
+        #region Public Methods
+
         public static int MyMethod() => 42;
-        public MyNestedClass MyNestedClass { get; set; }
+
+        #endregion Public Methods
     }
+
+    #endregion Private Classes
+
+    #region Public Classes
 
     public class MyNestedClass
     {
+        #region Public Properties
+
         public string MyNestedProperty { get; set; }
+
+        #endregion Public Properties
     }
+
+    #endregion Public Classes
 }

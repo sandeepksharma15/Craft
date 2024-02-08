@@ -4,6 +4,8 @@ namespace System;
 
 public static class ObjectExtensions
 {
+    #region Public Methods
+
     public static T AsType<T>(this object obj) where T : class => (T)obj;
 
     /// <summary>
@@ -60,11 +62,13 @@ public static class ObjectExtensions
         if (obj is null)
             return default;
 
-        if (typeof(T) == typeof(Guid) && Guid.TryParse(obj?.ToString(), out var guid))
+        if (typeof(T) == typeof(Guid) && Guid.TryParse(obj.ToString(), out Guid guid))
             return (T)(ValueType)guid;
 
         return obj is IConvertible convertible
             ? (T)Convert.ChangeType(convertible, typeof(T), CultureInfo.CurrentCulture)
             : default;
     }
+
+    #endregion Public Methods
 }

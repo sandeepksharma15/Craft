@@ -1,5 +1,6 @@
 ﻿using Craft.MediaQuery.Enums;
 using Craft.MediaQuery.Models;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
@@ -38,12 +39,12 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         remove => Unsubscribe(value);
     }
 
-    public async ValueTask<ViewportSize> GetViewportSizeAsync()
+    public async ValueTask<ViewportSizeEventArgs> GetViewportSizeAsync()
     {
         _logger.LogDebug("[ViewportResizeListener] GetViewportSize Invoked");
 
         var module = await _moduleTask.Value;
-        return await module.InvokeAsync<ViewportSize>("getViewportSize", jsListenerId);
+        return await module.InvokeAsync<ViewportSizeEventArgs>("getViewportSize", jsListenerId);
     }
 
     public async ValueTask<Breakpoint> GetBreakpointAsync()
@@ -54,20 +55,20 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         return await module.InvokeAsync<Breakpoint>("getBreakpoint", jsListenerId);
     }
 
-    public async ValueTask<bool> MatchMediaAsync(string mediaQuery)
-    {
-        _logger.LogDebug("[ViewportResizeListener] MatchMediaAsync Invoked");
-
-        var module = await _moduleTask.Value;
-        return await module.InvokeAsync<bool>("matchMediaQuery", mediaQuery, jsListenerId);
-    }
-
     public async ValueTask<bool> IsBreakpointMatchingAsync(Breakpoint withBreakpoint)
     {
         if (_lastBreakpoint == Breakpoint.None)
             _lastBreakpoint = await GetBreakpointAsync();
 
         return _lastBreakpoint.IsMatchingWith(withBreakpoint);
+    }
+
+    public async ValueTask<bool> MatchMediaAsync(string mediaQuery)
+    {
+        _logger.LogDebug("[ViewportResizeListener] MatchMediaAsync Invoked");
+
+        var module = await _moduleTask.Value;
+        return await module.InvokeAsync<bool>("matchMediaQuery", mediaQuery, jsListenerId);
     }
 
     public async ValueTask<bool> MatchMediaAsync(int? minWidth = null, int? maxWidth = null)
@@ -85,7 +86,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
     }
 
     [JSInvokable]
-    public void RaiseOnResized(ViewportSize viewportSize, Breakpoint breakpoint)
+    public void RaiseOnResized(ViewportSizeEventArgs viewportSize, Breakpoint breakpoint)
     {
         _logger.LogDebug($"[ViewportResizeListener] RaiseOnResized Invoked with Height: [{viewportSize.Height}] Width: [{viewportSize.Height}]");
         _logger.LogDebug($"[ViewportResizeListener] RaiseOnResized Invoked with Breakpoint: [{breakpoint}]");
@@ -96,7 +97,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         _onResized?.Invoke(this, new ResizeEventArgs(viewportSize, breakpoint, false));
     }
 
-    protected virtual void Dispose(bool disposing)
+    protected virtual void DisposeThis(bool disposing)
     {
         _logger.LogDebug("[ViewportResizeListener] Dispose Invoked");
 
@@ -112,7 +113,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         _logger.LogDebug("[ViewportResizeListener] DisposeAsync Invoked");
-#pragma warning disable RCS1075 // Avoid empty catch clause that catches System.Exception.
+#pragma warning disable RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
         try
         {
             if (_moduleTask.IsValueCreated)
@@ -121,11 +122,11 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
                 await module.DisposeAsync();
             }
 
-            Dispose(true);
+            DisposeThis(true);
             GC.SuppressFinalize(this);
         }
         catch (Exception) { }
-#pragma warning restore RCS1075 // Avoid empty catch clause that catches System.Exception.
+#pragma warning restore RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
     }
 
     private void Subscribe(EventHandler<ResizeEventArgs>? value)
@@ -143,7 +144,8 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
         _logger.LogDebug($"[ViewportResizeListener] Unsubscribe Invoked with value: [{value}]");
 
         _onResized -= value;
-        if (_onResized is null)
+
+        if (_onResized.GetInvocationList().Length == 0)
             Task.Run(async () => await Cancel().ConfigureAwait(false));
     }
 

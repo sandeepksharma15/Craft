@@ -1,6 +1,7 @@
 using Craft.MediaQuery.Enums;
 using Craft.MediaQuery.Models;
 using Craft.MediaQuery.Services;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
@@ -8,23 +9,25 @@ namespace Craft.MediaQuery.Components;
 
 public partial class CmBreakpointProvider : ComponentBase, IDisposable
 {
-    [Inject] internal IViewportResizeListener _viewportResizeListener { get; set; }
+    #region Internal Properties
+
     [Inject] internal ILogger<CmBreakpointProvider> _logger { get; set; }
+    [Inject] internal IViewportResizeListener _viewportResizeListener { get; set; }
+
+    #endregion Internal Properties
+
+    #region Public Properties
 
     public Breakpoint Breakpoint { get; private set; } = Breakpoint.None;
 
-    [Parameter] public EventCallback<Breakpoint> OnBreakpointChanged { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public EventCallback<Breakpoint> OnBreakpointChanged { get; set; }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
+    #endregion Public Properties
 
-        if (firstRender)
-            _viewportResizeListener.OnResized += WindowResized;
-    }
+    #region Private Methods
 
-    async void WindowResized(object _, ResizeEventArgs resizeEventArgs)
+    private async void WindowResized(object _, ResizeEventArgs resizeEventArgs)
     {
         _logger.LogDebug("Window is resized Resized");
 
@@ -35,8 +38,28 @@ public partial class CmBreakpointProvider : ComponentBase, IDisposable
         StateHasChanged();
     }
 
+    #endregion Private Methods
+
+    #region Protected Methods
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+            _viewportResizeListener.OnResized += WindowResized;
+    }
+
+    #endregion Protected Methods
+
+    #region Public Methods
+
     public void Dispose()
     {
         _viewportResizeListener.OnResized -= WindowResized;
+
+        GC.SuppressFinalize(this);
     }
+
+    #endregion Public Methods
 }

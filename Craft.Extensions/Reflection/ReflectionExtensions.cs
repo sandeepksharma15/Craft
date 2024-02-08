@@ -5,6 +5,61 @@ namespace System.Reflection;
 
 public static class ReflectionExtensions
 {
+    #region Public Methods
+
+    /// <summary>
+    /// Gets a PropertyDescriptor for a specified member by name within the given Type.
+    /// Supports nested properties using dot notation (e.g., "NestedClass.Property").
+    /// </summary>
+    /// <param name="type">The Type containing the member.</param>
+    /// <param name="memberName">The name of the member to retrieve.</param>
+    /// <returns>A PropertyDescriptor for the specified member or null if not found.</returns>
+    public static PropertyDescriptor GetMemberByName(this Type type, string memberName)
+    {
+        // Get all properties for the given type
+        var members = TypeDescriptor.GetProperties(type);
+
+        // If the memberName does not contain a dot, find the property directly
+        if (!memberName.Contains('.'))
+            return members.Find(memberName, true);
+
+        // If the memberName contains a dot, consider it as a nested property
+        var memberNameParts = memberName.Split('.');
+        var topLevelMember = members.Find(memberNameParts[0], true);
+
+        // If the top-level member is found, get child properties and find the nested property
+        return topLevelMember?.GetChildProperties()?.Find(memberNameParts[1], true);
+    }
+
+    /// <summary>
+    /// Retrieves the name of a property from a lambda expression.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the source object.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="property">The lambda expression representing the property.</param>
+    /// <returns>The name of the property.</returns>
+    public static string GetMemberName<TSource, TProperty>(this Expression<Func<TSource, TProperty>> property)
+        => property.GetPropertyInfo().Name;
+
+    /// <summary>
+    /// Gets the underlying type of the member represented by the lambda expression.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the source object.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="property">The lambda expression representing the property.</param>
+    /// <returns>The underlying type of the member, handling nullable types appropriately.</returns>
+    public static Type GetMemberType<TSource, TProperty>(this Expression<Func<TSource, TProperty>> property)
+    {
+        // Get the PropertyInfo object for the expression and then retrieve the underlying type
+        var type = property.GetPropertyInfo().GetMemberUnderlyingType();
+
+        // Handle nullable types by returning the underlying type if the type is Nullable<>
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            return Nullable.GetUnderlyingType(type);
+
+        return type;
+    }
+
     /// <summary>
     /// Gets the <see cref="PropertyInfo"/> of a specified property by name from the given <see cref="Type"/>.
     /// Throws an <see cref="ArgumentException"/> if the property is not found.
@@ -52,65 +107,15 @@ public static class ReflectionExtensions
             if (memberExpression.Member is PropertyInfo propertyInfo)
                 return propertyInfo;
         }
-        else if (expression.Body is UnaryExpression unaryExpression)
+        else if (expression.Body is UnaryExpression unaryExpression &&
+                    unaryExpression.Operand is MemberExpression nestedMemberExpression &&
+                    nestedMemberExpression.Member is PropertyInfo nestedPropertyInfo)
         {
-            if (unaryExpression.Operand is MemberExpression nestedMemberExpression && nestedMemberExpression.Member is PropertyInfo nestedPropertyInfo)
-                return nestedPropertyInfo;
+            return nestedPropertyInfo;
         }
 
         throw new ArgumentException("Invalid expression. Expected a property access expression.");
     }
 
-    /// <summary>
-    /// Retrieves the name of a property from a lambda expression.
-    /// </summary>
-    /// <typeparam name="TSource">The type of the source object.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
-    /// <param name="property">The lambda expression representing the property.</param>
-    /// <returns>The name of the property.</returns>
-    public static string GetMemberName<TSource, TProperty>(this Expression<Func<TSource, TProperty>> property)
-        => property.GetPropertyInfo().Name;
-
-    /// <summary>
-    /// Gets the underlying type of the member represented by the lambda expression.
-    /// </summary>
-    /// <typeparam name="TSource">The type of the source object.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
-    /// <param name="property">The lambda expression representing the property.</param>
-    /// <returns>The underlying type of the member, handling nullable types appropriately.</returns>
-    public static Type GetMemberType<TSource, TProperty>(this Expression<Func<TSource, TProperty>> property)
-    {
-        // Get the PropertyInfo object for the expression and then retrieve the underlying type
-        var type = property.GetPropertyInfo().GetMemberUnderlyingType();
-
-        // Handle nullable types by returning the underlying type if the type is Nullable<>
-        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-            return Nullable.GetUnderlyingType(type);
-
-        return type;
-    }
-
-    /// <summary>
-    /// Gets a PropertyDescriptor for a specified member by name within the given Type.
-    /// Supports nested properties using dot notation (e.g., "NestedClass.Property").
-    /// </summary>
-    /// <param name="type">The Type containing the member.</param>
-    /// <param name="memberName">The name of the member to retrieve.</param>
-    /// <returns>A PropertyDescriptor for the specified member or null if not found.</returns>
-    public static PropertyDescriptor GetMemberByName(this Type type, string memberName)
-    {
-        // Get all properties for the given type
-        var members = TypeDescriptor.GetProperties(type);
-
-        // If the memberName does not contain a dot, find the property directly
-        if (!memberName.Contains('.'))
-            return members.Find(memberName, true);
-
-        // If the memberName contains a dot, consider it as a nested property
-        var memberNameParts = memberName.Split('.');
-        var topLevelMember = members.Find(memberNameParts[0], true);
-
-        // If the top-level member is found, get child properties and find the nested property
-        return topLevelMember?.GetChildProperties()?.Find(memberNameParts[1], true);
-    }
+    #endregion Public Methods
 }

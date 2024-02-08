@@ -4,6 +4,89 @@ namespace System;
 
 public static class TypeExtensions
 {
+    #region Public Methods
+
+    /// <summary>
+    /// Retrieves a list of class names within the current AppDomain that are inherited from the specified <paramref name="type"/>
+    /// and marked with the specified attribute <typeparamref name="T"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of attribute to check for.</typeparam>
+    /// <param name="type">The base type to check for inheritance.</param>
+    /// <returns>A list of class names with the specified attribute.</returns>
+    public static IList<string> GetClassesWithAttribute<T>(this Type type) where T : Attribute
+    {
+        if (type is null) return [];
+
+        // Get the list of all the types inherited from class type having attribute T
+        var classes = AppDomain.CurrentDomain.GetAssemblies()
+               .SelectMany(s => s.GetTypes())
+               .Where(t => type.IsAssignableFrom(t) && t.HasAttribute<T>() && t.IsClass && !t.IsAbstract)
+               .Select(t => t.Name)
+               .ToList();
+
+        return classes;
+    }
+
+    /// <summary>
+    /// Gets a list of class names that are inherited from the specified <paramref name="type"/>
+    /// and do not have the specified attribute <typeparamref name="T"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of attribute to check for.</typeparam>
+    /// <param name="type">The base type to check for inherited classes without the attribute.</param>
+    /// <returns>A list of class names that meet the criteria.</returns>
+    public static IList<string> GetClassesWithoutAttribute<T>(this Type type) where T : Attribute
+    {
+        if (type is null) return [];
+
+        // Get the list of all the types inherited from class type not having attribute T
+        var classes = AppDomain.CurrentDomain.GetAssemblies()
+               .SelectMany(s => s.GetTypes())
+               .Where(t => type.IsAssignableFrom(t) && !t.HasAttribute<T>() && t.IsClass && !t.IsAbstract)
+               .Select(t => t.Name)
+               .ToList();
+
+        return classes;
+    }
+
+    /// <summary>
+    /// Gets a list of class names that are inherited from the specified <paramref name="type"/>.
+    /// </summary>
+    /// <param name="type">The base type to check for inherited classes.</param>
+    /// <returns>A list of class names that are inherited from the base type.</returns>
+    public static IList<string> GetInheritedClasses(this Type type)
+    {
+        if (type is null) return [];
+
+        // Get the list of all the types inherited from class type
+        var classes = AppDomain.CurrentDomain.GetAssemblies()
+               .SelectMany(s => s.GetTypes())
+               .Where(t => type.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract && (type != t))
+               .Select(t => t.Name)
+               .ToList();
+
+        return classes;
+    }
+
+    public static Type GetMemberUnderlyingType(this MemberInfo member)
+    {
+        return member?.MemberType switch
+        {
+            MemberTypes.Field => ((FieldInfo)member).FieldType,
+            MemberTypes.Property => ((PropertyInfo)member).PropertyType,
+            MemberTypes.Event => ((EventInfo)member).EventHandlerType,
+            _ => throw new ArgumentException("MemberInfo must be if type FieldInfo, PropertyInfo or EventInfo", nameof(member)),
+        };
+    }
+
+    /// <summary>
+    /// Gets the non-nullable type from the provided type. If the type is nullable,
+    /// returns the underlying non-nullable type; otherwise, returns the original type.
+    /// </summary>
+    /// <param name="type">The input type.</param>
+    /// <returns>The non-nullable type.</returns>
+    public static Type GetNonNullableType(this Type type)
+        => Nullable.GetUnderlyingType(type) ?? type;
+
     /// <summary>
     /// Checks if the specified <paramref name="type"/> has the specified attribute <typeparamref name="T"/>.
     /// </summary>
@@ -18,21 +101,18 @@ public static class TypeExtensions
     }
 
     /// <summary>
-    /// Determines whether the specified <paramref name="type"/> is a nullable type.
+    /// Checks if the specified <paramref name="derivedType"/> has implemented the specified interface <paramref name="baseType"/>.
     /// </summary>
-    /// <param name="type">The type to check for nullable.</param>
-    /// <returns>True if the type is nullable; otherwise, false.</returns>
-    public static bool IsNullable(this Type type)
-        => Nullable.GetUnderlyingType(type) != null;
+    /// <param name="derivedType">The derived type to check.</param>
+    /// <param name="baseType">The interface type to check for implementation.</param>
+    /// <returns>True if the derived type implements the interface; otherwise, false.</returns>
+    public static bool HasImplementedInterface(this Type derivedType, Type baseType)
+    {
+        if (derivedType == null || baseType?.IsInterface != true)
+            return false;
 
-    /// <summary>
-    /// Gets the non-nullable type from the provided type. If the type is nullable,
-    /// returns the underlying non-nullable type; otherwise, returns the original type.
-    /// </summary>
-    /// <param name="type">The input type.</param>
-    /// <returns>The non-nullable type.</returns>
-    public static Type GetNonNullableType(this Type type)
-        => Nullable.GetUnderlyingType(type) ?? type;
+        return derivedType.GetInterfaces().Contains(baseType);
+    }
 
     /// <summary>
     /// Checks if the specified <paramref name="derivedClassType"/> is derived from the <paramref name="baseClassType"/>.
@@ -57,18 +137,12 @@ public static class TypeExtensions
     }
 
     /// <summary>
-    /// Checks if the specified <paramref name="derivedType"/> has implemented the specified interface <paramref name="baseType"/>.
+    /// Determines whether the specified <paramref name="type"/> is a nullable type.
     /// </summary>
-    /// <param name="derivedType">The derived type to check.</param>
-    /// <param name="baseType">The interface type to check for implementation.</param>
-    /// <returns>True if the derived type implements the interface; otherwise, false.</returns>
-    public static bool HasImplementedInterface(this Type derivedType, Type baseType)
-    {
-        if (derivedType == null || baseType?.IsInterface != true)
-            return false;
-
-        return derivedType.GetInterfaces().Contains(baseType);
-    }
+    /// <param name="type">The type to check for nullable.</param>
+    /// <returns>True if the type is nullable; otherwise, false.</returns>
+    public static bool IsNullable(this Type type)
+        => Nullable.GetUnderlyingType(type) != null;
 
     /// <summary>
     /// Checks if the specified <paramref name="type"/> represents a numeric type.
@@ -104,75 +178,5 @@ public static class TypeExtensions
         }
     }
 
-    /// <summary>
-    /// Retrieves a list of class names within the current AppDomain that are inherited from the specified <paramref name="type"/>
-    /// and marked with the specified attribute <typeparamref name="T"/>.
-    /// </summary>
-    /// <typeparam name="T">The type of attribute to check for.</typeparam>
-    /// <param name="type">The base type to check for inheritance.</param>
-    /// <returns>A list of class names with the specified attribute.</returns>
-    public static IList<string> GetClassesWithAttribute<T>(this Type type) where T : Attribute
-    {
-        if (type is null) return null;
-
-        // Get the list of all the types inherited from class type having attribute T
-        var classes = AppDomain.CurrentDomain.GetAssemblies()
-               .SelectMany(s => s.GetTypes())
-               .Where(t => type.IsAssignableFrom(t) && t.HasAttribute<T>() && t.IsClass && !t.IsAbstract)
-               .Select(t => t.Name)
-               .ToList();
-
-        return classes;
-    }
-
-    /// <summary>
-    /// Gets a list of class names that are inherited from the specified <paramref name="type"/>
-    /// and do not have the specified attribute <typeparamref name="T"/>.
-    /// </summary>
-    /// <typeparam name="T">The type of attribute to check for.</typeparam>
-    /// <param name="type">The base type to check for inherited classes without the attribute.</param>
-    /// <returns>A list of class names that meet the criteria.</returns>
-    public static IList<string> GetClassesWithoutAttribute<T>(this Type type) where T : Attribute
-    {
-        if (type is null) return null;
-
-        // Get the list of all the types inherited from class type not having attribute T
-        var classes = AppDomain.CurrentDomain.GetAssemblies()
-               .SelectMany(s => s.GetTypes())
-               .Where(t => type.IsAssignableFrom(t) && !t.HasAttribute<T>() && t.IsClass && !t.IsAbstract)
-               .Select(t => t.Name)
-               .ToList();
-
-        return classes;
-    }
-
-    /// <summary>
-    /// Gets a list of class names that are inherited from the specified <paramref name="type"/>.
-    /// </summary>
-    /// <param name="type">The base type to check for inherited classes.</param>
-    /// <returns>A list of class names that are inherited from the base type.</returns>
-    public static IList<string> GetInheritedClasses(this Type type)
-    {
-        if (type is null) return null;
-
-        // Get the list of all the types inherited from class type
-        var classes = AppDomain.CurrentDomain.GetAssemblies()
-               .SelectMany(s => s.GetTypes())
-               .Where(t => type.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract && (type != t))
-               .Select(t => t.Name)
-               .ToList();
-
-        return classes;
-    }
-
-    public static Type GetMemberUnderlyingType(this MemberInfo member)
-    {
-        return member?.MemberType switch
-        {
-            MemberTypes.Field => ((FieldInfo)member).FieldType,
-            MemberTypes.Property => ((PropertyInfo)member).PropertyType,
-            MemberTypes.Event => ((EventInfo)member).EventHandlerType,
-            _ => throw new ArgumentException("MemberInfo must be if type FieldInfo, PropertyInfo or EventInfo", nameof(member)),
-        };
-    }
+    #endregion Public Methods
 }

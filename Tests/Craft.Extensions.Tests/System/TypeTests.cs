@@ -5,35 +5,48 @@ using FluentAssertions;
 namespace Craft.Extensions.Tests.System;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-public class TestAttribute : Attribute { }
+public class TestAttribute : Attribute
+{ }
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-public class AnotherAttribute : Attribute { }
+public class AnotherAttribute : Attribute
+{ }
 
-public class BaseClass { }
+public class BaseClass
+{ }
 
 [Test]
-public class DerivedClass : BaseClass, IInterface, IGenericInterface<string> { }
+public class DerivedClass : BaseClass, IInterface, IGenericInterface<string>
+{ }
 
 [Test]
-public class ClassA : BaseClass { }
+public class ClassA : BaseClass
+{ }
 
 [Another]
-public class ClassB : BaseClass { }
+public class ClassB : BaseClass
+{ }
 
-public interface IInterface { }
+public interface IInterface
+{ }
 
-public interface IGenericInterface<T> { }
+public interface IGenericInterface<T>
+{ }
 
-public interface INonGenericInterface { }
+public interface INonGenericInterface
+{ }
 
 #pragma warning disable IDE0051, RCS1213, CS0169, CS0067
+
 public class MyTestClass
 {
     private readonly int _myField;
+
     public string MyProperty { get; set; }
+
     public event EventHandler MyEvent;
 }
+
 #pragma warning restore CS0169, RCS1213, IDE0051, CS0067
 
 public class TypeTests
@@ -163,7 +176,7 @@ public class TypeTests
         var result = type.GetClassesWithAttribute<TestAttribute>();
 
         // Assert
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [Fact]
@@ -202,7 +215,7 @@ public class TypeTests
         var result = type.GetClassesWithoutAttribute<TestAttribute>();
 
         // Assert
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [Fact]

@@ -1,25 +1,21 @@
 ﻿using System.Linq.Expressions;
 using System.Text.Json;
+
 using Craft.QuerySpec.Helpers;
+
 using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
 public class SearchInfoTests
 {
+    #region Private Fields
+
     private JsonSerializerOptions serializeOptions;
 
-    [Fact]
-    public void DefaultConstructor_Initialization()
-    {
-        // Arrange & Act
-        var searchInfo = new SearchInfo<MyResult>();
+    #endregion Private Fields
 
-        // Assert
-        searchInfo.SearchGroup.Should().Be(0); // Assuming default value is 0.
-        searchInfo.SearchTerm.Should().BeNull();
-        searchInfo.SearchItem.Should().BeNull();
-    }
+    #region Public Methods
 
     [Fact]
     public void Constructor_InitializationWithValidValues()
@@ -38,13 +34,6 @@ public class SearchInfoTests
         searchInfo.SearchItem.Should().Be(searchItem);
     }
 
-    [Fact]
-    public void Constructor_NullSearchExpression_ThrowsException()
-    {
-        // Arrange & Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new SearchInfo<object>(null, "validTerm"));
-    }
-
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -55,6 +44,25 @@ public class SearchInfoTests
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => new SearchInfo<MyResult>(searchItem, searchTerm));
+    }
+
+    [Fact]
+    public void Constructor_NullSearchExpression_ThrowsException()
+    {
+        // Arrange & Act & Assert
+        Assert.Throws<ArgumentNullException>(() => new SearchInfo<object>(null, "validTerm"));
+    }
+
+    [Fact]
+    public void DefaultConstructor_Initialization()
+    {
+        // Arrange & Act
+        var searchInfo = new SearchInfo<MyResult>();
+
+        // Assert
+        searchInfo.SearchGroup.Should().Be(0); // Assuming default value is 0.
+        searchInfo.SearchTerm.Should().BeNull();
+        searchInfo.SearchItem.Should().BeNull();
     }
 
     [Fact]
@@ -80,9 +88,19 @@ public class SearchInfoTests
         deserializedInfo.SearchItem.Should().BeEquivalentTo(searchItem);
     }
 
+    #endregion Public Methods
+
+    #region Private Classes
+
     private class MyResult
     {
+        #region Public Properties
+
         public long Id { get; set; }
-        public string ResultName { get; set; }
+        public string ResultName { get; set; } = default!;
+
+        #endregion Public Properties
     }
+
+    #endregion Private Classes
 }

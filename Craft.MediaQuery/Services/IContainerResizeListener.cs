@@ -11,7 +11,7 @@ public interface IContainerResizeListener
 
     Task UnsubscribeAsync(string elementId);
 
-    ValueTask<ViewportSize> GetContainerSizeAsync(string elementId);
+    ValueTask<ViewportSizeEventArgs> GetContainerSizeAsync(string elementId);
 
     ValueTask<Breakpoint> GetContainerBreakpointAsync(string elementId);
 
