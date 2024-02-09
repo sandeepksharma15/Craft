@@ -2,6 +2,4 @@
 
 namespace Craft.TestHelper.Models;
 
-public class TestRole : IdentityRole<int>
-{
-}
+public class TestRole : IdentityRole<int>;

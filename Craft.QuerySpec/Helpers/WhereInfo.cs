@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Craft.Extensions.System;
 using Craft.QuerySpec.Builders;
 
@@ -59,6 +60,9 @@ public class WhereInfoJsonConverter<T> : JsonConverter<WhereInfo<T>> where T : c
 {
     #region Public Methods
 
+    private static string RemoveAccessor(string source)
+        => Regex.Replace(source, @"\((\w+)\.", string.Empty);
+
     public override WhereInfo<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         Expression<Func<T, bool>> filter = null;
@@ -101,7 +105,8 @@ public class WhereInfoJsonConverter<T> : JsonConverter<WhereInfo<T>> where T : c
     {
         writer.WriteStartObject();
 
-        writer.WriteString(nameof(WhereInfo<T>.Filter), value.Filter.Body.ToString());
+        writer.WriteString(nameof(WhereInfo<T>.Filter),
+            RemoveAccessor(value.Filter.Body.ToString()));
 
         writer.WriteEndObject();
     }

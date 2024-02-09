@@ -196,12 +196,15 @@ public class ServiceProviderExtensionsTests
     }
 }
 
-interface ITestService { }
-class TestService : ITestService { }
-class TestService1 : ITestService { }
-class TestService2 : ITestService { }
+internal interface ITestService;
 
-class TestService3(ITestService testService = null)
+internal class TestService : ITestService;
+
+internal class TestService1 : ITestService;
+
+internal class TestService2 : ITestService;
+
+internal class TestService3(ITestService testService = null)
 {
     public ITestService TestService { get; set; } = testService;
 }
