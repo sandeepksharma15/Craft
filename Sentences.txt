@@ -1,0 +1,5 @@
+Please review this code and suggest optimizations and improvements. Please add summary comments as well. Thanks
+
+Write all possible unit test cases for this code using xunit and fluentassertions. Use Theory based tests. Thanks
+
+Write all possible unit test cases for this code using xunit and fluentassertions. Thanks
