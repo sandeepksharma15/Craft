@@ -8,17 +8,6 @@ public readonly struct CssBuilder(string value)
 
     public static CssBuilder Default(string value) => new(value);
 
-    public readonly string Build()
-        => stringBuffer != null ? stringBuffer.ToString().Trim() : string.Empty;
-
-    public override readonly string ToString() => Build();
-
-    public readonly CssBuilder AddValue(string value)
-    {
-        stringBuffer.Append(value);
-        return this;
-    }
-
     public readonly CssBuilder AddClass(string value) => AddValue(" " + value);
 
     public readonly CssBuilder AddClass(string value, bool when = true)
@@ -45,4 +34,15 @@ public readonly struct CssBuilder(string value)
         : additionalAttributes.TryGetValue("class", out var c)
             ? AddClass(c.ToString())
             : this;
+
+    public readonly CssBuilder AddValue(string value)
+    {
+        stringBuffer.Append(value);
+        return this;
+    }
+
+    public readonly string Build()
+                                            => stringBuffer != null ? stringBuffer.ToString().Trim() : string.Empty;
+
+    public override readonly string ToString() => Build();
 }

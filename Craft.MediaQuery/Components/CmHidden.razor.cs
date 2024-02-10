@@ -8,21 +8,17 @@ namespace Craft.MediaQuery.Components;
 
 public partial class CmHidden : ComponentBase, IDisposable
 {
+    private Breakpoint _currentBreakpoint = Breakpoint.None;
     private bool _isHidden = true;
     private bool _isServiceReady = false;
     private bool _isServiceSubscribed = false;
-    private Breakpoint _currentBreakpoint = Breakpoint.None;
-
-    [Inject] private IViewportResizeListener _viewportResizeListener { get; set; }
-    [Inject] private ILogger<CmHidden> _logger { get; set; }
+    [Parameter] public Breakpoint Breakpoint { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
 
     [CascadingParameter]
     public Breakpoint CurrentBreakpointFromProvider { get; set; } = Breakpoint.None;
 
-    [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public Breakpoint Breakpoint { get; set; }
     [Parameter] public bool Invert { get; set; }
-    [Parameter] public EventCallback<bool> IsHiddenChanged { get; set; }
 
     [Parameter]
     public bool IsHidden
@@ -38,10 +34,14 @@ public partial class CmHidden : ComponentBase, IDisposable
         }
     }
 
-    protected override async Task OnParametersSetAsync()
+    [Parameter] public EventCallback<bool> IsHiddenChanged { get; set; }
+    [Inject] private ILogger<CmHidden> _logger { get; set; }
+    [Inject] private IViewportResizeListener _viewportResizeListener { get; set; }
+
+    public void Dispose()
     {
-        await base.OnParametersSetAsync();
-        await UpdateAsync(_currentBreakpoint);
+        if (_isServiceSubscribed && _isServiceReady)
+            _viewportResizeListener.OnResized -= WindowResized;
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -60,19 +60,10 @@ public partial class CmHidden : ComponentBase, IDisposable
         }
     }
 
-    async void WindowResized(object _, ResizeEventArgs resizeEventArgs)
+    protected override async Task OnParametersSetAsync()
     {
-        _logger.LogDebug("Window Resized");
-
-        await UpdateAsync(resizeEventArgs.Breakpoint);
-
-        StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        if (_isServiceSubscribed && _isServiceReady)
-            _viewportResizeListener.OnResized -= WindowResized;
+        await base.OnParametersSetAsync();
+        await UpdateAsync(_currentBreakpoint);
     }
 
     protected async Task UpdateAsync(Breakpoint currentBreakpoint)
@@ -81,7 +72,7 @@ public partial class CmHidden : ComponentBase, IDisposable
             currentBreakpoint = CurrentBreakpointFromProvider;
         else
             if (!_isServiceReady)
-                return;
+            return;
 
         if (currentBreakpoint == Breakpoint.None)
             return;
@@ -98,5 +89,14 @@ public partial class CmHidden : ComponentBase, IDisposable
         IsHidden = hidden;
 
         await Task.CompletedTask;
+    }
+
+    private async void WindowResized(object _, ResizeEventArgs resizeEventArgs)
+    {
+        _logger.LogDebug("Window Resized");
+
+        await UpdateAsync(resizeEventArgs.Breakpoint);
+
+        StateHasChanged();
     }
 }

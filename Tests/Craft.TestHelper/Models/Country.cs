@@ -2,9 +2,8 @@
 
 public class Country
 {
-    public virtual long Id { get; set; }
-
     public List<Company> Companies { get; set; }
+    public virtual long Id { get; set; }
     public string Name { get; set; }
 }
 

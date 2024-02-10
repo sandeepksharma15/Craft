@@ -1,7 +1,7 @@
-﻿using Craft.QuerySpec.Helpers;
-using FluentAssertions;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Text.Json;
+using Craft.QuerySpec.Helpers;
+using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
@@ -27,6 +27,22 @@ public class WhereInfoTests
         // Assert
         whereInfo.Filter.Should().BeEquivalentTo(filterExpression);
         whereInfo.FilterFunc.Invoke("TestString").Should().Be(true);
+    }
+
+    [Fact]
+    public void Serialization_RoundTrip_ReturnsEqualWhereInfo()
+    {
+        // Arrange
+        Expression<Func<MyEntity, bool>> filterExpression = x => x.Name == "John";
+        var whereInfo = new WhereInfo<MyEntity>(filterExpression);
+
+        // Act
+        var serializationInfo = JsonSerializer.Serialize(whereInfo, options);
+        var deserializedWhereInfo = JsonSerializer.Deserialize<WhereInfo<MyEntity>>(serializationInfo, options);
+
+        // Assert
+        deserializedWhereInfo.Should().NotBeNull();
+        deserializedWhereInfo.Filter.Should().BeEquivalentTo(filterExpression);
     }
 
     [Fact]
@@ -76,34 +92,6 @@ public class WhereInfoTests
     }
 
     [Fact]
-    public void WhereInfoJsonConverter_Read_NullJson_ThrowsException()
-    {
-        // Act
-        Action act = () => JsonSerializer.Deserialize<WhereInfo<MyEntity>>("\"null\"", options);
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>();
-    }
-
-    [Fact]
-    public void WhereInfoJsonConverter_Read_ValidJson_ConstructsCorrectly()
-    {
-        // Arrange
-        Expression<Func<MyEntity, bool>> filterExpression = x => x.Name == "John";
-        var filter = filterExpression.ToString();
-        var serializeFilter = JsonSerializer.Serialize<string>(filter);
-
-        const string json = "{\"Filter\": \"Name == 'John'\"}";
-
-        // Act
-        var result = JsonSerializer.Deserialize<WhereInfo<MyEntity>>(json, options);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Filter.Should().BeEquivalentTo(filterExpression);
-    }
-
-    [Fact]
     public void WhereInfoJsonConverter_Read_InvalidJson_ThrowsJsonException()
     {
         // Arrange
@@ -137,19 +125,31 @@ public class WhereInfoTests
     }
 
     [Fact]
-    public void Serialization_RoundTrip_ReturnsEqualWhereInfo()
+    public void WhereInfoJsonConverter_Read_NullJson_ThrowsException()
+    {
+        // Act
+        Action act = () => JsonSerializer.Deserialize<WhereInfo<MyEntity>>("\"null\"", options);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void WhereInfoJsonConverter_Read_ValidJson_ConstructsCorrectly()
     {
         // Arrange
         Expression<Func<MyEntity, bool>> filterExpression = x => x.Name == "John";
-        var whereInfo = new WhereInfo<MyEntity>(filterExpression);
+        var filter = filterExpression.ToString();
+        var serializeFilter = JsonSerializer.Serialize<string>(filter);
+
+        const string json = "{\"Filter\": \"Name == 'John'\"}";
 
         // Act
-        var serializationInfo = JsonSerializer.Serialize(whereInfo, options);
-        var deserializedWhereInfo = JsonSerializer.Deserialize<WhereInfo<MyEntity>>(serializationInfo, options);
+        var result = JsonSerializer.Deserialize<WhereInfo<MyEntity>>(json, options);
 
         // Assert
-        deserializedWhereInfo.Should().NotBeNull();
-        deserializedWhereInfo.Filter.Should().BeEquivalentTo(filterExpression);
+        result.Should().NotBeNull();
+        result.Filter.Should().BeEquivalentTo(filterExpression);
     }
 
     private class MyEntity

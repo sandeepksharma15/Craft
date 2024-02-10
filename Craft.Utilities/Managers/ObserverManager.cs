@@ -5,22 +5,12 @@ namespace Craft.Utilities.Managers;
 
 public class ObserverManager<TId, T>(ILogger logger) : IEnumerable<T>
 {
-    #region Private Properties
-
-    private Dictionary<TId, ObserverEntry> _observers { get; } = [];
-
-    #endregion Private Properties
-
-    #region Public Properties
-
     public int Count => _observers.Count;
 
     public IDictionary<TId, T> Observers
         => _observers.ToDictionary(_ => _.Key, _ => _.Value.Observer);
 
-    #endregion Public Properties
-
-    #region Public Methods
+    private Dictionary<TId, ObserverEntry> _observers { get; } = [];
 
     public void Clear() => _observers.Clear();
 
@@ -78,18 +68,8 @@ public class ObserverManager<TId, T>(ILogger logger) : IEnumerable<T>
         logger.LogDebug("Observer unsubscribed");
     }
 
-    #endregion Public Methods
-
-    #region Private Classes
-
     private sealed class ObserverEntry(T observer)
     {
-        #region Public Properties
-
         public T Observer { get; set; } = observer;
-
-        #endregion Public Properties
     }
-
-    #endregion Private Classes
 }

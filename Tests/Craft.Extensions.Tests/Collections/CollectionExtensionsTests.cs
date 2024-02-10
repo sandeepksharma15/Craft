@@ -5,19 +5,6 @@ namespace Craft.Extensions.Tests.Collections;
 public class CollectionExtensionsTests
 {
     [Fact]
-    public void IsNullOrEmpty_WithNullCollection_ReturnsTrue()
-    {
-        // Arrange
-        ICollection<int>? collection = null;
-
-        // Act
-        var isEmpty = collection.IsNullOrEmpty();
-
-        // Assert
-        isEmpty.Should().BeTrue();
-    }
-
-    [Fact]
     public void IsNullOrEmpty_WithEmptyCollection_ReturnsTrue()
     {
         // Arrange
@@ -41,5 +28,18 @@ public class CollectionExtensionsTests
 
         // Assert
         isEmpty.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsNullOrEmpty_WithNullCollection_ReturnsTrue()
+    {
+        // Arrange
+        ICollection<int>? collection = null;
+
+        // Act
+        var isEmpty = collection.IsNullOrEmpty();
+
+        // Assert
+        isEmpty.Should().BeTrue();
     }
 }

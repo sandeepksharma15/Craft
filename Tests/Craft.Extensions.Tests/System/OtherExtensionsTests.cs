@@ -4,8 +4,6 @@ namespace Craft.Extensions.Tests.System;
 
 public class OtherExtensionsTests
 {
-    #region Public Methods
-
     [Theory]
     [InlineData(null, null)] // Null input should return null
     [InlineData(new byte[0], "")] // Empty byte array should return an empty string
@@ -97,6 +95,4 @@ public class OtherExtensionsTests
         // Assert
         result.Should().Be(expected);
     }
-
-    #endregion Public Methods
 }

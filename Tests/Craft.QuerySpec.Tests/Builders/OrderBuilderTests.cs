@@ -9,8 +9,6 @@ namespace Craft.QuerySpec.Tests.Builders;
 
 public class OrderBuilderTests
 {
-    #region Public Methods
-
     [Fact]
     public void Add_Method_Should_Add_OrderExpression()
     {
@@ -159,6 +157,4 @@ public class OrderBuilderTests
         // Assert
         orderBuilder.OrderExpressions.Should().BeEmpty();
     }
-
-    #endregion Public Methods
 }

@@ -11,42 +11,15 @@ namespace Craft.QuerySpec.Builders;
 [Serializable]
 public class OrderBuilder<T> where T : class
 {
-    #region Public Properties
-
-    /// <summary>
-    /// List of order expressions.
-    /// </summary>
-    public List<OrderInfo<T>> OrderExpressions { get; }
-
-    #endregion Public Properties
-
-    #region Public Constructors
-
     /// <summary>
     /// Constructor to initialize the OrderBuilder.
     /// </summary>
     public OrderBuilder() => OrderExpressions = [];
 
-    #endregion Public Constructors
-
-    #region Private Methods
-
     /// <summary>
-    /// Adjusts the order type based on existing expressions.
+    /// List of order expressions.
     /// </summary>
-    internal OrderTypeEnum AdjustOrderType(OrderTypeEnum orderType)
-    {
-        if (OrderExpressions.Any(x => x.OrderType is OrderTypeEnum.OrderBy or OrderTypeEnum.OrderByDescending))
-            if (orderType is OrderTypeEnum.OrderBy)
-                orderType = OrderTypeEnum.ThenBy;
-            else if (orderType is OrderTypeEnum.OrderByDescending)
-                orderType = OrderTypeEnum.ThenByDescending;
-        return orderType;
-    }
-
-    #endregion Private Methods
-
-    #region Public Methods
+    public List<OrderInfo<T>> OrderExpressions { get; }
 
     /// <summary>
     /// Adds an order expression based on a property expression.
@@ -109,5 +82,16 @@ public class OrderBuilder<T> where T : class
         return this;
     }
 
-    #endregion Public Methods
+    /// <summary>
+    /// Adjusts the order type based on existing expressions.
+    /// </summary>
+    internal OrderTypeEnum AdjustOrderType(OrderTypeEnum orderType)
+    {
+        if (OrderExpressions.Any(x => x.OrderType is OrderTypeEnum.OrderBy or OrderTypeEnum.OrderByDescending))
+            if (orderType is OrderTypeEnum.OrderBy)
+                orderType = OrderTypeEnum.ThenBy;
+            else if (orderType is OrderTypeEnum.OrderByDescending)
+                orderType = OrderTypeEnum.ThenByDescending;
+        return orderType;
+    }
 }

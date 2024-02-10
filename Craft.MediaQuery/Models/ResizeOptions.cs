@@ -4,17 +4,11 @@ namespace Craft.MediaQuery.Models;
 
 public sealed class ResizeOptions : IEquatable<ResizeOptions>
 {
-    #region Public Properties
-
     public Dictionary<Breakpoint, int> Breakpoints { get; set; } = [];
     public bool EnableLogging { get; set; } = false;
     public bool NotifyOnBreakpointOnly { get; set; } = true;
     public int ReportRate { get; set; } = 250;
     public bool SuppressFirstEvent { get; set; } = false;
-
-    #endregion Public Properties
-
-    #region Public Methods
 
     public static bool operator !=(ResizeOptions left, ResizeOptions right) => !(left == right);
 
@@ -76,14 +70,10 @@ public sealed class ResizeOptions : IEquatable<ResizeOptions>
 
         return hashCode.ToHashCode();
     }
-
-    #endregion Public Methods
 }
 
 public static class ResizeOptionsExtensions
 {
-    #region Public Methods
-
     public static ResizeOptions Clone(this ResizeOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -97,6 +87,4 @@ public static class ResizeOptionsExtensions
             SuppressFirstEvent = options.SuppressFirstEvent
         };
     }
-
-    #endregion Public Methods
 }

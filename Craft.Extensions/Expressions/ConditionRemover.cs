@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Craft.Extensions.Expressions;
 
@@ -8,8 +8,6 @@ namespace Craft.Extensions.Expressions;
 /// </summary>
 public static class ConditionRemover
 {
-    #region Public Methods
-
     /// <summary>
     /// Removes the specified condition from the given expression.
     /// </summary>
@@ -32,22 +30,25 @@ public static class ConditionRemover
         return Expression.Lambda<Func<T, bool>>(modifiedBody, expression.Parameters);
     }
 
-    #endregion Public Methods
-
-    #region Private Classes
-
     /// <summary>
     /// A visitor class responsible for removing conditions from an expression.
     /// </summary>
     private sealed class ConditionRemoverVisitor<T>(Expression<Func<T, bool>> conditionToRemove) : ExpressionVisitor
     {
-        #region Private Fields
-
         private readonly Expression _conditionToRemove = conditionToRemove.Body;
 
-        #endregion Private Fields
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Roslynator", "RCS1158:Static member in generic type should use a type parameter", Justification = "<Pending>")]
+        public static bool IsEquivalentCondition(Expression expression1, Expression expression2)
+        {
+            if (expression1.CanReduce) expression1 = expression1.Reduce();
+            if (expression2.CanReduce) expression2 = expression2.Reduce();
 
-        #region Protected Methods
+            var equalityComparer = new ExpressionSemanticEqualityComparer();
+
+            // May need to customize this logic based on specific conditions
+            return ExpressionEqualityComparer.Instance.Equals(expression1, expression2)
+                || equalityComparer.Equals(expression1, expression2);
+        }
 
         protected override Expression VisitBinary(BinaryExpression node)
         {
@@ -65,26 +66,5 @@ public static class ConditionRemover
 
             return base.VisitBinary(node);
         }
-
-        #endregion Protected Methods
-
-        #region Public Methods
-
-        [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Roslynator", "RCS1158:Static member in generic type should use a type parameter", Justification = "<Pending>")]
-        public static bool IsEquivalentCondition(Expression expression1, Expression expression2)
-        {
-            if (expression1.CanReduce) expression1 = expression1.Reduce();
-            if (expression2.CanReduce) expression2 = expression2.Reduce();
-
-            var equalityComparer = new ExpressionSemanticEqualityComparer();
-
-            // May need to customize this logic based on specific conditions
-            return ExpressionEqualityComparer.Instance.Equals(expression1, expression2)
-                || equalityComparer.Equals(expression1, expression2);
-        }
-
-        #endregion Public Methods
     }
-
-    #endregion Private Classes
 }

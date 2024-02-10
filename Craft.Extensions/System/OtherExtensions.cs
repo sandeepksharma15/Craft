@@ -5,8 +5,6 @@ namespace System;
 
 public static class OtherExtensions
 {
-    #region Public Methods
-
     /// <summary>
     /// Converts a byte array to its hexadecimal representation.
     /// </summary>
@@ -82,6 +80,4 @@ public static class OtherExtensions
     /// <returns>The percentage representation of the float value.</returns>
     public static string ToPercentage(this float value)
         => (value * 100).ToString("0.##") + "%";
-
-    #endregion Public Methods
 }

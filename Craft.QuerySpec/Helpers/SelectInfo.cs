@@ -12,22 +12,6 @@ public class SelectInfo<T, TResult>
     where T : class
     where TResult : class
 {
-    #region Public Properties
-
-    public LambdaExpression Assignee { get; internal set; }
-    public LambdaExpression Assignor { get; internal set; }
-
-    #endregion Public Properties
-
-    #region Internal Constructors
-
-    internal SelectInfo()
-    { }
-
-    #endregion Internal Constructors
-
-    #region Public Constructors
-
     public SelectInfo(LambdaExpression assignor)
         => Initialize(assignor);
 
@@ -40,9 +24,11 @@ public class SelectInfo<T, TResult>
     public SelectInfo(string assignorPropName, string assigneePropName)
         => Initialize(assignorPropName.CreateMemberExpression<T>(), assigneePropName.CreateMemberExpression<TResult>());
 
-    #endregion Public Constructors
+    internal SelectInfo()
+    { }
 
-    #region Private Methods
+    public LambdaExpression Assignee { get; internal set; }
+    public LambdaExpression Assignor { get; internal set; }
 
     private static LambdaExpression GetAssignee(LambdaExpression assignor)
     {
@@ -76,8 +62,6 @@ public class SelectInfo<T, TResult>
         Assignor = assignor ?? throw new ArgumentException($"You must pass a lambda for the {nameof(assignor)}");
         Assignee = assignee ?? throw new ArgumentException($"You must pass a lambda for the {nameof(assignee)}");
     }
-
-    #endregion Private Methods
 }
 
 // Summary: JSON converter for SelectInfo<T, TResult>.
@@ -85,8 +69,6 @@ public class SelectInfoJsonConverter<T, TResult> : JsonConverter<SelectInfo<T, T
     where T : class
     where TResult : class
 {
-    #region Public Methods
-
     // Summary: Reads JSON and converts it to a SelectInfo<T, TResult> instance.
     public override SelectInfo<T, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -130,6 +112,4 @@ public class SelectInfoJsonConverter<T, TResult> : JsonConverter<SelectInfo<T, T
 
         writer.WriteEndObject();
     }
-
-    #endregion Public Methods
 }

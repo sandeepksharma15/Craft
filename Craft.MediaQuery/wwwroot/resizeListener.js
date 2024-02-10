@@ -166,7 +166,6 @@ class ResizeListener {
                         width: width
                     },
                     newBreakpoint);
-
             } catch (error) {
                 logger(`Error invoking resize event: ${error}`);
                 // console.log(`Error invoking resize event: ${error}`);

@@ -16,7 +16,7 @@ public static class LinqExtensions
     public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, string orderList)
     {
         // Check for null source or orderList
-        if (source is null || orderList is  null) return source;
+        if (source is null || orderList is null) return source;
 
         // Initial expression based on the source
         Expression queryExpr = source.Expression;

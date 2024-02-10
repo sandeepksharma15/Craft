@@ -5,13 +5,7 @@ namespace Craft.MediaQuery.Services;
 
 public interface IViewportResizeListener
 {
-    #region Public Events
-
     event EventHandler<ResizeEventArgs> OnResized;
-
-    #endregion Public Events
-
-    #region Public Methods
 
     ValueTask<Breakpoint> GetBreakpointAsync();
 
@@ -22,6 +16,4 @@ public interface IViewportResizeListener
     ValueTask<bool> MatchMediaAsync(string mediaQuery);
 
     ValueTask<bool> MatchMediaAsync(int? minWidth = null, int? maxWidth = null);
-
-    #endregion Public Methods
 }

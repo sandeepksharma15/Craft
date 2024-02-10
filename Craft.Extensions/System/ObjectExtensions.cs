@@ -4,8 +4,6 @@ namespace System;
 
 public static class ObjectExtensions
 {
-    #region Public Methods
-
     public static T AsType<T>(this object obj) where T : class => (T)obj;
 
     /// <summary>
@@ -69,6 +67,4 @@ public static class ObjectExtensions
             ? (T)Convert.ChangeType(convertible, typeof(T), CultureInfo.CurrentCulture)
             : default;
     }
-
-    #endregion Public Methods
 }

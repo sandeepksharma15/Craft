@@ -5,7 +5,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace Craft.Extensions.Tests.Identity;
 
@@ -48,7 +47,7 @@ public class UserManagerExtensionsTests
     public async Task ConfirmPhoneNumberAsync_Success()
     {
         // Arrange
-        var testUser = new TestUser { Id = 1,UserName="TestUser", PhoneNumber = "1234567890" };
+        var testUser = new TestUser { Id = 1, UserName = "TestUser", PhoneNumber = "1234567890" };
 
         await userManager.CreateAsync(testUser);
 

@@ -7,8 +7,6 @@ namespace Craft.QuerySpec.Builders;
 
 public static class ExpressionBuilder
 {
-    #region Private Fields
-
     private static readonly MethodInfo _containsMethod = typeof(string)
         .GetMethod("Contains", [typeof(string)]);
 
@@ -24,74 +22,6 @@ public static class ExpressionBuilder
 
     private static readonly MethodInfo _toUpperMethod = typeof(string)
         .GetMethod("ToUpper", []);
-
-    #endregion Private Fields
-
-    #region Private Methods
-
-    private static Expression CreateExpressionBody(MemberExpression leftExpression, Type dataType,
-        string dataValue, ComparisonType comparison)
-    {
-        object value;
-
-        // Get The Current Date Time Format Provider
-        var dateTimeFormatProvider = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
-
-        if (dataType.Equals(typeof(TimeOnly)))
-            value = TimeOnly.Parse(dataValue, dateTimeFormatProvider);
-        else if (dataType.Equals(typeof(DateOnly)))
-            value = DateTime.Parse(dataValue, dateTimeFormatProvider);
-        else
-            value = Convert.ChangeType(dataValue, dataType);
-
-        return dataType == typeof(string)
-            ? CreateStringExpressionBody(leftExpression, dataType, value, comparison)
-            : CreateNonStringExpressionBody(leftExpression, value, comparison);
-    }
-
-    private static Expression CreateNonStringExpressionBody(MemberExpression leftExpression,
-        object value, ComparisonType comparison)
-    {
-        // Create Expression Out Of The Constant Value
-        Expression<Func<object>> closure = () => value;
-
-        // Create RHS Expression
-        UnaryExpression rightExpression = Expression.Convert(closure.Body, leftExpression.Type);
-
-        return comparison switch
-        {
-            ComparisonType.GreaterThan => Expression.GreaterThan(leftExpression, rightExpression),
-            ComparisonType.GreaterThanOrEqualTo => Expression.GreaterThanOrEqual(leftExpression, rightExpression),
-            ComparisonType.LessThan => Expression.LessThan(leftExpression, rightExpression),
-            ComparisonType.LessThanOrEqualTo => Expression.LessThanOrEqual(leftExpression, rightExpression),
-            ComparisonType.NotEqualTo => Expression.NotEqual(leftExpression, rightExpression),
-            _ => Expression.Equal(leftExpression, rightExpression),
-        };
-    }
-
-    private static Expression CreateStringExpressionBody(MemberExpression leftExpression,
-        Type dataType, object value, ComparisonType comparison)
-    {
-        // Convert The Value To Upper Case
-        MethodCallExpression upperCaseValue = Expression.Call(Expression.Constant(value, dataType), _toUpperMethod);
-
-        // Convert The Class Member To Upper Case
-        MethodCallExpression upperMember = Expression.Call(leftExpression, _toUpperMethod);
-
-        return comparison switch
-        {
-            ComparisonType.EndsWith => Expression.Call(upperMember, _endsWithMethod, upperCaseValue),
-            ComparisonType.Contains => Expression.Call(upperMember, _containsMethod, upperCaseValue),
-            ComparisonType.StartsWith => Expression.Call(upperMember, _startsWithMethod, upperCaseValue),
-            ComparisonType.EqualTo => Expression.Call(upperMember, _equalsMethod, upperCaseValue),
-            ComparisonType.NotEqualTo => Expression.Not(Expression.Call(upperMember, _equalsMethod, upperCaseValue)),
-            _ => throw new ArgumentException("String type doesn't supports this comparison"),
-        };
-    }
-
-    #endregion Private Methods
-
-    #region Public Methods
 
     public static Expression<Func<T, bool>> CreateWhereExpression<T>(FilterInfo filterInfo)
     {
@@ -149,5 +79,63 @@ public static class ExpressionBuilder
         return Expression.Lambda<Func<T, object>>(member, lambdaParam);
     }
 
-    #endregion Public Methods
+    private static Expression CreateExpressionBody(MemberExpression leftExpression, Type dataType,
+                    string dataValue, ComparisonType comparison)
+    {
+        object value;
+
+        // Get The Current Date Time Format Provider
+        var dateTimeFormatProvider = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+
+        if (dataType.Equals(typeof(TimeOnly)))
+            value = TimeOnly.Parse(dataValue, dateTimeFormatProvider);
+        else if (dataType.Equals(typeof(DateOnly)))
+            value = DateTime.Parse(dataValue, dateTimeFormatProvider);
+        else
+            value = Convert.ChangeType(dataValue, dataType);
+
+        return dataType == typeof(string)
+            ? CreateStringExpressionBody(leftExpression, dataType, value, comparison)
+            : CreateNonStringExpressionBody(leftExpression, value, comparison);
+    }
+
+    private static Expression CreateNonStringExpressionBody(MemberExpression leftExpression,
+        object value, ComparisonType comparison)
+    {
+        // Create Expression Out Of The Constant Value
+        Expression<Func<object>> closure = () => value;
+
+        // Create RHS Expression
+        UnaryExpression rightExpression = Expression.Convert(closure.Body, leftExpression.Type);
+
+        return comparison switch
+        {
+            ComparisonType.GreaterThan => Expression.GreaterThan(leftExpression, rightExpression),
+            ComparisonType.GreaterThanOrEqualTo => Expression.GreaterThanOrEqual(leftExpression, rightExpression),
+            ComparisonType.LessThan => Expression.LessThan(leftExpression, rightExpression),
+            ComparisonType.LessThanOrEqualTo => Expression.LessThanOrEqual(leftExpression, rightExpression),
+            ComparisonType.NotEqualTo => Expression.NotEqual(leftExpression, rightExpression),
+            _ => Expression.Equal(leftExpression, rightExpression),
+        };
+    }
+
+    private static Expression CreateStringExpressionBody(MemberExpression leftExpression,
+        Type dataType, object value, ComparisonType comparison)
+    {
+        // Convert The Value To Upper Case
+        MethodCallExpression upperCaseValue = Expression.Call(Expression.Constant(value, dataType), _toUpperMethod);
+
+        // Convert The Class Member To Upper Case
+        MethodCallExpression upperMember = Expression.Call(leftExpression, _toUpperMethod);
+
+        return comparison switch
+        {
+            ComparisonType.EndsWith => Expression.Call(upperMember, _endsWithMethod, upperCaseValue),
+            ComparisonType.Contains => Expression.Call(upperMember, _containsMethod, upperCaseValue),
+            ComparisonType.StartsWith => Expression.Call(upperMember, _startsWithMethod, upperCaseValue),
+            ComparisonType.EqualTo => Expression.Call(upperMember, _equalsMethod, upperCaseValue),
+            ComparisonType.NotEqualTo => Expression.Not(Expression.Call(upperMember, _equalsMethod, upperCaseValue)),
+            _ => throw new ArgumentException("String type doesn't supports this comparison"),
+        };
+    }
 }

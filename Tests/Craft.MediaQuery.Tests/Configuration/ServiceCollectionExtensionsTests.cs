@@ -7,14 +7,10 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-using Moq;
-
 namespace Craft.MediaQuery.Tests.Configuration;
 
 public class ServiceCollectionExtensionsTests
 {
-    #region Public Methods
-
     [Fact]
     public void AddViewportResizeListener_ShouldConfigureServices()
     {
@@ -76,6 +72,4 @@ public class ServiceCollectionExtensionsTests
         var configuredOptions = serviceProvider.GetRequiredService<IOptions<ResizeOptions>>().Value;
         configuredOptions.Should().BeEquivalentTo(new ResizeOptions { ReportRate = 1000, EnableLogging = true });
     }
-
-    #endregion Public Methods
 }

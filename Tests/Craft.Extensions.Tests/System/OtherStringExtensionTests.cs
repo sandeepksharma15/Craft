@@ -5,35 +5,6 @@ namespace Craft.Extensions.Tests.System;
 
 public class OtherStringExtensionTests
 {
-    [Fact]
-    public void RemoveExtraSpaces_NullString_ReturnsNull()
-    {
-        // Arrange
-        const string input = null;
-
-        // Act
-        var result = input.RemoveExtraSpaces();
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Theory]
-    [InlineData("", "")]
-    [InlineData("  single   space  ", "single space")]
-    [InlineData("  multiple   spaces   between   words  ", "multiple spaces between words")]
-    [InlineData("   leading   spaces", "leading spaces")]
-    [InlineData("trailing   spaces   ", "trailing spaces")]
-    [InlineData("   leading   and   trailing   spaces   ", "leading and trailing spaces")]
-    public void RemoveExtraSpaces_ValidInput_ReturnsExpectedResult(string input, string expectedResult)
-    {
-        // Act
-        var result = input.RemoveExtraSpaces();
-
-        // Assert
-        result.Should().Be(expectedResult);
-    }
-
     [Theory]
     [InlineData(null, null)]
     [InlineData("", "")]
@@ -89,20 +60,33 @@ public class OtherStringExtensionTests
         result.Should().Be(expectedResult, because: $"{testCase}");
     }
 
-    [Theory]
-    [InlineData("test123", "test", StringComparison.Ordinal, "123", "456", "789")]
-    [InlineData("example.txt", "example", StringComparison.OrdinalIgnoreCase, ".txt", ".TXT")]
-    [InlineData("hello", "hello", StringComparison.Ordinal, "world")]
-    [InlineData("", "", StringComparison.Ordinal, "suffix")]
-    [InlineData(null, null, StringComparison.Ordinal, "suffix")]
-    [InlineData("caseSensitive", "caseSen", StringComparison.Ordinal, "sitive")]
-    public void RemovePostFix_ShouldRemovePostFixes(string input, string expected, StringComparison comparisonType, params string[] postfixes)
+    [Fact]
+    public void RemoveExtraSpaces_NullString_ReturnsNull()
     {
+        // Arrange
+        const string input = null;
+
         // Act
-        var result = input.RemovePostFix(comparisonType, postfixes);
+        var result = input.RemoveExtraSpaces();
 
         // Assert
-        result.Should().Be(expected);
+        result.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData("", "")]
+    [InlineData("  single   space  ", "single space")]
+    [InlineData("  multiple   spaces   between   words  ", "multiple spaces between words")]
+    [InlineData("   leading   spaces", "leading spaces")]
+    [InlineData("trailing   spaces   ", "trailing spaces")]
+    [InlineData("   leading   and   trailing   spaces   ", "leading and trailing spaces")]
+    public void RemoveExtraSpaces_ValidInput_ReturnsExpectedResult(string input, string expectedResult)
+    {
+        // Act
+        var result = input.RemoveExtraSpaces();
+
+        // Assert
+        result.Should().Be(expectedResult);
     }
 
     [Theory]
@@ -122,16 +106,16 @@ public class OtherStringExtensionTests
     }
 
     [Theory]
-    [InlineData("test123", "123", StringComparison.Ordinal, "test")]
-    [InlineData("example.txt", ".txt", StringComparison.OrdinalIgnoreCase, "example", ".TXT")]
+    [InlineData("test123", "test", StringComparison.Ordinal, "123", "456", "789")]
+    [InlineData("example.txt", "example", StringComparison.OrdinalIgnoreCase, ".txt", ".TXT")]
     [InlineData("hello", "hello", StringComparison.Ordinal, "world")]
-    [InlineData("", "", StringComparison.Ordinal, "prefix")]
-    [InlineData(null, null, StringComparison.Ordinal, "prefix")]
-    [InlineData("caseSensitive", "sitive", StringComparison.Ordinal, "caseSen")]
-    public void RemovePreFix_ShouldRemovePreFixes(string input, string expected, StringComparison comparisonType, params string[] prefixes)
+    [InlineData("", "", StringComparison.Ordinal, "suffix")]
+    [InlineData(null, null, StringComparison.Ordinal, "suffix")]
+    [InlineData("caseSensitive", "caseSen", StringComparison.Ordinal, "sitive")]
+    public void RemovePostFix_ShouldRemovePostFixes(string input, string expected, StringComparison comparisonType, params string[] postfixes)
     {
         // Act
-        var result = input.RemovePreFix(comparisonType, prefixes);
+        var result = input.RemovePostFix(comparisonType, postfixes);
 
         // Assert
         result.Should().Be(expected);
@@ -148,6 +132,22 @@ public class OtherStringExtensionTests
     {
         // Act
         var result = input.RemovePreFix(prefixes);
+
+        // Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("test123", "123", StringComparison.Ordinal, "test")]
+    [InlineData("example.txt", ".txt", StringComparison.OrdinalIgnoreCase, "example", ".TXT")]
+    [InlineData("hello", "hello", StringComparison.Ordinal, "world")]
+    [InlineData("", "", StringComparison.Ordinal, "prefix")]
+    [InlineData(null, null, StringComparison.Ordinal, "prefix")]
+    [InlineData("caseSensitive", "sitive", StringComparison.Ordinal, "caseSen")]
+    public void RemovePreFix_ShouldRemovePreFixes(string input, string expected, StringComparison comparisonType, params string[] prefixes)
+    {
+        // Act
+        var result = input.RemovePreFix(comparisonType, prefixes);
 
         // Assert
         result.Should().Be(expected);

@@ -5,6 +5,53 @@ namespace Craft.Extensions.Tests.System;
 public class StandardStringExtensionsTests
 {
     [Theory]
+    [InlineData("abc", 'c', StringComparison.Ordinal, "abc")] // No change expected
+    [InlineData("Hello", 'o', StringComparison.OrdinalIgnoreCase, "Hello")] // No change with case-insensitive comparison
+    [InlineData("world", '!', StringComparison.Ordinal, "world!")] // Append character
+    [InlineData("", 'a', StringComparison.Ordinal, "a")] // Empty string, append character
+    [InlineData(null, 'x', StringComparison.Ordinal, null)] // Null string, no change expected
+    public void EnsureEndsWith_ShouldEnsureCorrectEnding(string source, char character,
+        StringComparison comparisonType, string expected)
+    {
+        // Act
+        var result = source.EnsureEndsWith(character, comparisonType);
+
+        // Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("abc", 'a', StringComparison.Ordinal, "abc")] // No change expected
+    [InlineData("world", 'h', StringComparison.OrdinalIgnoreCase, "hworld")] // Prepend character
+    [InlineData("123", '0', StringComparison.Ordinal, "0123")] // Prepend character
+    [InlineData("", 'a', StringComparison.Ordinal, "a")] // Empty string, prepend character
+    [InlineData(null, 'x', StringComparison.Ordinal, null)] // Null string, no change expected
+    public void EnsureStartsWith_ShouldEnsureCorrectStarting(string source, char character,
+        StringComparison comparisonType, string expected)
+    {
+        // Act
+        var result = source.EnsureStartsWith(character, comparisonType);
+
+        // Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("hello", "Hello")] // Normal case
+    [InlineData("WORLD", "WORLD")] // All uppercase, no change expected
+    [InlineData("123", "123")] // Numeric string, no change expected
+    [InlineData("", "")] // Empty string, no change expected
+    [InlineData(null, null)] // Null string, no change expected
+    public void FirstCharToUpper_ShouldConvertFirstCharToUppercase(string input, string expected)
+    {
+        // Act
+        var result = input.FirstCharToUpper();
+
+        // Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
     [InlineData("example.file.txt", '.', "txt")]
     [InlineData("path/to/some/file.txt", '/', "file.txt")]
     [InlineData(null, '.', null)]
@@ -82,50 +129,33 @@ public class StandardStringExtensionsTests
     }
 
     [Theory]
-    [InlineData("abc", 'c', StringComparison.Ordinal, "abc")] // No change expected
-    [InlineData("Hello", 'o', StringComparison.OrdinalIgnoreCase, "Hello")] // No change with case-insensitive comparison
-    [InlineData("world", '!', StringComparison.Ordinal, "world!")] // Append character
-    [InlineData("", 'a', StringComparison.Ordinal, "a")] // Empty string, append character
-    [InlineData(null, 'x', StringComparison.Ordinal, null)] // Null string, no change expected
-    public void EnsureEndsWith_ShouldEnsureCorrectEnding(string source, char character,
-        StringComparison comparisonType, string expected)
+    [InlineData(null, 5, null)] // Null source should return null
+    [InlineData("", 5, "")] // Empty source should return empty string
+    [InlineData("abcdef", 0, "")] // Length 0 should return empty string
+    [InlineData("abcdef", 5, "abcde")] // Length less than source length should return the left substring
+    [InlineData("abcdef", 10, "abcdef")] // Length greater than or equal to source length should return the source string
+    public void Left_ShouldReturnExpectedResult(string source, int len, string expectedResult)
     {
         // Act
-        var result = source.EnsureEndsWith(character, comparisonType);
+        var result = source.Left(len);
 
         // Assert
-        result.Should().Be(expected);
+        result.Should().Be(expectedResult);
     }
 
     [Theory]
-    [InlineData("abc", 'a', StringComparison.Ordinal, "abc")] // No change expected
-    [InlineData("world", 'h', StringComparison.OrdinalIgnoreCase, "hworld")] // Prepend character
-    [InlineData("123", '0', StringComparison.Ordinal, "0123")] // Prepend character
-    [InlineData("", 'a', StringComparison.Ordinal, "a")] // Empty string, prepend character
-    [InlineData(null, 'x', StringComparison.Ordinal, null)] // Null string, no change expected
-    public void EnsureStartsWith_ShouldEnsureCorrectStarting(string source, char character,
-        StringComparison comparisonType, string expected)
+    [InlineData("123", 123)]
+    [InlineData("456.78", 456.78)]
+    [InlineData("0", 0)]
+    [InlineData("-789", -789)]
+    [InlineData("3.14", 3.14)]
+    public void Parse_PositiveTestCases_ReturnsExpectedResult(string input, float expectedResult)
     {
         // Act
-        var result = source.EnsureStartsWith(character, comparisonType);
+        var result = input.Parse<float>();
 
         // Assert
-        result.Should().Be(expected);
-    }
-
-    [Theory]
-    [InlineData("hello", "Hello")] // Normal case
-    [InlineData("WORLD", "WORLD")] // All uppercase, no change expected
-    [InlineData("123", "123")] // Numeric string, no change expected
-    [InlineData("", "")] // Empty string, no change expected
-    [InlineData(null, null)] // Null string, no change expected
-    public void FirstCharToUpper_ShouldConvertFirstCharToUppercase(string input, string expected)
-    {
-        // Act
-        var result = input.FirstCharToUpper();
-
-        // Assert
-        result.Should().Be(expected);
+        result.Should().Be(expectedResult);
     }
 
     [Theory]
@@ -149,36 +179,6 @@ public class StandardStringExtensionsTests
     {
         // Act
         var result = input.Parse<int>();
-
-        // Assert
-        result.Should().Be(expectedResult);
-    }
-
-    [Theory]
-    [InlineData("123", 123)]
-    [InlineData("456.78", 456.78)]
-    [InlineData("0", 0)]
-    [InlineData("-789", -789)]
-    [InlineData("3.14", 3.14)]
-    public void Parse_PositiveTestCases_ReturnsExpectedResult(string input, float expectedResult)
-    {
-        // Act
-        var result = input.Parse<float>();
-
-        // Assert
-        result.Should().Be(expectedResult);
-    }
-
-    [Theory]
-    [InlineData(null, 5, null)] // Null source should return null
-    [InlineData("", 5, "")] // Empty source should return empty string
-    [InlineData("abcdef", 0, "")] // Length 0 should return empty string
-    [InlineData("abcdef", 5, "abcde")] // Length less than source length should return the left substring
-    [InlineData("abcdef", 10, "abcdef")] // Length greater than or equal to source length should return the source string
-    public void Left_ShouldReturnExpectedResult(string source, int len, string expectedResult)
-    {
-        // Act
-        var result = source.Left(len);
 
         // Assert
         result.Should().Be(expectedResult);

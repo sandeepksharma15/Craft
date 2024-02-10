@@ -1,13 +1,26 @@
-﻿using Craft.QuerySpec.Enums;
+﻿using System.Linq.Expressions;
+using Craft.QuerySpec.Enums;
 using Craft.QuerySpec.Helpers;
 using Craft.TestHelper.Models;
 using FluentAssertions;
-using System.Linq.Expressions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
 public class FilterInfoTests
 {
+    [Fact]
+    public void GetExpression_WithFilterInfo_ReturnsValidExpression()
+    {
+        // Arrange
+        var filterInfo = new FilterInfo(typeof(long).FullName, "Name", "1", ComparisonType.EqualTo);
+
+        // Act
+        var expression = filterInfo.GetExpression<Company>();
+
+        // Assert
+        expression.Body.NodeType.Should().Be(ExpressionType.Equal);
+    }
+
     [Fact]
     public void GetFilterInfo_WithPropertyExpression_ReturnsCorrectFilterInfo()
     {
@@ -38,18 +51,5 @@ public class FilterInfoTests
         filterInfo.Name.Should().Be("Length");
         filterInfo.Value.Should().Be("10");
         filterInfo.Comparison.Should().Be(ComparisonType.GreaterThan);
-    }
-
-    [Fact]
-    public void GetExpression_WithFilterInfo_ReturnsValidExpression()
-    {
-        // Arrange
-        var filterInfo = new FilterInfo(typeof(long).FullName, "Name", "1", ComparisonType.EqualTo);
-
-        // Act
-        var expression = filterInfo.GetExpression<Company>();
-
-        // Assert
-        expression.Body.NodeType.Should().Be(ExpressionType.Equal);
     }
 }

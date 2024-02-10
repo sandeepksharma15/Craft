@@ -21,10 +21,10 @@ public class ExpressionBuilderTests
     }
 
     [Fact]
-    public void CreateWhereExpression_ShouldReturnCorrectExpression()
+    public void CreateNonStringExpressionBody_ShouldReturnCorrectComparisonExpression()
     {
         // Arrange
-        FilterInfo filterInfo = new(typeof(string).FullName, "Name", "Company 1", ComparisonType.EqualTo);
+        FilterInfo filterInfo = new(typeof(long).FullName, "Id", "1", ComparisonType.EqualTo);
 
         // Act
         var expression = ExpressionBuilder.CreateWhereExpression<Company>(filterInfo);
@@ -38,10 +38,29 @@ public class ExpressionBuilderTests
     }
 
     [Fact]
-    public void CreateNonStringExpressionBody_ShouldReturnCorrectComparisonExpression()
+    public void CreateWhereExpression_ShouldCreateValidExpression()
     {
         // Arrange
-        FilterInfo filterInfo = new(typeof(long).FullName, "Id", "1", ComparisonType.EqualTo);
+        Expression<Func<Company, object>> propertyExpression = (x) => x.Name;
+        const string dataValue = "Company 1";
+        const ComparisonType comparison = ComparisonType.EqualTo;
+
+        // Act
+        var expression = ExpressionBuilder.CreateWhereExpression(propertyExpression, dataValue, comparison);
+        var result = queryable.Where(expression).ToList();
+
+        // Assert
+        expression.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.Should().HaveCount(1);
+        result[0].Name.Should().Be("Company 1");
+    }
+
+    [Fact]
+    public void CreateWhereExpression_ShouldReturnCorrectExpression()
+    {
+        // Arrange
+        FilterInfo filterInfo = new(typeof(string).FullName, "Name", "Company 1", ComparisonType.EqualTo);
 
         // Act
         var expression = ExpressionBuilder.CreateWhereExpression<Company>(filterInfo);
@@ -77,24 +96,5 @@ public class ExpressionBuilderTests
 
         // Assert
         expression.Should().BeNull();
-    }
-
-    [Fact]
-    public void CreateWhereExpression_ShouldCreateValidExpression()
-    {
-        // Arrange
-        Expression<Func<Company, object>> propertyExpression = (x) => x.Name;
-        const string dataValue = "Company 1";
-        const ComparisonType comparison = ComparisonType.EqualTo;
-
-        // Act
-        var expression = ExpressionBuilder.CreateWhereExpression(propertyExpression, dataValue, comparison);
-        var result = queryable.Where(expression).ToList();
-
-        // Assert
-        expression.Should().NotBeNull();
-        result.Should().NotBeNull();
-        result.Should().HaveCount(1);
-        result[0].Name.Should().Be("Company 1");
     }
 }

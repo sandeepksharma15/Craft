@@ -15,20 +15,7 @@ namespace Craft.QuerySpec.Helpers;
 [Serializable]
 public class WhereInfo<T> where T : class
 {
-    #region Private Fields
-
     private readonly Lazy<Func<T, bool>> filterFunc;
-
-    #endregion Private Fields
-
-    #region Public Properties
-
-    public Expression<Func<T, bool>> Filter { get; }
-    public Func<T, bool> FilterFunc => filterFunc.Value;
-
-    #endregion Public Properties
-
-    #region Public Constructors
 
     public WhereInfo(Expression<Func<T, bool>> filter)
     {
@@ -38,9 +25,8 @@ public class WhereInfo<T> where T : class
         filterFunc = new Lazy<Func<T, bool>>(Filter.Compile);
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
+    public Expression<Func<T, bool>> Filter { get; }
+    public Func<T, bool> FilterFunc => filterFunc.Value;
 
     /// <summary>
     /// Checks whether the specified entity matches the filter criteria.
@@ -48,8 +34,6 @@ public class WhereInfo<T> where T : class
     /// <param name="entity">The entity to be evaluated.</param>
     /// <returns>True if the entity matches the filter, false otherwise.</returns>
     public bool Matches(T entity) => FilterFunc.Invoke(entity);
-
-    #endregion Public Methods
 }
 
 /// <summary>
@@ -58,11 +42,6 @@ public class WhereInfo<T> where T : class
 /// <typeparam name="T">The type of the entities being filtered.</typeparam>
 public class WhereInfoJsonConverter<T> : JsonConverter<WhereInfo<T>> where T : class
 {
-    #region Public Methods
-
-    private static string RemoveAccessor(string source)
-        => Regex.Replace(source, @"\((\w+)\.", string.Empty);
-
     public override WhereInfo<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         Expression<Func<T, bool>> filter = null;
@@ -111,5 +90,6 @@ public class WhereInfoJsonConverter<T> : JsonConverter<WhereInfo<T>> where T : c
         writer.WriteEndObject();
     }
 
-    #endregion Public Methods
+    private static string RemoveAccessor(string source)
+                => Regex.Replace(source, @"\((\w+)\.", string.Empty);
 }

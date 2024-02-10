@@ -6,8 +6,6 @@ namespace Craft.MediaQuery.Tests.Enums;
 
 public class BreakpointExtensionsTests
 {
-    #region Public Methods
-
     [Theory]
     [InlineData(Breakpoint.Mobile, Breakpoint.MobileAndUp, true)]
     [InlineData(Breakpoint.Tablet, Breakpoint.TabletAndUp, true)]
@@ -63,6 +61,4 @@ public class BreakpointExtensionsTests
         // Assert
         result.Should().Be(expected);
     }
-
-    #endregion Public Methods
 }

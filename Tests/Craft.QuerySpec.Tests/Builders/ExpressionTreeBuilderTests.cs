@@ -8,8 +8,6 @@ namespace Craft.QuerySpec.Tests.Builders;
 
 public class ExpressionTreeBuilderTests
 {
-    #region Public Methods
-
     [Fact]
     public void AllRegExPatterns()
     {
@@ -131,40 +129,28 @@ public class ExpressionTreeBuilderTests
         var filter = new Dictionary<string, string> { { "p", "d" } };
         ExpressionTreeBuilder.BuildBinaryTreeExpression<TestClass>(filter).Should().BeNull();
     }
-
-    #endregion Public Methods
 }
 
 public class TestClass
 {
-    #region Public Properties
-
     public IEnumerable<string> Collection { get; set; }
     public string Id { get; set; }
     public int NumericValue { get; set; }
     public string StringValue { get; set; }
-
-    #endregion Public Properties
 }
 
 public class ToBinaryTree_EmptyOrNullOrIncorrectFilter_ReturnsNull_Data : TheoryData<IDictionary<string, string>>
 {
-    #region Public Constructors
-
     public ToBinaryTree_EmptyOrNullOrIncorrectFilter_ReturnsNull_Data()
     {
         Add(null);
         Add(new Dictionary<string, string>());
         Add(new Dictionary<string, string> { { nameof(TestClass.NumericValue), "d" } });
     }
-
-    #endregion Public Constructors
 }
 
 internal class ExpressionBuilderForTest : ExpressionTreeBuilder
 {
-    #region Internal Fields
-
     internal const string BinaryPatternValue = BinaryPattern;
 
     internal const string BinaryWithBracketsPatternValue = BinaryWithBracketsPattern;
@@ -177,13 +163,7 @@ internal class ExpressionBuilderForTest : ExpressionTreeBuilder
 
     internal const string HasSurroundingBracketsOnlyValue = HasSurroundingBracketsOnly;
 
-    #endregion Internal Fields
-
-    #region Internal Methods
-
     internal static Func<MemberExpression, object, Expression> GetBinaryExpressionBuilder(string key) => BinaryExpressionBuilder[key];
 
     internal static Func<Expression, Expression, Expression> GetEvaluationExpressionBuilder(string key) => EvaluationExpressionBuilder[key];
-
-    #endregion Internal Methods
 }

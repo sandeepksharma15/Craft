@@ -1,23 +1,33 @@
-﻿using Microsoft.JSInterop;
-using Moq;
+﻿using Bunit;
+using Craft.MediaQuery.Enums;
 using Craft.MediaQuery.Models;
-using Bunit;
 using Craft.MediaQuery.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Craft.MediaQuery.Enums;
+using Microsoft.JSInterop;
+using Moq;
 
 namespace Craft.MediaQuery.Tests.Services;
 
 public class ViewportResizeListenerServiceTests : TestContext
 {
-    private static ViewportResizeListener CreateViewportResizeListener(IJSRuntime jsRuntime = null)
+    [Fact]
+    public async Task GetBreakpoint_ShouldInvokeJSInterop()
     {
-        var loggerMock = new Mock<ILogger<ViewportResizeListener>>();
-        var optionsMock = Options.Create(new ResizeOptions());
-        jsRuntime ??= new Mock<IJSRuntime>().Object;
+        // Arrange
+        JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
+        JSInterop
+            .Setup<Breakpoint>("getBreakpoint", "084b2348")
+            .SetResult(Breakpoint.Widescreen);
+        JSInterop.Mode = JSRuntimeMode.Loose;
 
-        return new ViewportResizeListener(jsRuntime, loggerMock.Object, optionsMock);
+        var listener = CreateViewportResizeListener(JSInterop.JSRuntime);
+
+        // Act
+        await listener.GetBreakpointAsync();
+
+        // Assert
+        JSInterop.VerifyInvoke("getBreakpoint");
     }
 
     [Fact]
@@ -40,44 +50,6 @@ public class ViewportResizeListenerServiceTests : TestContext
     }
 
     [Fact]
-    public async Task GetBreakpoint_ShouldInvokeJSInterop()
-    {
-        // Arrange
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
-        JSInterop
-            .Setup<Breakpoint>("getBreakpoint", "084b2348")
-            .SetResult(Breakpoint.Widescreen);
-        JSInterop.Mode = JSRuntimeMode.Loose;
-
-        var listener = CreateViewportResizeListener(JSInterop.JSRuntime);
-
-        // Act
-        await listener.GetBreakpointAsync();
-
-        // Assert
-        JSInterop.VerifyInvoke("getBreakpoint");
-    }
-
-    [Fact]
-    public async Task MatchMedia_ShouldInvokeJSInterop()
-    {
-        // Arrange
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
-        JSInterop
-            .Setup<bool>("matchMediaQuery", "someMediaQuery",  "084b2348")
-            .SetResult(true);
-        JSInterop.Mode = JSRuntimeMode.Loose;
-
-        var listener = CreateViewportResizeListener(JSInterop.JSRuntime);
-
-        // Act
-        await listener.MatchMediaAsync("someMediaQuery");
-
-        // Assert
-        JSInterop.VerifyInvoke("matchMediaQuery");
-    }
-
-    [Fact]
     public async Task IsBreakpointMatching_ShouldInvokeGetBreakpointIfNotCached()
     {
         // Arrange
@@ -94,6 +66,34 @@ public class ViewportResizeListenerServiceTests : TestContext
 
         // Assert
         JSInterop.VerifyInvoke("getBreakpoint");
+    }
+
+    [Fact]
+    public async Task MatchMedia_ShouldInvokeJSInterop()
+    {
+        // Arrange
+        JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
+        JSInterop
+            .Setup<bool>("matchMediaQuery", "someMediaQuery", "084b2348")
+            .SetResult(true);
+        JSInterop.Mode = JSRuntimeMode.Loose;
+
+        var listener = CreateViewportResizeListener(JSInterop.JSRuntime);
+
+        // Act
+        await listener.MatchMediaAsync("someMediaQuery");
+
+        // Assert
+        JSInterop.VerifyInvoke("matchMediaQuery");
+    }
+
+    private static ViewportResizeListener CreateViewportResizeListener(IJSRuntime jsRuntime = null)
+    {
+        var loggerMock = new Mock<ILogger<ViewportResizeListener>>();
+        var optionsMock = Options.Create(new ResizeOptions());
+        jsRuntime ??= new Mock<IJSRuntime>().Object;
+
+        return new ViewportResizeListener(jsRuntime, loggerMock.Object, optionsMock);
     }
 
     // public async Task MatchMediaQuery_ShouldInvokeJSInteropForMinWidth()

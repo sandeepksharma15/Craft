@@ -10,7 +10,6 @@ export function containerObserver(dotnetReference, options, elementId) {
     const element = document.getElementById(elementId);
 
     if (!element) {
-
         logger('Element with ', elementId, ' not found');
         return false;
     }
@@ -113,7 +112,6 @@ class CustomObserver {
             }
 
             try {
-
                 if (this.resizeTimers[this.elementId]) {
                     clearTimeout(this.resizeTimers[this.elementId]);
                 }
@@ -145,7 +143,7 @@ class CustomObserver {
 
         this.dotnetObserver = undefined;
 
-        if (this.resizeTimers[this.elementId]) 
+        if (this.resizeTimers[this.elementId])
             clearTimeout(this.resizeTimers[this.elementId]);
 
         this.resizeObserver.unobserve(this.element);

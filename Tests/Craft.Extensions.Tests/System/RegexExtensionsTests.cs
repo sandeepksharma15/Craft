@@ -6,6 +6,22 @@ namespace Craft.Extensions.Tests.System;
 public class RegexExtensionsTests
 {
     [Theory]
+    [InlineData("Test123", @"\d+", true)]     // Positive match
+    [InlineData("NoDigits", @"\d+", false)]   // No match
+    [InlineData(null, @"\d+", false)]         // Null source
+    public void RegexMatch_II_ShouldReturnExpectedResult(string source, string pattern, bool expectedSuccess)
+    {
+        // Arrange
+        var regex = new Regex(pattern);
+
+        // Act
+        var result = source.RegexMatch(regex);
+
+        // Assert
+        result.Success.Should().Be(expectedSuccess);
+    }
+
+    [Theory]
     [InlineData("Input123", "Input\\d+", true)]   // Valid match case
     [InlineData("Test123", "\\d{3}", true)]        // Valid match case
     [InlineData("NoMatch", "\\d+", false)]         // No match case
@@ -21,21 +37,5 @@ public class RegexExtensionsTests
 
         // Assert
         result.Success.Should().Be(expectedResult);
-    }
-
-    [Theory]
-    [InlineData("Test123", @"\d+", true)]     // Positive match
-    [InlineData("NoDigits", @"\d+", false)]   // No match
-    [InlineData(null, @"\d+", false)]         // Null source
-    public void RegexMatch_II_ShouldReturnExpectedResult(string source, string pattern, bool expectedSuccess)
-    {
-        // Arrange
-        var regex = new Regex(pattern);
-
-        // Act
-        var result = source.RegexMatch(regex);
-
-        // Assert
-        result.Success.Should().Be(expectedSuccess);
     }
 }

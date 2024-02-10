@@ -1,7 +1,7 @@
-﻿using Craft.QuerySpec.Enums;
-using Craft.QuerySpec.Helpers;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Text.Json;
+using Craft.QuerySpec.Enums;
+using Craft.QuerySpec.Helpers;
 using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
@@ -32,26 +32,6 @@ public class OrderInfoTests
     }
 
     [Fact]
-    public void Serialization_RoundTrip_ReturnsEqualOrderInfo()
-    {
-        // Arrange
-        Expression<Func<MyTestClass, object>> orderItemExpression = x => x.MyProperty;
-        var orderInfo = new OrderInfo<MyTestClass>(orderItemExpression, OrderTypeEnum.OrderByDescending);
-
-        // Act
-        var serializationInfo = JsonSerializer.Serialize(orderInfo, serializeOptions);
-        var deserializedOrderInfo = JsonSerializer.Deserialize<OrderInfo<MyTestClass>>(serializationInfo, serializeOptions);
-
-        // Assert
-        deserializedOrderInfo.OrderType.Should().Be(OrderTypeEnum.OrderByDescending);
-
-        var compiledDelegate = deserializedOrderInfo.OrderItem.Compile();
-        var myTestClass = new MyTestClass { MyProperty = "TestValue" };
-        var propertyValue = compiledDelegate.DynamicInvoke(myTestClass);
-        propertyValue.Should().Be("TestValue");
-    }
-
-    [Fact]
     public void Read_WithInvalidMemberExpression_ThrowsException()
     {
         // Arrange
@@ -75,6 +55,26 @@ public class OrderInfoTests
 
         // Assert
         orderInfo.Should().BeNull();
+    }
+
+    [Fact]
+    public void Serialization_RoundTrip_ReturnsEqualOrderInfo()
+    {
+        // Arrange
+        Expression<Func<MyTestClass, object>> orderItemExpression = x => x.MyProperty;
+        var orderInfo = new OrderInfo<MyTestClass>(orderItemExpression, OrderTypeEnum.OrderByDescending);
+
+        // Act
+        var serializationInfo = JsonSerializer.Serialize(orderInfo, serializeOptions);
+        var deserializedOrderInfo = JsonSerializer.Deserialize<OrderInfo<MyTestClass>>(serializationInfo, serializeOptions);
+
+        // Assert
+        deserializedOrderInfo.OrderType.Should().Be(OrderTypeEnum.OrderByDescending);
+
+        var compiledDelegate = deserializedOrderInfo.OrderItem.Compile();
+        var myTestClass = new MyTestClass { MyProperty = "TestValue" };
+        var propertyValue = compiledDelegate.DynamicInvoke(myTestClass);
+        propertyValue.Should().Be("TestValue");
     }
 }
 

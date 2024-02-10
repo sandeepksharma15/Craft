@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Craft.Extensions.Tests.DependencyInjection;
 
+internal interface ITestService;
+
 public class ServiceProviderExtensionsTests
 {
     [Fact]
@@ -22,21 +24,6 @@ public class ServiceProviderExtensionsTests
     }
 
     [Fact]
-    public void AddServices_WithValidInterfaceType_RegistersImplementations()
-    {
-        // Arrange
-        var services = new ServiceCollection();
-        var interfaceType = typeof(ITestService);
-
-        // Act
-        services.AddServices(interfaceType, ServiceLifetime.Transient);
-
-        // Assert
-        services.IsImplementationAdded(typeof(TestService1)).Should().BeTrue();
-        services.IsImplementationAdded(typeof(TestService2)).Should().BeTrue();
-    }
-
-    [Fact]
     public void AddServices_WithInvalidInterfaceType_DoesNotRegisterTypes()
     {
         // Arrange
@@ -52,18 +39,18 @@ public class ServiceProviderExtensionsTests
     }
 
     [Fact]
-    public void GetSingletonInstance_WithSingletonService_ReturnsInstance()
+    public void AddServices_WithValidInterfaceType_RegistersImplementations()
     {
         // Arrange
         var services = new ServiceCollection();
-        var singletonService = new TestService();
-        services.AddSingleton(singletonService);
+        var interfaceType = typeof(ITestService);
 
         // Act
-        var retrievedInstance = services.GetSingletonInstance<TestService>();
+        services.AddServices(interfaceType, ServiceLifetime.Transient);
 
         // Assert
-        retrievedInstance.Should().BeSameAs(singletonService);
+        services.IsImplementationAdded(typeof(TestService1)).Should().BeTrue();
+        services.IsImplementationAdded(typeof(TestService2)).Should().BeTrue();
     }
 
     [Fact]
@@ -79,7 +66,7 @@ public class ServiceProviderExtensionsTests
     }
 
     [Fact]
-    public void GetSingletonInstanceOrNull_WithSingletonService_ReturnsInstance()
+    public void GetSingletonInstance_WithSingletonService_ReturnsInstance()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -87,7 +74,7 @@ public class ServiceProviderExtensionsTests
         services.AddSingleton(singletonService);
 
         // Act
-        var retrievedInstance = services.GetSingletonInstanceOrNull<TestService>();
+        var retrievedInstance = services.GetSingletonInstance<TestService>();
 
         // Assert
         retrievedInstance.Should().BeSameAs(singletonService);
@@ -108,17 +95,18 @@ public class ServiceProviderExtensionsTests
     }
 
     [Fact]
-    public void IsAdded_WithRegisteredService_ReturnsTrue()
+    public void GetSingletonInstanceOrNull_WithSingletonService_ReturnsInstance()
     {
         // Arrange
         var services = new ServiceCollection();
-        services.AddSingleton<TestService>();
+        var singletonService = new TestService();
+        services.AddSingleton(singletonService);
 
         // Act
-        var isAdded = services.IsAdded<TestService>();
+        var retrievedInstance = services.GetSingletonInstanceOrNull<TestService>();
 
         // Assert
-        isAdded.Should().BeTrue();
+        retrievedInstance.Should().BeSameAs(singletonService);
     }
 
     [Fact]
@@ -132,6 +120,20 @@ public class ServiceProviderExtensionsTests
 
         // Assert
         isAdded.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsAdded_WithRegisteredService_ReturnsTrue()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        services.AddSingleton<TestService>();
+
+        // Act
+        var isAdded = services.IsAdded<TestService>();
+
+        // Assert
+        isAdded.Should().BeTrue();
     }
 
     [Fact]
@@ -195,8 +197,6 @@ public class ServiceProviderExtensionsTests
         resolvedInstance.TestService.Should().BeSameAs(dependency);
     }
 }
-
-internal interface ITestService;
 
 internal class TestService : ITestService;
 

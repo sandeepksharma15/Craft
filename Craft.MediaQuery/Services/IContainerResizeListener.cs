@@ -7,13 +7,13 @@ public interface IContainerResizeListener
 {
     ResizeOptions ResizeOptions { get; }
 
-    Task SubscribeAsync(string elementId, IContainerObserver observer, bool fireImmediately = true);
-
-    Task UnsubscribeAsync(string elementId);
+    ValueTask<Breakpoint> GetContainerBreakpointAsync(string elementId);
 
     ValueTask<ViewportSizeEventArgs> GetContainerSizeAsync(string elementId);
 
-    ValueTask<Breakpoint> GetContainerBreakpointAsync(string elementId);
-
     ValueTask<bool> IsContainerBreakpointMatchingAsync(string elementId, Breakpoint withBreakpoint);
+
+    Task SubscribeAsync(string elementId, IContainerObserver observer, bool fireImmediately = true);
+
+    Task UnsubscribeAsync(string elementId);
 }

@@ -6,22 +6,6 @@ namespace Craft.Extensions.System;
 public static class OtherStringExtensions
 {
     /// <summary>
-    /// Removes extra spaces between words and trims the input string.
-    /// </summary>
-    /// <param name="input">The input string to be processed.</param>
-    /// <returns>A string with no more than a single space between words, trimmed.</returns>
-    public static string RemoveExtraSpaces(this string input)
-    {
-        if (string.IsNullOrEmpty(input)) return input;
-
-        // Split the string into words and remove empty entries
-        var words = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-        // Join the words with a single space
-        return string.Join(" ", words);
-    }
-
-    /// <summary>
     /// Normalizes line endings in a string by replacing different line ending formats
     /// (CRLF, CR, LF) with the system's default line ending (Environment.NewLine).
     /// </summary>
@@ -72,6 +56,22 @@ public static class OtherStringExtensions
             source = source.Replace(str, string.Empty);
 
         return source;
+    }
+
+    /// <summary>
+    /// Removes extra spaces between words and trims the input string.
+    /// </summary>
+    /// <param name="input">The input string to be processed.</param>
+    /// <returns>A string with no more than a single space between words, trimmed.</returns>
+    public static string RemoveExtraSpaces(this string input)
+    {
+        if (string.IsNullOrEmpty(input)) return input;
+
+        // Split the string into words and remove empty entries
+        var words = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+        // Join the words with a single space
+        return string.Join(" ", words);
     }
 
     /// <summary>

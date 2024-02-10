@@ -1,17 +1,13 @@
-﻿using Craft.QuerySpec.Helpers;
-using Craft.TestHelper.Models;
-
-using FluentAssertions;
-
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Text.Json;
+using Craft.QuerySpec.Helpers;
+using Craft.TestHelper.Models;
+using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
 public class SelectInfoTests
 {
-    #region Public Methods
-
     [Fact]
     public void Constructor_WithInvalidPropName_ShouldThrowArgumentNullException()
     {
@@ -157,19 +153,9 @@ public class SelectInfoTests
         deserializedSelectInfo.Assignee.Should().BeEquivalentTo(assigneeExpression);
     }
 
-    #endregion Public Methods
-
-    #region Private Classes
-
     private class MyResult
     {
-        #region Public Properties
-
         public long Id { get; set; }
         public string ResultName { get; set; } = default!;
-
-        #endregion Public Properties
     }
-
-    #endregion Private Classes
 }

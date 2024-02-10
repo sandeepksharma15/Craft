@@ -6,8 +6,6 @@ namespace Craft.Extensions.Tests.Reflection;
 
 public class ReflectionTests
 {
-    #region Public Methods
-
     [Fact]
     public void GetMemberByName_NestedProperty_ReturnsCorrectPropertyDescriptor()
     {
@@ -168,38 +166,44 @@ public class ReflectionTests
         propertyInfo.Name.Should().Be(nameof(MyClass.MyProperty));
     }
 
-    #endregion Public Methods
-
-    #region Private Classes
-
-    private class MyClass
+    [Fact]
+    public void GetPropertyInfo_WithMemberExpression_ShouldReturnCorrectPropertyInfo()
     {
-        #region Public Properties
+        // Arrange
+        LambdaExpression expr = (Expression<Func<MyClass, object>>)(x => x.MyProperty);
 
-        public MyNestedClass MyNestedClass { get; set; } = new();
-        public int MyProperty { get; set; } = default!;
+        // Act
+        var propertyInfo = expr.GetPropertyInfo();
 
-        #endregion Public Properties
-
-        #region Public Methods
-
-        public static int MyMethod() => 42;
-
-        #endregion Public Methods
+        // Assert
+        propertyInfo.Should().NotBeNull();
+        propertyInfo.Name.Should().Be(nameof(MyClass.MyProperty));
     }
 
-    #endregion Private Classes
+    [Fact]
+    public void GetPropertyInfo_WithUnaryExpression_ShouldReturnCorrectPropertyInfo()
+    {
+        // Arrange
+        LambdaExpression lambdaExpression = (Expression<Func<MyClass, object>>)(x => x.MyNestedClass.MyNestedProperty);
 
-    #region Public Classes
+        // Act
+        var propertyInfo = lambdaExpression.GetPropertyInfo();
+
+        // Assert
+        propertyInfo.Should().NotBeNull();
+        propertyInfo.Name.Should().Be(nameof(MyNestedClass.MyNestedProperty));
+    }
 
     public class MyNestedClass
     {
-        #region Public Properties
-
         public string MyNestedProperty { get; set; }
-
-        #endregion Public Properties
     }
 
-    #endregion Public Classes
+    private class MyClass
+    {
+        public MyNestedClass MyNestedClass { get; set; } = new();
+        public int MyProperty { get; set; } = default!;
+
+        public static int MyMethod() => 42;
+    }
 }

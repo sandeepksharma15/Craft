@@ -9,13 +9,7 @@ namespace Craft.QuerySpec.Tests.Helpers;
 
 public class SearchInfoTests
 {
-    #region Private Fields
-
     private JsonSerializerOptions serializeOptions;
-
-    #endregion Private Fields
-
-    #region Public Methods
 
     [Fact]
     public void Constructor_InitializationWithValidValues()
@@ -88,19 +82,9 @@ public class SearchInfoTests
         deserializedInfo.SearchItem.Should().BeEquivalentTo(searchItem);
     }
 
-    #endregion Public Methods
-
-    #region Private Classes
-
     private class MyResult
     {
-        #region Public Properties
-
         public long Id { get; set; }
         public string ResultName { get; set; } = default!;
-
-        #endregion Public Properties
     }
-
-    #endregion Private Classes
 }

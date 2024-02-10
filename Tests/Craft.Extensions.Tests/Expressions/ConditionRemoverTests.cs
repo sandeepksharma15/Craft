@@ -1,6 +1,6 @@
-﻿using Craft.Extensions.Expressions;
+﻿using System.Linq.Expressions;
+using Craft.Extensions.Expressions;
 using FluentAssertions;
-using System.Linq.Expressions;
 
 namespace Craft.Extensions.Tests.Expressions;
 
@@ -35,11 +35,11 @@ public class ConditionRemoverTests
     }
 
     [Fact]
-    public void RemoveCondition_WithNullOriginalExpression_ShouldThrowArgumentNullException()
+    public void RemoveCondition_WithNullConditionToRemove_ShouldThrowArgumentNullException()
     {
         // Arrange
-        Expression<Func<int, bool>> original = null;
-        Expression<Func<int, bool>> conditionToRemove = x => x < 10;
+        Expression<Func<int, bool>> original = x => x > 5;
+        Expression<Func<int, bool>> conditionToRemove = null;
 
         // Act & Assert
         Action act = () => original.RemoveCondition(conditionToRemove);
@@ -47,11 +47,11 @@ public class ConditionRemoverTests
     }
 
     [Fact]
-    public void RemoveCondition_WithNullConditionToRemove_ShouldThrowArgumentNullException()
+    public void RemoveCondition_WithNullOriginalExpression_ShouldThrowArgumentNullException()
     {
         // Arrange
-        Expression<Func<int, bool>> original = x => x > 5;
-        Expression<Func<int, bool>> conditionToRemove = null;
+        Expression<Func<int, bool>> original = null;
+        Expression<Func<int, bool>> conditionToRemove = x => x < 10;
 
         // Act & Assert
         Action act = () => original.RemoveCondition(conditionToRemove);

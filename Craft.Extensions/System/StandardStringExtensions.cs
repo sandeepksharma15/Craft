@@ -4,8 +4,6 @@ namespace System;
 
 public static class StandardStringExtensions
 {
-    #region Public Methods
-
     /// <summary>
     /// Ensures that a given string ends with a specified character.
     /// If the string is null or empty, the original string is returned unchanged.
@@ -168,6 +166,4 @@ public static class StandardStringExtensions
 
         return source[^len..];
     }
-
-    #endregion Public Methods
 }

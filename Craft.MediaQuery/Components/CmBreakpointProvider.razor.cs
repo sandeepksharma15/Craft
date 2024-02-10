@@ -9,23 +9,26 @@ namespace Craft.MediaQuery.Components;
 
 public partial class CmBreakpointProvider : ComponentBase, IDisposable
 {
-    #region Internal Properties
-
+    public Breakpoint Breakpoint { get; private set; } = Breakpoint.None;
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public EventCallback<Breakpoint> OnBreakpointChanged { get; set; }
     [Inject] internal ILogger<CmBreakpointProvider> _logger { get; set; }
     [Inject] internal IViewportResizeListener _viewportResizeListener { get; set; }
 
-    #endregion Internal Properties
+    public void Dispose()
+    {
+        _viewportResizeListener.OnResized -= WindowResized;
 
-    #region Public Properties
+        GC.SuppressFinalize(this);
+    }
 
-    public Breakpoint Breakpoint { get; private set; } = Breakpoint.None;
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
 
-    [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public EventCallback<Breakpoint> OnBreakpointChanged { get; set; }
-
-    #endregion Public Properties
-
-    #region Private Methods
+        if (firstRender)
+            _viewportResizeListener.OnResized += WindowResized;
+    }
 
     private async void WindowResized(object _, ResizeEventArgs resizeEventArgs)
     {
@@ -37,29 +40,4 @@ public partial class CmBreakpointProvider : ComponentBase, IDisposable
 
         StateHasChanged();
     }
-
-    #endregion Private Methods
-
-    #region Protected Methods
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-
-        if (firstRender)
-            _viewportResizeListener.OnResized += WindowResized;
-    }
-
-    #endregion Protected Methods
-
-    #region Public Methods
-
-    public void Dispose()
-    {
-        _viewportResizeListener.OnResized -= WindowResized;
-
-        GC.SuppressFinalize(this);
-    }
-
-    #endregion Public Methods
 }

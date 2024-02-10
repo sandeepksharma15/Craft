@@ -5,14 +5,6 @@ namespace Craft.TestHelper.Fixtures;
 
 public class DatabaseFixture : IDisposable
 {
-    #region Public Properties
-
-    public TestDbContext DbContext { get; }
-
-    #endregion Public Properties
-
-    #region Public Constructors
-
     public DatabaseFixture()
     {
         var options = new DbContextOptionsBuilder<TestDbContext>()
@@ -24,16 +16,12 @@ public class DatabaseFixture : IDisposable
         DbContext.Database.EnsureCreated();
     }
 
-    #endregion Public Constructors
-
-    #region Public Methods
+    public TestDbContext DbContext { get; }
 
     public void Dispose()
     {
         GC.SuppressFinalize(this);
     }
-
-    #endregion Public Methods
 }
 
 [CollectionDefinition("DatabaseCollection")]

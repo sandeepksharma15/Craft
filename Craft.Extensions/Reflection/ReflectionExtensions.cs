@@ -5,8 +5,6 @@ namespace System.Reflection;
 
 public static class ReflectionExtensions
 {
-    #region Public Methods
-
     /// <summary>
     /// Gets a PropertyDescriptor for a specified member by name within the given Type.
     /// Supports nested properties using dot notation (e.g., "NestedClass.Property").
@@ -117,5 +115,29 @@ public static class ReflectionExtensions
         throw new ArgumentException("Invalid expression. Expected a property access expression.");
     }
 
-    #endregion Public Methods
+    /// <summary>
+    /// Retrieves the PropertyInfo object from a lambda expression representing a property access.
+    /// </summary>
+    /// <param name="expression">The lambda expression.</param>
+    /// <returns>The PropertyInfo object.</returns>
+    public static PropertyInfo GetPropertyInfo(this LambdaExpression expression)
+    {
+        // Check if the expression body is a MemberExpression
+        if (expression.Body is MemberExpression memberExpression)
+        {
+            // If it is, check if the member is a PropertyInfo
+            if (memberExpression.Member is PropertyInfo propertyInfo)
+                return propertyInfo;
+        }
+        // Check if the expression body is a UnaryExpression with a nested MemberExpression
+        else if (expression.Body is UnaryExpression unaryExpression &&
+                    unaryExpression.Operand is MemberExpression nestedMemberExpression &&
+                    nestedMemberExpression.Member is PropertyInfo nestedPropertyInfo)
+        {
+            return nestedPropertyInfo;
+        }
+
+        // If the expression does not match expected patterns, throw an ArgumentException
+        throw new ArgumentException("Invalid expression. Expected a property access expression.");
+    }
 }

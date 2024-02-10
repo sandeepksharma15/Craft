@@ -9,12 +9,6 @@ namespace Craft.QuerySpec.Helpers;
 [Serializable]
 public class SearchInfo<T> where T : class
 {
-    public int SearchGroup { get; internal set; }
-    public string SearchTerm { get; internal set; }
-    public LambdaExpression SearchItem { get; internal set; }
-
-    internal SearchInfo() { }
-
     public SearchInfo(LambdaExpression searchItem, string searchTerm, int searchGroup = 1)
     {
         _ = searchItem ?? throw new ArgumentNullException(nameof(searchItem));
@@ -26,6 +20,13 @@ public class SearchInfo<T> where T : class
         SearchTerm = searchTerm;
         SearchGroup = searchGroup;
     }
+
+    internal SearchInfo()
+    { }
+
+    public int SearchGroup { get; internal set; }
+    public LambdaExpression SearchItem { get; internal set; }
+    public string SearchTerm { get; internal set; }
 }
 
 public class SearchInfoJsonConverter<T> : JsonConverter<SearchInfo<T>> where T : class

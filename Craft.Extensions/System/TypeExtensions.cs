@@ -4,8 +4,6 @@ namespace System;
 
 public static class TypeExtensions
 {
-    #region Public Methods
-
     /// <summary>
     /// Retrieves a list of class names within the current AppDomain that are inherited from the specified <paramref name="type"/>
     /// and marked with the specified attribute <typeparamref name="T"/>.
@@ -177,6 +175,4 @@ public static class TypeExtensions
                 return false;
         }
     }
-
-    #endregion Public Methods
 }

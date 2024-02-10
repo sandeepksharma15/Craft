@@ -76,6 +76,7 @@ public static class EnumValues<T> where T : Enum
 {
     // Static dictionaries to store enum values, names, and descriptions.
     private static readonly Dictionary<T, string> Description = [];
+
     private static readonly Dictionary<T, string> Names = [];
     private static readonly T[] Values;
 

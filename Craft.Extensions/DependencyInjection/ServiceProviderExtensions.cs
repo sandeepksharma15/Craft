@@ -2,8 +2,6 @@
 
 public static class ServiceProviderExtensions
 {
-    #region Public Methods
-
     /// <summary>
     /// Adds a service to the dependency injection container with the specified service lifetime.
     /// Provides a concise syntax for registering services with different lifetimes.
@@ -139,6 +137,4 @@ public static class ServiceProviderExtensions
     /// <returns>The resolved instance of the service.</returns>
     public static T ResolveWith<T>(this IServiceProvider provider, params object[] parameters) where T : class
         => ActivatorUtilities.CreateInstance<T>(provider, parameters);
-
-    #endregion Public Methods
 }

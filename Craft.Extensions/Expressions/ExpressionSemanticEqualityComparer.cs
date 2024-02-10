@@ -8,11 +8,6 @@ namespace Craft.Extensions.Expressions;
 /// </summary>
 public class ExpressionSemanticEqualityComparer : IEqualityComparer<Expression>
 {
-    private static Expression NormalizeExpression(Expression expression)
-    {
-        return new ExpressionNormalizer().Visit(expression);
-    }
-
     public bool Equals(Expression x, Expression y)
     {
         if (x == y) return true;
@@ -24,6 +19,11 @@ public class ExpressionSemanticEqualityComparer : IEqualityComparer<Expression>
 
     public int GetHashCode(Expression obj)
         => NormalizeExpression(obj).ToString().GetHashCode();
+
+    private static Expression NormalizeExpression(Expression expression)
+    {
+        return new ExpressionNormalizer().Visit(expression);
+    }
 
     // The private sealed class ExpressionNormalizer is responsible for normalizing binary expressions.
     // It extends ExpressionVisitor to traverse and modify expression trees.

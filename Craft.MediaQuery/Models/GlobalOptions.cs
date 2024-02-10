@@ -14,13 +14,13 @@ public static class GlobalOptions
         [Breakpoint.ExtraSmall] = 0,
     };
 
-    public static Dictionary<Breakpoint, int> GetDefaultBreakpoints()
-        => DefaultBreakpoints.ToDictionary(entry => entry.Key, entry => entry.Value);
-
     public static Dictionary<Breakpoint, int> GetBreakpoints(ResizeOptions options)
        => (options?.Breakpoints?.Count ?? 0) > 0
            ? options.Breakpoints.ToDictionary(entry => entry.Key, entry => entry.Value)
            : DefaultBreakpoints.ToDictionary(entry => entry.Key, entry => entry.Value);
+
+    public static Dictionary<Breakpoint, int> GetDefaultBreakpoints()
+            => DefaultBreakpoints.ToDictionary(entry => entry.Key, entry => entry.Value);
 
     public static ResizeOptions GetDefaultResizeOptions()
     {

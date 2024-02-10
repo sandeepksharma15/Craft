@@ -6,6 +6,21 @@ namespace Craft.Extensions.Tests.Identity;
 public class IdentityResultExtensionsTests
 {
     [Fact]
+    public void GetErrors_WithMultipleErrors_ReturnsListWithAllErrors()
+    {
+        // Arrange
+        var errorDescriptions = new[] { "Invalid email.", "Password must contain at least one digit." };
+        var errors = errorDescriptions.Select(description => new IdentityError { Description = description }).ToArray();
+        var result = IdentityResult.Failed(errors);
+
+        // Act
+        var resultErrors = result.GetErrors();
+
+        // Assert
+        resultErrors.Should().BeEquivalentTo(errorDescriptions);
+    }
+
+    [Fact]
     public void GetErrors_WithNoErrors_ReturnsEmptyList()
     {
         // Arrange
@@ -30,20 +45,5 @@ public class IdentityResultExtensionsTests
 
         // Assert
         errors.Should().ContainSingle().And.Contain(errorDescription);
-    }
-
-    [Fact]
-    public void GetErrors_WithMultipleErrors_ReturnsListWithAllErrors()
-    {
-        // Arrange
-        var errorDescriptions = new[] { "Invalid email.", "Password must contain at least one digit." };
-        var errors = errorDescriptions.Select(description => new IdentityError { Description = description }).ToArray();
-        var result = IdentityResult.Failed(errors);
-
-        // Act
-        var resultErrors = result.GetErrors();
-
-        // Assert
-        resultErrors.Should().BeEquivalentTo(errorDescriptions);
     }
 }
