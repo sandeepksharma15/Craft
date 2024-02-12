@@ -35,6 +35,7 @@ public class WhereInfoTests
         // Arrange
         Expression<Func<MyEntity, bool>> filterExpression = x => x.Name == "John";
         var whereInfo = new WhereInfo<MyEntity>(filterExpression);
+        var entity = new MyEntity { Name = "John" };
 
         // Act
         var serializationInfo = JsonSerializer.Serialize(whereInfo, options);
@@ -43,6 +44,7 @@ public class WhereInfoTests
         // Assert
         deserializedWhereInfo.Should().NotBeNull();
         deserializedWhereInfo.Filter.Should().BeEquivalentTo(filterExpression);
+        deserializedWhereInfo.FilterFunc(entity).Should().BeTrue();
     }
 
     [Fact]

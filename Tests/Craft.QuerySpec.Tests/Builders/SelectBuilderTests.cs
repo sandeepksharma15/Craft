@@ -26,6 +26,22 @@ public class SelectBuilderTests
     }
 
     [Fact]
+    public void AddExpressionColumn_Should_Add_Column_To_SelectList()
+    {
+        // Arrange
+        var builder = new SelectBuilder<MyEntity, MyResult>();
+
+        // Act
+        builder.Add(s => s.Name, d => d.Name);
+
+        // Assert
+        builder.Build().Should().NotBeNull();
+        builder.Build().Parameters.Should().HaveCount(1);
+        builder.Build().Parameters[0].Type.Should().Be(typeof(MyEntity));
+        builder.Build().Body.Should().BeOfType<MemberInitExpression>();
+    }
+
+    [Fact]
     public void AddPropertyName_Should_Add_Column_To_SelectList()
     {
         // Arrange
@@ -42,21 +58,41 @@ public class SelectBuilderTests
     }
 
     [Fact]
-    public void AddColumn_Should_Add_Column_When_TResult_But_NoAssignTo_If_Same_Property()
+    public void AddExpressionColumn_Should_Add_Column_When_TResult_But_NoAssignTo_If_Same_Property()
     {
         // Arrange
-        Expression<Func<MyEntity, string>> assignor = s => s.Name;
-
         var builder = new SelectBuilder<MyEntity, MyResult>();
 
         // Act
-        builder.Add(assignor);
+        builder.Add(s => s.Name);
 
         // Assert
         builder.Build().Should().NotBeNull();
         builder.Build().Parameters.Should().HaveCount(1);
         builder.Build().Parameters[0].Type.Should().Be(typeof(MyEntity));
         builder.Build().Body.Should().BeOfType<MemberInitExpression>();
+    }
+
+    [Fact]
+    public void BuildAnonymousSelect_ShouldConstructExpressionForObjectType()
+    {
+        // Arrange
+        var data = new[]
+        {
+            new MyEntity { Id = 1, Name = "John", Age = 30 },
+            new MyEntity { Id = 2, Name = "Alice", Age = 25 },
+            new MyEntity { Id = 3, Name = "Bob", Age = 35 }
+        }.AsQueryable();
+        var selectBuilder = new SelectBuilder<MyEntity, object>()
+            .Add(x => x.Name);
+
+        // Act
+        var selectExpression = selectBuilder.Build();
+        var result = data.Select(selectExpression);
+
+        // Assert
+        selectExpression.Parameters.Should().HaveCount(1); // Expecting a single parameter
+        result.Should().HaveCount(3);
     }
 
     [Fact]
@@ -229,6 +265,22 @@ public class SelectBuilderTests
 
         // Assert
         result.Should().HaveCount(3);
+    }
+
+    [Fact]
+    public void Clear_ShouldRemoveAllSelectExpressions()
+    {
+        // Arrange
+        Expression<Func<MyEntity, string>> assignor = s => s.Name;
+        Expression<Func<MyResult, string>> assignee = d => d.Name;
+
+        var builder = new SelectBuilder<MyEntity, MyResult>();
+
+        // Act
+        builder.Clear();
+
+        // Assert
+        builder.SelectCount.Should().Be(0); // Expecting no select expressions after clearing
     }
 }
 
