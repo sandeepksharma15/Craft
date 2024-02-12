@@ -17,7 +17,7 @@ public interface IQuery<T, TResult> : IQuery<T>
     new void Clear();
 }
 
-public interface IQuery<T> : ISerializable where T : class
+public interface IQuery<T> where T : class
 {
     bool AsNoTracking { get; internal set; }
     bool AsSplitQuery { get; internal set; }

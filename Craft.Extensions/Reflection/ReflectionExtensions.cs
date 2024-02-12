@@ -87,8 +87,17 @@ public static class ReflectionExtensions
     /// <returns>The <see cref="PropertyInfo"/> of the accessed property.</returns>
     public static PropertyInfo GetPropertyInfo<TSource, TProperty>(this Expression<Func<TSource, TProperty>> expression)
     {
-        if (expression.Body is MemberExpression memberExpression && memberExpression.Member is PropertyInfo propertyInfo)
-            return propertyInfo;
+        if (expression.Body is MemberExpression memberExpression)
+        {
+            if (memberExpression.Member is PropertyInfo propertyInfo)
+                return propertyInfo;
+        }
+        else if (expression.Body is UnaryExpression unaryExpression &&
+                    unaryExpression.Operand is MemberExpression nestedMemberExpression &&
+                    nestedMemberExpression.Member is PropertyInfo nestedPropertyInfo)
+        {
+            return nestedPropertyInfo;
+        }
 
         throw new ArgumentException("Invalid expression. Expected a property access expression.");
     }
