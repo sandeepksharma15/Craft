@@ -1,4 +1,5 @@
-﻿using Craft.QuerySpec.Core;
+﻿using Castle.Core.Resource;
+using Craft.QuerySpec.Core;
 using Craft.TestHelper.Models;
 using FluentAssertions;
 
@@ -75,5 +76,29 @@ public class QueryTests
 
         // Assert
         result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Clear_ResetsAllQuerySpecifications()
+    {
+        // Arrange
+        var query = new Query<Company, object>
+        {
+            // Set some query specifications
+            AsNoTracking = true,
+            Skip = 10
+        };
+        query.Where(c => c.Name == "John");
+        query.Select(c => c.Name);
+
+        // Act
+        query.Clear();
+
+        // Assert
+        query.AsNoTracking.Should().BeFalse();
+        query.Skip.Should().Be(0);
+        query.WhereBuilder.WhereExpressions.Count().Should().Be(0);
+        query.SelectBuilder.SelectCount.Should().Be(0);
+        query.SelectorMany.Should().BeNull();
     }
 }
