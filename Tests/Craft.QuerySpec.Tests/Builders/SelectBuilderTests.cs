@@ -280,7 +280,7 @@ public class SelectBuilderTests
         builder.Clear();
 
         // Assert
-        builder.SelectCount.Should().Be(0); // Expecting no select expressions after clearing
+        builder.Count.Should().Be(0); // Expecting no select expressions after clearing
     }
 }
 

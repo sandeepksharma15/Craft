@@ -27,8 +27,7 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     /// <summary>
     /// Gets the count of select expressions.
     /// </summary>
-    public long SelectCount
-        => _selectList.Count;
+    public long Count => _selectList.Count;
 
     public SelectBuilder<T, TResult> Add(Expression<Func<T, object>> assignor, Expression<Func<TResult, object>> assignee)
     {
@@ -36,6 +35,7 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
         var assigneeName = assignee.GetMemberName();
 
         _selectList.Add(new SelectInfo<T, TResult>(assignorName, assigneeName));
+
         return this;
     }
 
@@ -45,6 +45,7 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     public SelectBuilder<T, TResult> Add(LambdaExpression assignor, LambdaExpression assignee)
     {
         _selectList.Add(new SelectInfo<T, TResult>(assignor, assignee));
+
         return this;
     }
 
@@ -53,6 +54,7 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
         var columnName = column.GetMemberName();
 
         _selectList.Add(new SelectInfo<T, TResult>(columnName));
+
         return this;
     }
 
@@ -62,6 +64,7 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     public SelectBuilder<T, TResult> Add(LambdaExpression column)
     {
         _selectList.Add(new SelectInfo<T, TResult>(column));
+
         return this;
     }
 
@@ -71,6 +74,7 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     public SelectBuilder<T, TResult> Add(string assignorPropName)
     {
         _selectList.Add(new SelectInfo<T, TResult>(assignorPropName));
+
         return this;
     }
 
@@ -80,6 +84,7 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     public SelectBuilder<T, TResult> Add(string assignorPropName, string assigneePropName)
     {
         _selectList.Add(new SelectInfo<T, TResult>(assignorPropName, assigneePropName));
+
         return this;
     }
 

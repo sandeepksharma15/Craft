@@ -12,6 +12,8 @@ public class WhereBuilder<T> where T : class
 
     public List<WhereInfo<T>> WhereExpressions { get; }
 
+    public long Count => WhereExpressions.Count;
+
     public WhereBuilder<T> Add(Expression<Func<T, bool>> expression)
     {
         ArgumentNullException.ThrowIfNullOrEmpty(nameof(expression));

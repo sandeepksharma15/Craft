@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Craft.Extensions.Expressions;
@@ -53,8 +54,8 @@ public class OrderInfoJsonConverter<T> : JsonConverter<OrderInfo<T>> where T : c
     {
         writer.WriteStartObject();
 
-        var memberExpression = value.OrderItem.Body as MemberExpression;
-        writer.WriteString(nameof(OrderInfo<T>.OrderItem), memberExpression.Member.Name);
+        var memberName = value.OrderItem.GetPropertyInfo().Name;
+        writer.WriteString(nameof(OrderInfo<T>.OrderItem), memberName);
         writer.WriteNumber(nameof(OrderInfo<T>.OrderType), (int)value.OrderType);
 
         writer.WriteEndObject();

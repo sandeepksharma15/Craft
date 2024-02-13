@@ -1,5 +1,7 @@
-﻿using Castle.Core.Resource;
+﻿using System.Text.Json;
+using Castle.Core.Resource;
 using Craft.QuerySpec.Core;
+using Craft.QuerySpec.Helpers;
 using Craft.TestHelper.Models;
 using FluentAssertions;
 
@@ -97,8 +99,41 @@ public class QueryTests
         // Assert
         query.AsNoTracking.Should().BeFalse();
         query.Skip.Should().Be(0);
-        query.WhereBuilder.WhereExpressions.Count().Should().Be(0);
-        query.SelectBuilder.SelectCount.Should().Be(0);
+        query.WhereBuilder.WhereExpressions.Count.Should().Be(0);
+        query.SelectBuilder.Count.Should().Be(0);
         query.SelectorMany.Should().BeNull();
+    }
+
+    [Fact]
+    public void SerializeDeserialize_SimpleQuery_PreservesValues()
+    {
+        // Arrange
+        var query = new Query<Company, object>
+        {
+            // Set some query specifications
+            AsNoTracking = true,
+            Skip = 10
+        };
+        query.Where(c => c.Name == "John");
+        query.Select(c => c.Name);
+        query.OrderBy(c => c.Id);
+
+        // Act
+        var serializeOptions = new JsonSerializerOptions();
+        serializeOptions.Converters.Add(new OrderInfoJsonConverter<Company>());
+        serializeOptions.Converters.Add(new SelectInfoJsonConverter<Company, object>());
+        serializeOptions.Converters.Add(new WhereInfoJsonConverter<Company>());
+        serializeOptions.Converters.Add(new SearchInfoJsonConverter<Company>());
+
+        var serializedQuery = JsonSerializer.Serialize(query, serializeOptions);
+        var deserializedQuery = JsonSerializer.Deserialize<Query<Company, object>>(serializedQuery, serializeOptions);
+
+        // Assert
+        deserializedQuery.Should().NotBeNull();
+        deserializedQuery.WhereBuilder.Count.Should().Be(1);
+        deserializedQuery.OrderBuilder.OrderExpressions.Count.Should().Be(1);
+        deserializedQuery.AsNoTracking.Should().BeTrue();
+        deserializedQuery.Skip.Should().Be(10);
+        deserializedQuery.SelectBuilder.Count.Should().Be(1);
     }
 }

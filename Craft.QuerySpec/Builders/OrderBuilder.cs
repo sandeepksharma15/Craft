@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Craft.Extensions.Expressions;
 using Craft.QuerySpec.Enums;
 using Craft.QuerySpec.Helpers;
@@ -20,6 +22,8 @@ public class OrderBuilder<T> where T : class
     /// List of order expressions.
     /// </summary>
     public List<OrderInfo<T>> OrderExpressions { get; }
+
+    public long Count => OrderExpressions.Count;
 
     /// <summary>
     /// Adds an order expression based on a property expression.
@@ -93,5 +97,39 @@ public class OrderBuilder<T> where T : class
             else if (orderType is OrderTypeEnum.OrderByDescending)
                 orderType = OrderTypeEnum.ThenByDescending;
         return orderType;
+    }
+}
+
+public class OrderBuilderJsonConverter<T> : JsonConverter<OrderBuilder<T>> where T : class
+{
+    public override bool CanConvert(Type objectType)
+        => objectType == typeof(OrderBuilder<T>);
+
+    public override OrderBuilder<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Write(Utf8JsonWriter writer, OrderBuilder<T> value, JsonSerializerOptions options)
+    {
+        // Write the start of the object.
+        writer.WriteStartObject();
+
+        // Write the order expressions.
+        writer.WritePropertyName(nameof(OrderBuilder<T>.OrderExpressions));
+
+        // Start The Array
+        writer.WriteStartArray();
+
+        foreach (var order in value.OrderExpressions)
+        {
+
+        }
+        JsonSerializer.Serialize(writer, value.OrderExpressions, options);
+
+        // End the array
+        writer.WriteEndArray();
+
+        writer.WriteEndObject();
     }
 }
