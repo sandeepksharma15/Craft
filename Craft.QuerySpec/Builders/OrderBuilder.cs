@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Craft.Extensions.Expressions;
@@ -25,15 +26,21 @@ public class OrderBuilder<T> where T : class
 
     public long Count => OrderExpressions.Count;
 
+    public OrderBuilder<T> Add(OrderInfo<T> orderInfo)
+    {
+        ArgumentNullException.ThrowIfNull(nameof(orderInfo));
+        orderInfo.OrderType = AdjustOrderType(orderInfo.OrderType);
+        OrderExpressions.Add(orderInfo);
+        return this;
+    }
+
     /// <summary>
     /// Adds an order expression based on a property expression.
     /// </summary>
     public OrderBuilder<T> Add(Expression<Func<T, object>> propExpr, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
     {
         ArgumentNullException.ThrowIfNull(nameof(propExpr));
-
         OrderExpressions.Add(new OrderInfo<T>(propExpr, AdjustOrderType(orderType)));
-
         return this;
     }
 
@@ -43,9 +50,7 @@ public class OrderBuilder<T> where T : class
     public OrderBuilder<T> Add(string propName, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
     {
         var propExpr = ExpressionBuilder.GetPropertyExpression<T>(propName);
-
         OrderExpressions.Add(new OrderInfo<T>(propExpr, AdjustOrderType(orderType)));
-
         return this;
     }
 
@@ -55,7 +60,6 @@ public class OrderBuilder<T> where T : class
     public OrderBuilder<T> Clear()
     {
         OrderExpressions.Clear();
-
         return this;
     }
 
@@ -65,9 +69,7 @@ public class OrderBuilder<T> where T : class
     public OrderBuilder<T> Remove(Expression<Func<T, object>> propExpr)
     {
         ArgumentNullException.ThrowIfNull(nameof(propExpr));
-
         var comparer = new ExpressionSemanticEqualityComparer();
-
         var orderInfo = OrderExpressions.Find(x => comparer.Equals(x.OrderItem, propExpr));
 
         if (orderInfo != null)
@@ -82,7 +84,6 @@ public class OrderBuilder<T> where T : class
     public OrderBuilder<T> Remove(string propName)
     {
         Remove(ExpressionBuilder.GetPropertyExpression<T>(propName));
-
         return this;
     }
 
@@ -102,34 +103,61 @@ public class OrderBuilder<T> where T : class
 
 public class OrderBuilderJsonConverter<T> : JsonConverter<OrderBuilder<T>> where T : class
 {
+    private static readonly JsonSerializerOptions serializeOptions;
+
+    static OrderBuilderJsonConverter()
+    {
+        serializeOptions = new JsonSerializerOptions();
+        serializeOptions.Converters.Add(new OrderInfoJsonConverter<T>());
+    }
+
     public override bool CanConvert(Type objectType)
         => objectType == typeof(OrderBuilder<T>);
 
     public override OrderBuilder<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
+        // Create a new OrderBuilder
+        var orderBuilder = new OrderBuilder<T>();
+
+        // We Want To Clone The Options To Add The OrderInfoJsonConverter
+        var localOptions = options.GetClone();
+        localOptions.Converters.Add(new OrderInfoJsonConverter<T>());
+
+        // Check for array start
+        if (reader.TokenType != JsonTokenType.StartArray)
+            throw new JsonException("Invalid format for OrderBuilder: expected array of order expressions.");
+
+        // Read each order expression
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndArray)
+                break;
+
+            // Read the individual order expression object
+            var orderInfo = JsonSerializer.Deserialize<OrderInfo<T>>(ref reader, localOptions);
+
+            // Validate and add the order expression
+            if (orderInfo != null)
+                orderBuilder.Add(orderInfo);
+            else
+                throw new JsonException("Invalid order expression encountered in OrderBuilder array.");
+        }
+
+        return orderBuilder;
     }
 
     public override void Write(Utf8JsonWriter writer, OrderBuilder<T> value, JsonSerializerOptions options)
     {
-        // Write the start of the object.
-        writer.WriteStartObject();
-
-        // Write the order expressions.
-        writer.WritePropertyName(nameof(OrderBuilder<T>.OrderExpressions));
-
         // Start The Array
         writer.WriteStartArray();
 
         foreach (var order in value.OrderExpressions)
         {
-
+            var json = JsonSerializer.Serialize(order, serializeOptions);
+            writer.WriteRawValue(json);
         }
-        JsonSerializer.Serialize(writer, value.OrderExpressions, options);
 
         // End the array
         writer.WriteEndArray();
-
-        writer.WriteEndObject();
     }
 }

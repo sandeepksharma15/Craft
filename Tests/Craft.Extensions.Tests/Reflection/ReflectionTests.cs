@@ -194,6 +194,59 @@ public class ReflectionTests
         propertyInfo.Name.Should().Be(nameof(MyNestedClass.MyNestedProperty));
     }
 
+    [Fact]
+    public void Clone_NullInput_ThrowsArgumentNullException()
+    {
+        // Arrange
+        MyClass input = null;
+
+        Assert.Throws<ArgumentNullException>(() => input.GetClone());
+    }
+
+    [Fact]
+    public void Clone_PrimitiveType_ReturnsClonedObject()
+    {
+        // Arrange
+        var input = new MyClass { MyProperty = 42 };
+
+        // Act
+        var clone = input.GetClone();
+
+        // Assert
+        clone.Should().NotBeNull().And.BeOfType<MyClass>();
+        clone.MyProperty.Should().Be(input.MyProperty);
+    }
+
+    [Fact]
+    public void Clone_NestedObject_ReturnsClonedObject()
+    {
+        // Arrange
+        var input = new MyClass { MyNestedClass = new MyNestedClass { MyNestedProperty = "Nested" } };
+
+        // Act
+        var clone = input.GetClone();
+
+        // Assert
+        clone.Should().NotBeNull().And.BeOfType<MyClass>();
+        clone.MyNestedClass.Should().NotBeNull().And.BeOfType<MyNestedClass>();
+        clone.MyNestedClass.MyNestedProperty.Should().Be(input.MyNestedClass.MyNestedProperty);
+    }
+
+    [Fact]
+    public void Clone_StaticMethod_ReturnsClonedObject()
+    {
+        // Arrange
+        var input = new MyClass();
+
+        // Act
+        var clone = input.GetClone();
+
+        // Assert
+        clone.Should().NotBeNull().And.BeOfType<MyClass>();
+        MyClass.MyMethod().Should().Be(42); // Original object's method result
+        clone.MyNestedClass.Should().NotBeNull().And.BeOfType<MyNestedClass>();
+    }
+
     public class MyNestedClass
     {
         public string MyNestedProperty { get; set; }

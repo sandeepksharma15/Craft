@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Text.Json;
 using Craft.QuerySpec.Builders;
 using Craft.QuerySpec.Enums;
 using Craft.QuerySpec.Helpers;
@@ -9,6 +10,15 @@ namespace Craft.QuerySpec.Tests.Builders;
 
 public class OrderBuilderTests
 {
+    private readonly JsonSerializerOptions serializeOptions;
+
+    public OrderBuilderTests()
+    {
+        // Arrange
+        serializeOptions = new JsonSerializerOptions();
+        serializeOptions.Converters.Add(new OrderBuilderJsonConverter<Company>());
+    }
+
     [Fact]
     public void Add_Method_Should_Add_OrderExpression()
     {
@@ -156,5 +166,63 @@ public class OrderBuilderTests
 
         // Assert
         orderBuilder.OrderExpressions.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void OrderBuilder_Should_Initialize_OrderExpressions_List()
+    {
+        // Arrange & Act
+        var orderBuilder = new OrderBuilder<Company>();
+
+        // Assert
+        orderBuilder.OrderExpressions.Should().NotBeNull();
+        orderBuilder.OrderExpressions.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void OrderBuilder_Add_Should_Add_OrderInfo_To_OrderExpressions()
+    {
+        // Arrange
+        var orderBuilder = new OrderBuilder<Company>();
+        Expression<Func<Company, object>> orderExpr = x => x.Id;
+        var orderInfo = new OrderInfo<Company>(orderExpr);
+
+        // Act
+        orderBuilder.Add(orderInfo);
+
+        // Assert
+        orderBuilder.OrderExpressions.Should().Contain(orderInfo);
+    }
+
+    [Fact]
+    public void Write_Should_Serialize_OrderBuilder_OrderExpressions()
+    {
+        // Arrange
+        var orderBuilder = new OrderBuilder<Company>();
+        orderBuilder.Add(c => c.Name);
+        orderBuilder.Add(c => c.Id);
+
+        // Act
+        var serializedOrderBuilder = JsonSerializer.Serialize(orderBuilder, serializeOptions);
+
+        // Assert
+        serializedOrderBuilder.Should().Contain("Name");
+        serializedOrderBuilder.Should().Contain("Id");
+    }
+
+    [Fact]
+    public void Read_Should_Deserialize_OrderBuilder_With_OrderExpressions()
+    {
+        // Arrange
+        const string json = "[{\"OrderItem\":\"Name\",\"OrderType\":1},{\"OrderItem\":\"Id\",\"OrderType\":3}]";
+
+        // Act
+        var orderBuilder = JsonSerializer.Deserialize<OrderBuilder<Company>>(json, serializeOptions);
+
+        // Assert
+        orderBuilder.Should().NotBeNull();
+        orderBuilder.OrderExpressions.Should().HaveCount(2);
+        orderBuilder.OrderExpressions[0].OrderItem.Body.ToString().Should().Contain("x.Name");
+        orderBuilder.OrderExpressions[1].OrderItem.Body.ToString().Should().Contain("x.Id");
     }
 }

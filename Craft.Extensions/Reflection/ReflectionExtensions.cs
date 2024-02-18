@@ -149,4 +149,44 @@ public static class ReflectionExtensions
         // If the expression does not match expected patterns, throw an ArgumentException
         throw new ArgumentException("Invalid expression. Expected a property access expression.");
     }
+
+    public static T GetClone<T>(this T input)
+    {
+        if (input == null)
+            throw new ArgumentNullException(nameof(input), "Input object cannot be null.");
+
+        var type = typeof(T);
+        var visited = new Dictionary<object, object>();
+        return (T)CloneObject(input, type, visited);
+    }
+
+    private static object CloneObject(object input, Type type, Dictionary<object, object> visited)
+    {
+        if (visited.TryGetValue(input, out object keyValue))
+            return keyValue;
+
+        var clonedObj = Activator.CreateInstance(type);
+        visited.Add(input, clonedObj);
+
+        foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (property.CanWrite)
+            {
+                var value = property.GetValue(input);
+                var propertyType = property.PropertyType;
+
+                if (value != null && propertyType.IsClass && !propertyType.FullName.StartsWith("System."))
+                {
+                    var clonedValue = CloneObject(value, propertyType, visited);
+                    property.SetValue(clonedObj, clonedValue);
+                }
+                else
+                {
+                    property.SetValue(clonedObj, value);
+                }
+            }
+        }
+
+        return clonedObj;
+    }
 }
