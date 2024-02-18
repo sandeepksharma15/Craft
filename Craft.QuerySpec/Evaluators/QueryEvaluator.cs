@@ -12,6 +12,7 @@ public class QueryEvaluator : IEvaluator, ISelectEvaluator
         => Evaluators.AddRange([
             WhereEvaluator.Instance,
             OrderEvaluator.Instance,
+            SearchEvaluator.Instance,
             PaginationEvaluator.Instance,
             AsNoTrackingEvaluator.Instance,
             AsSplitQueryEvaluator.Instance,
