@@ -125,7 +125,7 @@ public class OrderBuilderJsonConverter<T> : JsonConverter<OrderBuilder<T>> where
 
         // Check for array start
         if (reader.TokenType != JsonTokenType.StartArray)
-            throw new JsonException("Invalid format for OrderBuilder: expected array of order expressions.");
+            throw new JsonException("Invalid format for OrderBuilder: expected array of OrderInfo");
 
         // Read each order expression
         while (reader.Read())

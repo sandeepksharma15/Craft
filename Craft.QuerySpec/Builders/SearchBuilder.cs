@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Craft.Extensions.Expressions;
@@ -87,11 +88,47 @@ public class SearchBuilderJsonConverter<T> : JsonConverter<SearchBuilder<T>> whe
 
     public override SearchBuilder<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
+        var searchBuilder = new SearchBuilder<T>();
+
+        // We Want To Clone The Options To Add The SearchInfoJsonConverter
+        var localOptions = options.GetClone();
+        localOptions.Converters.Add(new SearchInfoJsonConverter<T>());
+
+        // Check for array start
+        if (reader.TokenType != JsonTokenType.StartArray)
+            throw new JsonException("Invalid format for SearchBuilder: expected array of SearchInfo");
+
+        // Read each order expression
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndArray)
+                break;
+
+            // Read the individual SearchInfo object
+            var searchInfo = JsonSerializer.Deserialize<SearchInfo<T>>(ref reader, localOptions);
+
+            // Validate and add the order expression
+            if (searchInfo != null)
+                searchBuilder.Add(searchInfo);
+            else
+                throw new JsonException("Invalid SearchInfo encountered in SearchBuilder array");
+        }
+
+        return searchBuilder;
     }
 
     public override void Write(Utf8JsonWriter writer, SearchBuilder<T> value, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
+        // Start The Array
+        writer.WriteStartArray();
+
+        foreach (var searchInfo in value.SearchInfoList)
+        {
+            var json = JsonSerializer.Serialize(searchInfo, serializeOptions);
+            writer.WriteRawValue(json);
+        }
+
+        // End the array
+        writer.WriteEndArray();
     }
 }
