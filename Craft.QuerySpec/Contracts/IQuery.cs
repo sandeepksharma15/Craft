@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Runtime.Serialization;
 using Craft.QuerySpec.Builders;
 
 namespace Craft.QuerySpec.Contracts;
@@ -27,6 +26,8 @@ public interface IQuery<T> where T : class
     Func<IEnumerable<T>, IEnumerable<T>> PostProcessingAction { get; internal set; }
     int? Skip { get; set; }
     int? Take { get; set; }
+
+    SearchBuilder<T> SearchBuilder { get; }
 
     WhereBuilder<T> WhereBuilder { get; }
 

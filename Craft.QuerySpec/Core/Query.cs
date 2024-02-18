@@ -45,6 +45,7 @@ public class Query<T> : IQuery<T> where T : class
 
     // Builders for building where and order expressions.
     public OrderBuilder<T> OrderBuilder { get; internal set; } = new();
+    public SearchBuilder<T> SearchBuilder { get; internal set; } = new();
     public WhereBuilder<T> WhereBuilder { get; internal set; } = new();
 
     // Function for post-processing results.
@@ -82,8 +83,9 @@ public class Query<T> : IQuery<T> where T : class
         IgnoreAutoIncludes = false;
         IgnoreQueryFilters = false;
 
-        // Clear where and order expressions.
-        WhereBuilder.Clear();
+        // Clear Builders
         OrderBuilder.Clear();
+        SearchBuilder.Clear();
+        WhereBuilder.Clear();
     }
 }

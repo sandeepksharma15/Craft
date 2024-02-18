@@ -11,10 +11,8 @@ public class SearchInfo<T> where T : class
 {
     public SearchInfo(LambdaExpression searchItem, string searchTerm, int searchGroup = 1)
     {
-        _ = searchItem ?? throw new ArgumentNullException(nameof(searchItem));
-
-        if (searchTerm.IsNullOrEmpty())
-            throw new ArgumentException($"{nameof(searchTerm)} cannot be null or empty", nameof(searchTerm));
+        ArgumentNullException.ThrowIfNull(nameof(searchItem));
+        ArgumentException.ThrowIfNullOrEmpty(nameof(searchTerm));
 
         SearchItem = searchItem;
         SearchTerm = searchTerm;
