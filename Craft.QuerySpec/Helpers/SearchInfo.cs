@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Craft.Extensions.Expressions;
@@ -11,16 +12,17 @@ public class SearchInfo<T> where T : class
 {
     public SearchInfo(LambdaExpression searchItem, string searchTerm, int searchGroup = 1)
     {
-        ArgumentNullException.ThrowIfNull(nameof(searchItem));
-        ArgumentException.ThrowIfNullOrEmpty(nameof(searchTerm));
+        ArgumentNullException.ThrowIfNull(searchItem);
+
+        if (searchTerm.IsNullOrEmpty())
+            throw new ArgumentException("{0} cannot be null or empty", nameof(searchTerm));
 
         SearchItem = searchItem;
         SearchTerm = searchTerm;
         SearchGroup = searchGroup;
     }
 
-    internal SearchInfo()
-    { }
+    internal SearchInfo() { }
 
     public int SearchGroup { get; internal set; }
     public LambdaExpression SearchItem { get; internal set; }
@@ -65,8 +67,9 @@ public class SearchInfoJsonConverter<T> : JsonConverter<SearchInfo<T>> where T :
     {
         writer.WriteStartObject();
 
-        var memberExpression = value.SearchItem.Body as MemberExpression;
-        writer.WriteString(nameof(SearchInfo<T>.SearchItem), memberExpression.Member.Name);
+        var memberName = value.SearchItem.GetPropertyInfo().Name;
+
+        writer.WriteString(nameof(SearchInfo<T>.SearchItem), memberName);
         writer.WriteString(nameof(SearchInfo<T>.SearchTerm), value.SearchTerm);
         writer.WriteNumber(nameof(SearchInfo<T>.SearchGroup), value.SearchGroup);
 
