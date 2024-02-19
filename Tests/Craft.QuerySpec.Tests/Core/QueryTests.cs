@@ -121,7 +121,7 @@ public class QueryTests
         // Act
         var serializeOptions = new JsonSerializerOptions();
         serializeOptions.Converters.Add(new OrderDescriptorJsonConverter<Company>());
-        serializeOptions.Converters.Add(new SelectionDescriptorJsonConverter<Company, object>());
+        serializeOptions.Converters.Add(new SelectDescriptorJsonConverter<Company, object>());
         serializeOptions.Converters.Add(new EntityFilterCriteriaJsonConverter<Company>());
         serializeOptions.Converters.Add(new SqlLikeSearchInfoJsonConverter<Company>());
 

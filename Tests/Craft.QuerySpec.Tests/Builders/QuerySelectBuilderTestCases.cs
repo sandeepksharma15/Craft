@@ -1,11 +1,22 @@
 ﻿using Craft.QuerySpec.Builders;
+using Craft.QuerySpec.Helpers;
+using Craft.TestHelper.Models;
 using FluentAssertions;
 using System.Linq.Expressions;
+using System.Text.Json;
 
 namespace Craft.QuerySpec.Tests.Builders;
 
 public class QuerySelectBuilderTestCases
 {
+    private readonly JsonSerializerOptions serializeOptions;
+
+    public QuerySelectBuilderTestCases()
+    {
+        serializeOptions = new JsonSerializerOptions();
+        serializeOptions.Converters.Add(new QuerySelectBuilderJsonConverter<MyEntity, MyResult>());
+    }
+
     [Fact]
     public void AddColumn_Should_Add_Column_To_SelectList()
     {
@@ -281,6 +292,66 @@ public class QuerySelectBuilderTestCases
 
         // Assert
         builder.Count.Should().Be(0); // Expecting no select expressions after clearing
+    }
+
+    [Fact]
+    public void CanConvert_ReturnsTrueForCorrectType()
+    {
+        var converter = new QuerySelectBuilderJsonConverter<MyEntity, MyResult>();
+        bool canConvert = converter.CanConvert(typeof(QuerySelectBuilder<MyEntity, MyResult>));
+
+        canConvert.Should().BeTrue();
+    }
+
+    [Fact]
+    public void CanConvert_ReturnsFalseForIncorrectType()
+    {
+        var converter = new QuerySelectBuilderJsonConverter<MyEntity, MyResult>();
+        bool canConvert = converter.CanConvert(typeof(string));
+
+        canConvert.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Read_ThrowsJsonExceptionForInvalidFormat()
+    {
+        // Arrange
+        const string invalidJson = "{}"; // Not an array
+
+        // Act and Assert
+        Action act = () => JsonSerializer.Deserialize<QuerySelectBuilder<MyEntity, MyResult>>(invalidJson, serializeOptions);
+
+        act.Should().Throw<JsonException>();
+    }
+
+    [Fact]
+    public void Write_SerializesEntityFilterBuilderToJsonCorrectly()
+    {
+        // Arrange
+        var querySelectBuilder = new QuerySelectBuilder<MyEntity, MyResult>();
+        querySelectBuilder.Add(new SelectDescriptor<MyEntity, MyResult>("Name", "Name"));
+
+        // Act
+        var json = JsonSerializer.Serialize(querySelectBuilder, serializeOptions);
+
+        // Assert
+        json.Should().Be("[{\"Assignor\":\"Name\",\"Assignee\":\"Name\"}]");
+    }
+
+    [Fact]
+    public void Read_DeserializesValidJsonToEntityFilterBuilder()
+    {
+        // Arrange
+        const string validJson = "[{\"Assignor\":\"Name\",\"Assignee\":\"Name\"}]";
+
+        // Act
+        var querySelectBuilder = JsonSerializer.Deserialize<QuerySelectBuilder<MyEntity, MyResult>>(validJson, serializeOptions);
+
+        // Assert
+        querySelectBuilder.Should().NotBeNull();
+        querySelectBuilder.Count.Should().Be(1);
+        querySelectBuilder.SelectDescriptorList[0].Assignee.Body.ToString().Should().Contain("x.Name");
+        querySelectBuilder.SelectDescriptorList[0].Assignor.Body.ToString().Should().Contain("x.Name");
     }
 }
 

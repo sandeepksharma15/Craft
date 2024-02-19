@@ -1,5 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Craft.QuerySpec.Contracts;
 using Craft.QuerySpec.Helpers;
 
@@ -16,26 +18,31 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
     where T : class
     where TResult : class
 {
-    private readonly List<SelectionDescriptor<T, TResult>> _selectList;
+    public List<SelectDescriptor<T, TResult>> SelectDescriptorList { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="QuerySelectBuilder{T, TResult}"/> class.
     /// </summary>
-    public QuerySelectBuilder()
-        => _selectList = [];
+    public QuerySelectBuilder() => SelectDescriptorList = [];
 
     /// <summary>
     /// Gets the count of select expressions.
     /// </summary>
-    public long Count => _selectList.Count;
+    public long Count => SelectDescriptorList.Count;
 
     public QuerySelectBuilder<T, TResult> Add(Expression<Func<T, object>> assignor, Expression<Func<TResult, object>> assignee)
     {
         var assignorName = assignor.GetMemberName();
         var assigneeName = assignee.GetMemberName();
 
-        _selectList.Add(new SelectionDescriptor<T, TResult>(assignorName, assigneeName));
+        SelectDescriptorList.Add(new SelectDescriptor<T, TResult>(assignorName, assigneeName));
 
+        return this;
+    }
+
+    public QuerySelectBuilder<T, TResult> Add(SelectDescriptor<T, TResult> selectDescriptor)
+    {
+        SelectDescriptorList.Add(selectDescriptor);
         return this;
     }
 
@@ -44,7 +51,7 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
     /// </summary>
     public QuerySelectBuilder<T, TResult> Add(LambdaExpression assignor, LambdaExpression assignee)
     {
-        _selectList.Add(new SelectionDescriptor<T, TResult>(assignor, assignee));
+        SelectDescriptorList.Add(new SelectDescriptor<T, TResult>(assignor, assignee));
 
         return this;
     }
@@ -53,7 +60,7 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
     {
         var columnName = column.GetMemberName();
 
-        _selectList.Add(new SelectionDescriptor<T, TResult>(columnName));
+        SelectDescriptorList.Add(new SelectDescriptor<T, TResult>(columnName));
 
         return this;
     }
@@ -63,7 +70,7 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
     /// </summary>
     public QuerySelectBuilder<T, TResult> Add(LambdaExpression column)
     {
-        _selectList.Add(new SelectionDescriptor<T, TResult>(column));
+        SelectDescriptorList.Add(new SelectDescriptor<T, TResult>(column));
 
         return this;
     }
@@ -73,7 +80,7 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
     /// </summary>
     public QuerySelectBuilder<T, TResult> Add(string assignorPropName)
     {
-        _selectList.Add(new SelectionDescriptor<T, TResult>(assignorPropName));
+        SelectDescriptorList.Add(new SelectDescriptor<T, TResult>(assignorPropName));
 
         return this;
     }
@@ -83,7 +90,7 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
     /// </summary>
     public QuerySelectBuilder<T, TResult> Add(string assignorPropName, string assigneePropName)
     {
-        _selectList.Add(new SelectionDescriptor<T, TResult>(assignorPropName, assigneePropName));
+        SelectDescriptorList.Add(new SelectDescriptor<T, TResult>(assignorPropName, assigneePropName));
 
         return this;
     }
@@ -98,13 +105,13 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
     /// Clears the select expressions.
     /// </summary>
     public void Clear()
-        => _selectList.Clear();
+        => SelectDescriptorList.Clear();
 
     private Expression<Func<T, TResult>> BuildAnnonymousSelect()
     {
         var sourceParam = Expression.Parameter(typeof(T), "x");
 
-        var selectExpressions = _selectList.Select(item =>
+        var selectExpressions = SelectDescriptorList.Select(item =>
         {
             var columnInvoke = Expression.Invoke(item.Assignor, sourceParam);
 
@@ -121,7 +128,7 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
         var selectParam = Expression.Parameter(typeof(T));
         var memberBindings = new List<MemberBinding>();
 
-        foreach (var item in _selectList)
+        foreach (var item in SelectDescriptorList)
         {
             var columnInvoke = Expression.Invoke(item.Assignor, selectParam);
             var propertyInfo = item.Assignee.GetPropertyInfo();
@@ -137,5 +144,62 @@ public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
         var selectorLambda = Expression.Lambda<Func<T, TResult>>(memberInit, selectParam);
 
         return Expression.Lambda<Func<T, TResult>>(selectorLambda.Body, selectParam);
+    }
+}
+
+public class QuerySelectBuilderJsonConverter<T, TResult> : JsonConverter<QuerySelectBuilder<T, TResult>>
+    where T : class
+    where TResult : class
+{
+    public override bool CanConvert(Type objectType)
+        => objectType == typeof(QuerySelectBuilder<T, TResult>);
+
+    public override QuerySelectBuilder<T, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var querySelectBuilder = new QuerySelectBuilder<T, TResult>();
+
+        // We Want To Clone The Options To Add The SelectDescriptorJsonConverter
+        var localOptions = options.GetClone();
+        localOptions.Converters.Add(new SelectDescriptorJsonConverter<T, TResult>());
+
+        // Check for array start
+        if (reader.TokenType != JsonTokenType.StartArray)
+            throw new JsonException("Invalid format for QuerySelectBuilder: expected array of SelectDescriptor");
+
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndArray)
+                break;
+
+            // Read the individual Select Descriptor object
+            var selectDescriptor = JsonSerializer.Deserialize<SelectDescriptor<T, TResult>>(ref reader, localOptions);
+
+            // Validate and add the SelectDescriptor
+            if (selectDescriptor != null)
+                querySelectBuilder.Add(selectDescriptor);
+            else
+                throw new JsonException("Invalid select descriptor encountered in QuerySelectBuilder array");
+        }
+
+        return querySelectBuilder;
+    }
+
+    public override void Write(Utf8JsonWriter writer, QuerySelectBuilder<T, TResult> value, JsonSerializerOptions options)
+    {
+        // Start The Array
+        writer.WriteStartArray();
+
+        // We Want To Clone The Options To Add The SelectDescriptorJsonConverter
+        var localOptions = options.GetClone();
+        localOptions.Converters.Add(new SelectDescriptorJsonConverter<T, TResult>());
+
+        foreach (var selectDescriptor in value.SelectDescriptorList)
+        {
+            var json = JsonSerializer.Serialize(selectDescriptor, localOptions);
+            writer.WriteRawValue(json);
+        }
+
+        // End the array
+        writer.WriteEndArray();
     }
 }

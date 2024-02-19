@@ -8,23 +8,23 @@ namespace Craft.QuerySpec.Helpers;
 // Summary: Represents information about a select operation.
 //          This class is designed to store assignor and assignee LambdaExpressions.
 [Serializable]
-public class SelectionDescriptor<T, TResult>
+public class SelectDescriptor<T, TResult>
     where T : class
     where TResult : class
 {
-    public SelectionDescriptor(LambdaExpression assignor)
+    public SelectDescriptor(LambdaExpression assignor)
         => Initialize(assignor);
 
-    public SelectionDescriptor(LambdaExpression assignor, LambdaExpression assignee)
+    public SelectDescriptor(LambdaExpression assignor, LambdaExpression assignee)
         => Initialize(assignor, assignee);
 
-    public SelectionDescriptor(string assignorPropName)
+    public SelectDescriptor(string assignorPropName)
         => Initialize(assignorPropName.CreateMemberExpression<T>());
 
-    public SelectionDescriptor(string assignorPropName, string assigneePropName)
+    public SelectDescriptor(string assignorPropName, string assigneePropName)
         => Initialize(assignorPropName.CreateMemberExpression<T>(), assigneePropName.CreateMemberExpression<TResult>());
 
-    internal SelectionDescriptor()
+    internal SelectDescriptor()
     { }
 
     public LambdaExpression Assignee { get; internal set; }
@@ -65,17 +65,17 @@ public class SelectionDescriptor<T, TResult>
 }
 
 // Summary: JSON converter for SelectInfo<T, TResult>.
-public class SelectionDescriptorJsonConverter<T, TResult> : JsonConverter<SelectionDescriptor<T, TResult>>
+public class SelectDescriptorJsonConverter<T, TResult> : JsonConverter<SelectDescriptor<T, TResult>>
     where T : class
     where TResult : class
 {
     // Summary: Reads JSON and converts it to a SelectInfo<T, TResult> instance.
-    public override SelectionDescriptor<T, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override SelectDescriptor<T, TResult> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
             return null;
 
-        SelectionDescriptor<T, TResult> selectInfo = new();
+        SelectDescriptor<T, TResult> selectInfo = new();
 
         while (reader.Read())
         {
@@ -88,10 +88,10 @@ public class SelectionDescriptorJsonConverter<T, TResult> : JsonConverter<Select
 
                 reader.Read();
 
-                if (propertyName == nameof(SelectionDescriptor<T, TResult>.Assignor))
+                if (propertyName == nameof(SelectDescriptor<T, TResult>.Assignor))
                     selectInfo.Assignor = typeof(T).CreateMemberExpression(reader.GetString());
 
-                if (propertyName == nameof(SelectionDescriptor<T, TResult>.Assignee))
+                if (propertyName == nameof(SelectDescriptor<T, TResult>.Assignee))
                     selectInfo.Assignee = typeof(TResult).CreateMemberExpression(reader.GetString());
             }
         }
@@ -100,15 +100,15 @@ public class SelectionDescriptorJsonConverter<T, TResult> : JsonConverter<Select
     }
 
     // Summary: Writes a SelectInfo<T, TResult> instance to JSON.
-    public override void Write(Utf8JsonWriter writer, SelectionDescriptor<T, TResult> value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, SelectDescriptor<T, TResult> value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 
         var assignor = value.Assignor.Body as MemberExpression;
         var assignee = value.Assignee.Body as MemberExpression;
 
-        writer.WriteString(nameof(SelectionDescriptor<T, TResult>.Assignor), assignor.Member.Name);
-        writer.WriteString(nameof(SelectionDescriptor<T, TResult>.Assignee), assignee.Member.Name);
+        writer.WriteString(nameof(SelectDescriptor<T, TResult>.Assignor), assignor.Member.Name);
+        writer.WriteString(nameof(SelectDescriptor<T, TResult>.Assignee), assignee.Member.Name);
 
         writer.WriteEndObject();
     }
