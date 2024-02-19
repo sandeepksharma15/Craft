@@ -1,7 +1,9 @@
 ﻿using System.Data;
 using System.Linq.Expressions;
+using System.Text.Json;
 using Craft.QuerySpec.Builders;
 using Craft.QuerySpec.Enums;
+using Craft.QuerySpec.Helpers;
 using Craft.TestHelper.Models;
 using FluentAssertions;
 
@@ -9,10 +11,14 @@ namespace Craft.QuerySpec.Tests.Builders;
 
 public class EntityFilterBuilderTests
 {
+    private readonly JsonSerializerOptions serializeOptions;
     private readonly IQueryable<Company> queryable;
 
     public EntityFilterBuilderTests()
     {
+        serializeOptions = new JsonSerializerOptions();
+        serializeOptions.Converters.Add(new EntityFilterBuilderJsonConverter<Company>());
+
         queryable = new List<Company>
         {
             new() { Id = 1, Name = "Company 1" },
@@ -161,5 +167,64 @@ public class EntityFilterBuilderTests
 
         // Assert
         whereBuilder.EntityFilterList.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void CanConvert_ReturnsTrueForCorrectType()
+    {
+        var converter = new EntityFilterBuilderJsonConverter<TestClass>();
+        bool canConvert = converter.CanConvert(typeof(EntityFilterBuilder<TestClass>));
+
+        canConvert.Should().BeTrue();
+    }
+
+    [Fact]
+    public void CanConvert_ReturnsFalseForIncorrectType()
+    {
+        var converter = new EntityFilterBuilderJsonConverter<TestClass>();
+        bool canConvert = converter.CanConvert(typeof(string));
+
+        canConvert.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Read_DeserializesValidJsonToEntityFilterBuilder()
+    {
+        // Arrange
+        const string validJson = "[{\"Filter\": \"Name == 'John'\"}]";
+
+        // Act
+        var filterBuilder = JsonSerializer.Deserialize<EntityFilterBuilder<Company>>(validJson, serializeOptions);
+
+        // Assert
+        filterBuilder.EntityFilterList.Count.Should().Be(1);
+        filterBuilder.EntityFilterList[0].Filter.Body.ToString().Should().Contain("x.Name");
+    }
+
+    [Fact]
+    public void Read_ThrowsJsonExceptionForInvalidFormat()
+    {
+        // Arrange
+        const string invalidJson = "{}"; // Not an array
+
+        // Act and Assert
+        Action act = () => JsonSerializer.Deserialize<EntityFilterBuilder<Company>>(invalidJson, serializeOptions);
+
+        act.Should().Throw<JsonException>();
+    }
+
+    [Fact]
+    public void Write_SerializesEntityFilterBuilderToJsonCorrectly()
+    {
+        // Arrange
+        var filterBuilder = new EntityFilterBuilder<Company>();
+        Expression<Func<Company, bool>> filterCriteria = x => x.Name == "John";
+        filterBuilder.Add(filterCriteria);
+
+        // Act
+        var json = JsonSerializer.Serialize(filterBuilder, serializeOptions);
+
+        // Assert
+        json.Should().Be("[{\"Filter\":\"Name == \\u0022John\\u0022)\"}]");
     }
 }

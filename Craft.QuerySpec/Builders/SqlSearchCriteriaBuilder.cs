@@ -75,14 +75,6 @@ public class SqlSearchCriteriaBuilder<T> where T : class
 
 public class SearchBuilderJsonConverter<T> : JsonConverter<SqlSearchCriteriaBuilder<T>> where T : class
 {
-    private static readonly JsonSerializerOptions serializeOptions;
-
-    static SearchBuilderJsonConverter()
-    {
-        serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new SqlLikeSearchInfoJsonConverter<T>());
-    }
-
     public override bool CanConvert(Type objectType)
         => objectType == typeof(SqlSearchCriteriaBuilder<T>);
 
@@ -122,9 +114,13 @@ public class SearchBuilderJsonConverter<T> : JsonConverter<SqlSearchCriteriaBuil
         // Start The Array
         writer.WriteStartArray();
 
+        // We Want To Clone The Options To Add The SqlLikeSearchInfoJsonConverter
+        var localOptions = options.GetClone();
+        localOptions.Converters.Add(new SqlLikeSearchInfoJsonConverter<T>());
+
         foreach (var searchInfo in value.SearchCriteriaList)
         {
-            var json = JsonSerializer.Serialize(searchInfo, serializeOptions);
+            var json = JsonSerializer.Serialize(searchInfo, localOptions);
             writer.WriteRawValue(json);
         }
 

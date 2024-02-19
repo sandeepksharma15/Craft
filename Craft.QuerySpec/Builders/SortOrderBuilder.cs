@@ -103,14 +103,6 @@ public class SortOrderBuilder<T> where T : class
 
 public class SortOrderBuilderJsonConverter<T> : JsonConverter<SortOrderBuilder<T>> where T : class
 {
-    private static readonly JsonSerializerOptions serializeOptions;
-
-    static SortOrderBuilderJsonConverter()
-    {
-        serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new OrderDescriptorJsonConverter<T>());
-    }
-
     public override bool CanConvert(Type objectType)
         => objectType == typeof(SortOrderBuilder<T>);
 
@@ -151,9 +143,13 @@ public class SortOrderBuilderJsonConverter<T> : JsonConverter<SortOrderBuilder<T
         // Start The Array
         writer.WriteStartArray();
 
+        // We Want To Clone The Options To Add The OrderDescriptorJsonConverter
+        var localOptions = options.GetClone();
+        localOptions.Converters.Add(new OrderDescriptorJsonConverter<T>());
+
         foreach (var order in value.OrderDescriptorList)
         {
-            var json = JsonSerializer.Serialize(order, serializeOptions);
+            var json = JsonSerializer.Serialize(order, localOptions);
             writer.WriteRawValue(json);
         }
 
