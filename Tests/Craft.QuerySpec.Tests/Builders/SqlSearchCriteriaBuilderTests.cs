@@ -123,4 +123,55 @@ public class SqlSearchCriteriaBuilderTests
         // Assert
         builder.SearchCriteriaList.Should().BeEmpty();
     }
+
+    [Fact]
+    public void CanConvert_ReturnsTrueForSqlSearchCriteriaBuilderType()
+    {
+        var converter = new SearchBuilderJsonConverter<TestClass>();
+        bool canConvert = converter.CanConvert(typeof(SqlSearchCriteriaBuilder<TestClass>));
+
+        canConvert.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Read_DeserializesValidJsonToSqlSearchCriteriaBuilder()
+    {
+        // Arrange
+        const string json = "[{\"SearchItem\": \"Name\", \"SearchString\": \"John\", \"SearchGroup\": 1}]";
+
+        // Act
+        var searchBuilder = JsonSerializer.Deserialize<SqlSearchCriteriaBuilder<Company>>(json, serializeOptions);
+
+        // Assert
+        searchBuilder.Count.Should().Be(1);
+        searchBuilder.SearchCriteriaList[0].SearchItem.Body.ToString().Should().Contain("x.Name");
+        searchBuilder.SearchCriteriaList[0].SearchString.Should().Be("John");
+        searchBuilder.SearchCriteriaList[0].SearchGroup.Should().Be(1);
+    }
+
+    [Fact]
+    public void Read_ThrowsJsonExceptionForInvalidJsonFormat()
+    {
+        // Arrange
+        const string json = "{}"; // Not an array
+
+        // Act and Assert
+        Action act = () => JsonSerializer.Deserialize<SqlSearchCriteriaBuilder<Company>>(json, serializeOptions);
+
+        act.Should().Throw<JsonException>();
+    }
+
+    [Fact]
+    public void Write_SerializesSqlSearchCriteriaBuilderToJsonCorrectly()
+    {
+        // Arrange
+        var searchBuilder = new SqlSearchCriteriaBuilder<Company>();
+        searchBuilder.Add(new SqlLikeSearchInfo<Company>(x => x.Name, "Alice", 2));
+
+        // Act
+        var json = JsonSerializer.Serialize(searchBuilder, serializeOptions);
+
+        // Assert
+        json.Should().Be("[{\"SearchItem\":\"Name\",\"SearchString\":\"Alice\",\"SearchGroup\":2}]");
+    }
 }
