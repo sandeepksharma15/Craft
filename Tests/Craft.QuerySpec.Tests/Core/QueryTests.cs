@@ -99,7 +99,7 @@ public class QueryTests
         // Assert
         query.AsNoTracking.Should().BeFalse();
         query.Skip.Should().Be(0);
-        query.WhereBuilder.WhereExpressions.Count.Should().Be(0);
+        query.WhereBuilder.EntityFilterList.Count.Should().Be(0);
         query.SelectBuilder.Count.Should().Be(0);
         query.SelectorMany.Should().BeNull();
     }
@@ -121,8 +121,8 @@ public class QueryTests
         // Act
         var serializeOptions = new JsonSerializerOptions();
         serializeOptions.Converters.Add(new OrderInfoJsonConverter<Company>());
-        serializeOptions.Converters.Add(new SelectInfoJsonConverter<Company, object>());
-        serializeOptions.Converters.Add(new WhereInfoJsonConverter<Company>());
+        serializeOptions.Converters.Add(new SelectionDescriptorJsonConverter<Company, object>());
+        serializeOptions.Converters.Add(new EntityFilterCriteriaJsonConverter<Company>());
         serializeOptions.Converters.Add(new SqlLikeSearchInfoJsonConverter<Company>());
 
         var serializedQuery = JsonSerializer.Serialize(query, serializeOptions);
@@ -131,7 +131,7 @@ public class QueryTests
         // Assert
         deserializedQuery.Should().NotBeNull();
         deserializedQuery.WhereBuilder.Count.Should().Be(1);
-        deserializedQuery.OrderBuilder.OrderExpressions.Count.Should().Be(1);
+        deserializedQuery.OrderBuilder.OrderDescriptorList.Count.Should().Be(1);
         deserializedQuery.AsNoTracking.Should().BeTrue();
         deserializedQuery.Skip.Should().Be(10);
         deserializedQuery.SelectBuilder.Count.Should().Be(1);

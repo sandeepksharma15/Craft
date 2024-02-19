@@ -64,6 +64,6 @@ public static class QueryExtensions
     {
         if (query is null) return true;
 
-        return query.OrderBuilder is null || query.OrderBuilder.OrderExpressions.Count == 0;
+        return query.OrderBuilder is null || query.OrderBuilder.OrderDescriptorList.Count == 0;
     }
 }

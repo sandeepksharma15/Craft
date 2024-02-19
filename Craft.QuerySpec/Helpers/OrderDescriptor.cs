@@ -8,15 +8,15 @@ using Craft.QuerySpec.Enums;
 namespace Craft.QuerySpec.Helpers;
 
 [Serializable]
-public class OrderInfo<T> where T : class
+public class OrderDescriptor<T> where T : class
 {
-    public OrderInfo(LambdaExpression orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
+    public OrderDescriptor(LambdaExpression orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
     {
         OrderItem = orderItem;
         OrderType = orderType;
     }
 
-    public OrderInfo(Expression<Func<T, object>> orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
+    public OrderDescriptor(Expression<Func<T, object>> orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
     {
         OrderItem = orderItem;
         OrderType = orderType;
@@ -27,18 +27,18 @@ public class OrderInfo<T> where T : class
 }
 
 /// <summary>
-/// A custom JSON converter specifically designed to serialize and deserialize instances of the OrderInfo<T> class,
+/// A custom JSON converter specifically designed to serialize and deserialize instances of the OrderDescriptor<T> class,
 /// ensuring proper handling of LambdaExpressions representing order items and OrderTypeEnum values.
 /// </summary>
 /// <typeparam name="T">The type of the entity being ordered.</typeparam>
-public class OrderInfoJsonConverter<T> : JsonConverter<OrderInfo<T>> where T : class
+public class OrderInfoJsonConverter<T> : JsonConverter<OrderDescriptor<T>> where T : class
 {
-    public override OrderInfo<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override OrderDescriptor<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
             return null;
 
-        OrderInfo<T> orderInfo = new(null);
+        OrderDescriptor<T> orderInfo = new(null);
 
         while (reader.Read())
         {
@@ -51,10 +51,10 @@ public class OrderInfoJsonConverter<T> : JsonConverter<OrderInfo<T>> where T : c
 
                 reader.Read();
 
-                if (propertyName == nameof(OrderInfo<T>.OrderItem))
+                if (propertyName == nameof(OrderDescriptor<T>.OrderItem))
                     orderInfo.OrderItem = typeof(T).CreateMemberExpression(reader.GetString());
 
-                if (propertyName == nameof(OrderInfo<T>.OrderType))
+                if (propertyName == nameof(OrderDescriptor<T>.OrderType))
                     orderInfo.OrderType = (OrderTypeEnum)reader.GetInt32();
             }
         }
@@ -62,13 +62,13 @@ public class OrderInfoJsonConverter<T> : JsonConverter<OrderInfo<T>> where T : c
         return orderInfo;
     }
 
-    public override void Write(Utf8JsonWriter writer, OrderInfo<T> value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, OrderDescriptor<T> value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 
         var memberName = value.OrderItem.GetPropertyInfo().Name;
-        writer.WriteString(nameof(OrderInfo<T>.OrderItem), memberName);
-        writer.WriteNumber(nameof(OrderInfo<T>.OrderType), (int)value.OrderType);
+        writer.WriteString(nameof(OrderDescriptor<T>.OrderItem), memberName);
+        writer.WriteNumber(nameof(OrderDescriptor<T>.OrderType), (int)value.OrderType);
 
         writer.WriteEndObject();
     }

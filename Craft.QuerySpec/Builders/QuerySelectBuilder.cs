@@ -6,22 +6,22 @@ using Craft.QuerySpec.Helpers;
 namespace Craft.QuerySpec.Builders;
 
 [Serializable]
-public class SelectBuilder<T> : SelectBuilder<T, T>, ISelectBuilder<T> where T : class;
+public class QuerySelectBuilder<T> : QuerySelectBuilder<T, T>, IQuerySelectBuilder<T> where T : class;
 
 /// <summary>
 /// A builder class for constructing select expressions.
 /// </summary>
 [Serializable]
-public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
+public class QuerySelectBuilder<T, TResult> : IQuerySelectBuilder<T, TResult>
     where T : class
     where TResult : class
 {
-    private readonly List<SelectInfo<T, TResult>> _selectList;
+    private readonly List<SelectionDescriptor<T, TResult>> _selectList;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SelectBuilder{T, TResult}"/> class.
+    /// Initializes a new instance of the <see cref="QuerySelectBuilder{T, TResult}"/> class.
     /// </summary>
-    public SelectBuilder()
+    public QuerySelectBuilder()
         => _selectList = [];
 
     /// <summary>
@@ -29,12 +29,12 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     /// </summary>
     public long Count => _selectList.Count;
 
-    public SelectBuilder<T, TResult> Add(Expression<Func<T, object>> assignor, Expression<Func<TResult, object>> assignee)
+    public QuerySelectBuilder<T, TResult> Add(Expression<Func<T, object>> assignor, Expression<Func<TResult, object>> assignee)
     {
         var assignorName = assignor.GetMemberName();
         var assigneeName = assignee.GetMemberName();
 
-        _selectList.Add(new SelectInfo<T, TResult>(assignorName, assigneeName));
+        _selectList.Add(new SelectionDescriptor<T, TResult>(assignorName, assigneeName));
 
         return this;
     }
@@ -42,18 +42,18 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     /// <summary>
     /// Adds a select expression.
     /// </summary>
-    public SelectBuilder<T, TResult> Add(LambdaExpression assignor, LambdaExpression assignee)
+    public QuerySelectBuilder<T, TResult> Add(LambdaExpression assignor, LambdaExpression assignee)
     {
-        _selectList.Add(new SelectInfo<T, TResult>(assignor, assignee));
+        _selectList.Add(new SelectionDescriptor<T, TResult>(assignor, assignee));
 
         return this;
     }
 
-    public SelectBuilder<T, TResult> Add(Expression<Func<T, object>> column)
+    public QuerySelectBuilder<T, TResult> Add(Expression<Func<T, object>> column)
     {
         var columnName = column.GetMemberName();
 
-        _selectList.Add(new SelectInfo<T, TResult>(columnName));
+        _selectList.Add(new SelectionDescriptor<T, TResult>(columnName));
 
         return this;
     }
@@ -61,9 +61,9 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     /// <summary>
     /// Adds a select expression with a single column.
     /// </summary>
-    public SelectBuilder<T, TResult> Add(LambdaExpression column)
+    public QuerySelectBuilder<T, TResult> Add(LambdaExpression column)
     {
-        _selectList.Add(new SelectInfo<T, TResult>(column));
+        _selectList.Add(new SelectionDescriptor<T, TResult>(column));
 
         return this;
     }
@@ -71,9 +71,9 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     /// <summary>
     /// Adds a select expression with a single column identified by its name.
     /// </summary>
-    public SelectBuilder<T, TResult> Add(string assignorPropName)
+    public QuerySelectBuilder<T, TResult> Add(string assignorPropName)
     {
-        _selectList.Add(new SelectInfo<T, TResult>(assignorPropName));
+        _selectList.Add(new SelectionDescriptor<T, TResult>(assignorPropName));
 
         return this;
     }
@@ -81,9 +81,9 @@ public class SelectBuilder<T, TResult> : ISelectBuilder<T, TResult>
     /// <summary>
     /// Adds a select expression with a mapping between two properties.
     /// </summary>
-    public SelectBuilder<T, TResult> Add(string assignorPropName, string assigneePropName)
+    public QuerySelectBuilder<T, TResult> Add(string assignorPropName, string assigneePropName)
     {
-        _selectList.Add(new SelectInfo<T, TResult>(assignorPropName, assigneePropName));
+        _selectList.Add(new SelectionDescriptor<T, TResult>(assignorPropName, assigneePropName));
 
         return this;
     }

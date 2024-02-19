@@ -5,17 +5,17 @@ using Craft.QuerySpec.Enums;
 
 namespace Craft.QuerySpec.Helpers;
 
-public class FilterInfo(string typeName, string name, string value, ComparisonType comparison = ComparisonType.EqualTo)
+public class FilterCriteria(string typeName, string name, string value, ComparisonType comparison = ComparisonType.EqualTo)
 {
     public ComparisonType Comparison { get; } = comparison;
     public string Name { get; } = name;
     public string TypeName { get; } = typeName;
     public string Value { get; } = value;
 
-    public static Expression<Func<T, bool>> GetExpression<T>(FilterInfo filterInfo)
+    public static Expression<Func<T, bool>> GetExpression<T>(FilterCriteria filterInfo)
         => ExpressionBuilder.CreateWhereExpression<T>(filterInfo);
 
-    public static FilterInfo GetFilterInfo<T>(Expression<Func<T, object>> propName, object compareWith, ComparisonType comparisonType)
+    public static FilterCriteria GetFilterInfo<T>(Expression<Func<T, object>> propName, object compareWith, ComparisonType comparisonType)
     {
         MemberInfo prop = propName.GetPropertyInfo<T>()
             ?? throw new ArgumentException("You must pass a lambda of the form: '() => Class.Property' ");
@@ -32,10 +32,10 @@ public class FilterInfo(string typeName, string name, string value, ComparisonTy
         if (Nullable.GetUnderlyingType(type) != null)
             type = type.GetNonNullableType();
 
-        return new FilterInfo(type.FullName, name, compareWith.ToString(), comparisonType);
+        return new FilterCriteria(type.FullName, name, compareWith.ToString(), comparisonType);
     }
 
-    public static FilterInfo GetFilterInfo<T>(Expression<Func<T, bool>> whereExpr)
+    public static FilterCriteria GetFilterInfo<T>(Expression<Func<T, bool>> whereExpr)
     {
         if (IsValidExpression(whereExpr))
             return ParseExpression(whereExpr);
@@ -54,7 +54,7 @@ public class FilterInfo(string typeName, string name, string value, ComparisonTy
             left.Member is MemberInfo _;
     }
 
-    private static FilterInfo ParseExpression<T>(Expression<Func<T, bool>> expression)
+    private static FilterCriteria ParseExpression<T>(Expression<Func<T, bool>> expression)
     {
         var binaryExpression = (BinaryExpression)expression.Body;
 
@@ -74,7 +74,7 @@ public class FilterInfo(string typeName, string name, string value, ComparisonTy
             _ => throw new ArgumentException("Comparison operator not supported"),
         };
 
-        return new FilterInfo(dataType.FullName,
+        return new FilterCriteria(dataType.FullName,
             propertyName,
             comparedValue.ToString(),
             comparisonOperator);

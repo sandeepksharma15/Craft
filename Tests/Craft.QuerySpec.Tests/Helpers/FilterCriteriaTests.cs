@@ -6,13 +6,13 @@ using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
-public class FilterInfoTests
+public class FilterCriteriaTests
 {
     [Fact]
     public void GetExpression_WithFilterInfo_ReturnsValidExpression()
     {
         // Arrange
-        var filterInfo = new FilterInfo(typeof(long).FullName, "Name", "1", ComparisonType.EqualTo);
+        var filterInfo = new FilterCriteria(typeof(long).FullName, "Name", "1", ComparisonType.EqualTo);
 
         // Act
         var expression = filterInfo.GetExpression<Company>();
@@ -28,7 +28,7 @@ public class FilterInfoTests
         Expression<Func<string, object>> propertyExpression = s => s.Length;
 
         // Act
-        var filterInfo = FilterInfo.GetFilterInfo(propertyExpression, 10, ComparisonType.GreaterThan);
+        var filterInfo = FilterCriteria.GetFilterInfo(propertyExpression, 10, ComparisonType.GreaterThan);
 
         // Assert
         filterInfo.TypeName.Should().Be(typeof(int).FullName);
@@ -44,7 +44,7 @@ public class FilterInfoTests
         Expression<Func<string, bool>> whereExpression = s => s.Length > 10;
 
         // Act
-        var filterInfo = FilterInfo.GetFilterInfo(whereExpression);
+        var filterInfo = FilterCriteria.GetFilterInfo(whereExpression);
 
         // Assert
         filterInfo.TypeName.Should().Be(typeof(int).FullName);

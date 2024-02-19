@@ -12,8 +12,8 @@ public class Query<T, TResult> : Query<T>, IQuery<T, TResult>
     where T : class
     where TResult : class
 {
-    // SelectBuilder for constructing select expressions.
-    public SelectBuilder<T, TResult> SelectBuilder { get; } = new();
+    // QuerySelectBuilder for constructing select expressions.
+    public QuerySelectBuilder<T, TResult> SelectBuilder { get; } = new();
 
     // Expression for selecting many results.
     public Expression<Func<T, IEnumerable<TResult>>>? SelectorMany { get; set; }
@@ -44,9 +44,9 @@ public class Query<T> : IQuery<T> where T : class
     public int? Take { get; set; }
 
     // Builders for building where and order expressions.
-    public OrderBuilder<T> OrderBuilder { get; internal set; } = new();
+    public SortOrderBuilder<T> OrderBuilder { get; internal set; } = new();
     public SqlSearchCriteriaBuilder<T> SearchBuilder { get; internal set; } = new();
-    public WhereBuilder<T> WhereBuilder { get; internal set; } = new();
+    public EntityFilterBuilder<T> WhereBuilder { get; internal set; } = new();
 
     // Function for post-processing results.
     public Func<IEnumerable<T>, IEnumerable<T>> PostProcessingAction { get; set; }

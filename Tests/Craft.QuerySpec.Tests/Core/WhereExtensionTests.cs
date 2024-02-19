@@ -28,7 +28,7 @@ public class WhereExtensionTests
 
         // Act
         var result = query.Where("Name", "Company 2", ComparisonType.EqualTo);
-        var expr = result.WhereBuilder.WhereExpressions[0];
+        var expr = result.WhereBuilder.EntityFilterList[0];
         var filtered = queryable.Where(expr.Filter).ToList();
 
         // Assert
@@ -44,14 +44,14 @@ public class WhereExtensionTests
         // Arrange
         IQuery<Company> query = new Query<Company>();
         const string propName = null;
-        var expected = query.WhereBuilder.WhereExpressions.Count;
+        var expected = query.WhereBuilder.EntityFilterList.Count;
 
         // Act
         var result = query.Where(propName, null, ComparisonType.EqualTo);
 
         // Assert
         result.Should().NotBeNull();
-        query.WhereBuilder.WhereExpressions.Count.Should().Be(expected);
+        query.WhereBuilder.EntityFilterList.Count.Should().Be(expected);
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class WhereExtensionTests
 
         // Act
         var result = query.Where(propExpr, 2);
-        var expr = result.WhereBuilder.WhereExpressions[0];
+        var expr = result.WhereBuilder.EntityFilterList[0];
         var filtered = queryable.Where(expr.Filter).ToList();
 
         // Assert
@@ -93,14 +93,14 @@ public class WhereExtensionTests
         // Arrange
         IQuery<Company> query = new Query<Company>();
         Expression<Func<Company, object>> propExpr = null;
-        var expected = query.WhereBuilder.WhereExpressions.Count;
+        var expected = query.WhereBuilder.EntityFilterList.Count;
 
         // Act
         var result = query.Where(propExpr, 10);
 
         // Assert
         result.Should().NotBeNull();
-        query.WhereBuilder.WhereExpressions.Count.Should().Be(expected);
+        query.WhereBuilder.EntityFilterList.Count.Should().Be(expected);
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class WhereExtensionTests
 
         // Act
         var result = query.Where(expression);
-        var expr = result.WhereBuilder.WhereExpressions[0];
+        var expr = result.WhereBuilder.EntityFilterList[0];
         var filtered = queryable.Where(expr.Filter).ToList();
 
         // Assert
@@ -142,14 +142,14 @@ public class WhereExtensionTests
         // Arrange
         IQuery<Company> query = new Query<Company>();
         Expression<Func<Company, bool>> expression = null;
-        var expected = query.WhereBuilder.WhereExpressions.Count;
+        var expected = query.WhereBuilder.EntityFilterList.Count;
 
         // Act
         var result = query.Where(expression);
 
         // Assert
         result.Should().NotBeNull();
-        query.WhereBuilder.WhereExpressions.Count.Should().Be(expected);
+        query.WhereBuilder.EntityFilterList.Count.Should().Be(expected);
     }
 
     [Fact]

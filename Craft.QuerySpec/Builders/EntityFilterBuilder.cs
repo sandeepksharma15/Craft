@@ -6,52 +6,52 @@ using Craft.QuerySpec.Helpers;
 namespace Craft.QuerySpec.Builders;
 
 [Serializable]
-public class WhereBuilder<T> where T : class
+public class EntityFilterBuilder<T> where T : class
 {
-    public WhereBuilder() => WhereExpressions = [];
+    public EntityFilterBuilder() => EntityFilterList = [];
 
-    public List<WhereInfo<T>> WhereExpressions { get; }
+    public List<EntityFilterCriteria<T>> EntityFilterList { get; }
 
-    public long Count => WhereExpressions.Count;
+    public long Count => EntityFilterList.Count;
 
-    public WhereBuilder<T> Add(Expression<Func<T, bool>> expression)
+    public EntityFilterBuilder<T> Add(Expression<Func<T, bool>> expression)
     {
         ArgumentNullException.ThrowIfNullOrEmpty(nameof(expression));
 
         if (expression.CanReduce)
             expression = (Expression<Func<T, bool>>)expression.ReduceAndCheck();
 
-        WhereExpressions.Add(new WhereInfo<T>(expression));
+        EntityFilterList.Add(new EntityFilterCriteria<T>(expression));
 
         return this;
     }
 
-    public WhereBuilder<T> Add(Expression<Func<T, object>> propExpr, object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo)
+    public EntityFilterBuilder<T> Add(Expression<Func<T, object>> propExpr, object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo)
     {
         var expression = GetExpression(propExpr, compareWith, comparisonType);
 
-        WhereExpressions.Add(new WhereInfo<T>(expression));
+        EntityFilterList.Add(new EntityFilterCriteria<T>(expression));
 
         return this;
     }
 
-    public WhereBuilder<T> Add(string propName, object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo)
+    public EntityFilterBuilder<T> Add(string propName, object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo)
     {
         var expression = GetExpression(propName, compareWith, comparisonType);
 
-        WhereExpressions.Add(new WhereInfo<T>(expression));
+        EntityFilterList.Add(new EntityFilterCriteria<T>(expression));
 
         return this;
     }
 
-    public WhereBuilder<T> Clear()
+    public EntityFilterBuilder<T> Clear()
     {
-        WhereExpressions.Clear();
+        EntityFilterList.Clear();
 
         return this;
     }
 
-    public WhereBuilder<T> Remove(Expression<Func<T, bool>> expression)
+    public EntityFilterBuilder<T> Remove(Expression<Func<T, bool>> expression)
     {
         ArgumentNullException.ThrowIfNull(nameof(expression));
 
@@ -60,15 +60,15 @@ public class WhereBuilder<T> where T : class
 
         var comparer = new ExpressionSemanticEqualityComparer();
 
-        var whereInfo = WhereExpressions.Find(x => comparer.Equals(x.Filter, expression));
+        var whereInfo = EntityFilterList.Find(x => comparer.Equals(x.Filter, expression));
 
         if (whereInfo is not null)
-            WhereExpressions.Remove(whereInfo);
+            EntityFilterList.Remove(whereInfo);
 
         return this;
     }
 
-    public WhereBuilder<T> Remove(Expression<Func<T, object>> propExpr, object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo)
+    public EntityFilterBuilder<T> Remove(Expression<Func<T, object>> propExpr, object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo)
     {
         var expression = GetExpression(propExpr, compareWith, comparisonType);
 
@@ -77,7 +77,7 @@ public class WhereBuilder<T> where T : class
         return this;
     }
 
-    public WhereBuilder<T> Remove(string propName, object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo)
+    public EntityFilterBuilder<T> Remove(string propName, object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo)
     {
         var expression = GetExpression(propName, compareWith, comparisonType);
 
@@ -90,7 +90,7 @@ public class WhereBuilder<T> where T : class
     {
         ArgumentNullException.ThrowIfNull(nameof(propExpr));
 
-        var filterInfo = FilterInfo.GetFilterInfo(propExpr, compareWith, comparisonType);
+        var filterInfo = FilterCriteria.GetFilterInfo(propExpr, compareWith, comparisonType);
 
         return ExpressionBuilder.CreateWhereExpression<T>(filterInfo);
     }
@@ -99,7 +99,7 @@ public class WhereBuilder<T> where T : class
     {
         // Check if the property exists
         var propExpr = ExpressionBuilder.GetPropertyExpression<T>(propName);
-        var filterInfo = FilterInfo.GetFilterInfo(propExpr, compareWith, comparisonType);
+        var filterInfo = FilterCriteria.GetFilterInfo(propExpr, compareWith, comparisonType);
 
         return ExpressionBuilder.CreateWhereExpression<T>(filterInfo);
     }

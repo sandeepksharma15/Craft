@@ -9,7 +9,7 @@ public interface IQuery<T, TResult> : IQuery<T>
 {
     new Func<IEnumerable<TResult>, IEnumerable<TResult>> PostProcessingAction { get; internal set; }
 
-    SelectBuilder<T, TResult> SelectBuilder { get; }
+    QuerySelectBuilder<T, TResult> SelectBuilder { get; }
 
     Expression<Func<T, IEnumerable<TResult>>> SelectorMany { get; internal set; }
 
@@ -22,14 +22,14 @@ public interface IQuery<T> where T : class
     bool AsSplitQuery { get; internal set; }
     bool IgnoreAutoIncludes { get; internal set; }
     bool IgnoreQueryFilters { get; internal set; }
-    OrderBuilder<T> OrderBuilder { get; }
+    SortOrderBuilder<T> OrderBuilder { get; }
     Func<IEnumerable<T>, IEnumerable<T>> PostProcessingAction { get; internal set; }
     int? Skip { get; set; }
     int? Take { get; set; }
 
     SqlSearchCriteriaBuilder<T> SearchBuilder { get; }
 
-    WhereBuilder<T> WhereBuilder { get; }
+    EntityFilterBuilder<T> WhereBuilder { get; }
 
     void Clear();
 

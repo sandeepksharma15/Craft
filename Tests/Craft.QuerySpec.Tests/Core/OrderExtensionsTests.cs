@@ -48,10 +48,10 @@ public class OrderExtensionsTests
 
         // Assert
         result.Should().BeSameAs(query);
-        query.OrderBuilder.OrderExpressions.Should().ContainSingle();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Body.ToString().Should().Be("x.Name");
-        query.OrderBuilder.OrderExpressions[0].OrderType.Should().Be(OrderTypeEnum.OrderBy);
+        query.OrderBuilder.OrderDescriptorList.Should().ContainSingle();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Body.ToString().Should().Be("x.Name");
+        query.OrderBuilder.OrderDescriptorList[0].OrderType.Should().Be(OrderTypeEnum.OrderBy);
     }
 
     [Fact]
@@ -93,10 +93,10 @@ public class OrderExtensionsTests
 
         // Assert
         result.Should().BeSameAs(query);
-        query.OrderBuilder.OrderExpressions.Should().ContainSingle();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Body.ToString().Should().Be("x.Name");
-        query.OrderBuilder.OrderExpressions[0].OrderType.Should().Be(OrderTypeEnum.OrderByDescending);
+        query.OrderBuilder.OrderDescriptorList.Should().ContainSingle();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Body.ToString().Should().Be("x.Name");
+        query.OrderBuilder.OrderDescriptorList[0].OrderType.Should().Be(OrderTypeEnum.OrderByDescending);
     }
 
     [Fact]
@@ -138,10 +138,10 @@ public class OrderExtensionsTests
 
         // Assert
         result.Should().BeSameAs(query);
-        query.OrderBuilder.OrderExpressions.Should().ContainSingle();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Body.ToString().Should().Be("x.Name");
-        query.OrderBuilder.OrderExpressions[0].OrderType.Should().Be(OrderTypeEnum.ThenBy);
+        query.OrderBuilder.OrderDescriptorList.Should().ContainSingle();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Body.ToString().Should().Be("x.Name");
+        query.OrderBuilder.OrderDescriptorList[0].OrderType.Should().Be(OrderTypeEnum.ThenBy);
     }
 
     [Fact]
@@ -183,10 +183,10 @@ public class OrderExtensionsTests
 
         // Assert
         result.Should().BeSameAs(query);
-        query.OrderBuilder.OrderExpressions.Should().ContainSingle();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Body.ToString().Should().Be("x.Name");
-        query.OrderBuilder.OrderExpressions[0].OrderType.Should().Be(OrderTypeEnum.ThenByDescending);
+        query.OrderBuilder.OrderDescriptorList.Should().ContainSingle();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Body.ToString().Should().Be("x.Name");
+        query.OrderBuilder.OrderDescriptorList[0].OrderType.Should().Be(OrderTypeEnum.ThenByDescending);
     }
 
     [Fact]
@@ -228,9 +228,9 @@ public class OrderExtensionsTests
 
         // Assert
         result.Should().BeSameAs(query);
-        query.OrderBuilder.OrderExpressions.Should().ContainSingle();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        query.OrderBuilder.OrderExpressions[0].OrderType.Should().Be(OrderTypeEnum.OrderBy);
+        query.OrderBuilder.OrderDescriptorList.Should().ContainSingle();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        query.OrderBuilder.OrderDescriptorList[0].OrderType.Should().Be(OrderTypeEnum.OrderBy);
     }
 
     [Fact]
@@ -272,9 +272,9 @@ public class OrderExtensionsTests
 
         // Assert
         result.Should().BeSameAs(query);
-        query.OrderBuilder.OrderExpressions.Should().ContainSingle();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        query.OrderBuilder.OrderExpressions[0].OrderType.Should().Be(OrderTypeEnum.OrderByDescending);
+        query.OrderBuilder.OrderDescriptorList.Should().ContainSingle();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        query.OrderBuilder.OrderDescriptorList[0].OrderType.Should().Be(OrderTypeEnum.OrderByDescending);
     }
 
     [Fact]
@@ -316,9 +316,9 @@ public class OrderExtensionsTests
 
         // Assert
         result.Should().BeSameAs(query);
-        query.OrderBuilder.OrderExpressions.Should().ContainSingle();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        query.OrderBuilder.OrderExpressions[0].OrderType.Should().Be(OrderTypeEnum.ThenBy);
+        query.OrderBuilder.OrderDescriptorList.Should().ContainSingle();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        query.OrderBuilder.OrderDescriptorList[0].OrderType.Should().Be(OrderTypeEnum.ThenBy);
     }
 
     [Fact]
@@ -360,8 +360,8 @@ public class OrderExtensionsTests
 
         // Assert
         result.Should().BeSameAs(query);
-        query.OrderBuilder.OrderExpressions.Should().ContainSingle();
-        query.OrderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        query.OrderBuilder.OrderExpressions[0].OrderType.Should().Be(OrderTypeEnum.ThenByDescending);
+        query.OrderBuilder.OrderDescriptorList.Should().ContainSingle();
+        query.OrderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        query.OrderBuilder.OrderDescriptorList[0].OrderType.Should().Be(OrderTypeEnum.ThenByDescending);
     }
 }

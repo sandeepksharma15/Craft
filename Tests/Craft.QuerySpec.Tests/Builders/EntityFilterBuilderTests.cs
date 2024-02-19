@@ -7,11 +7,11 @@ using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Builders;
 
-public class WhereBuilderTests
+public class EntityFilterBuilderTests
 {
     private readonly IQueryable<Company> queryable;
 
-    public WhereBuilderTests()
+    public EntityFilterBuilderTests()
     {
         queryable = new List<Company>
         {
@@ -24,7 +24,7 @@ public class WhereBuilderTests
     public void Clear_EmptiesWhereExpressions()
     {
         // Arrange
-        var whereBuilder = new WhereBuilder<Company>();
+        var whereBuilder = new EntityFilterBuilder<Company>();
         whereBuilder.Add(u => u.Name == "Company 1");
 
         // Act
@@ -32,19 +32,19 @@ public class WhereBuilderTests
 
         // Assert
         result.Should().Be(whereBuilder);
-        whereBuilder.WhereExpressions.Should().BeEmpty();
+        whereBuilder.EntityFilterList.Should().BeEmpty();
     }
 
     [Fact]
     public void Add_Expression_AddsToWhereExpressions()
     {
         // Arrange
-        var whereBuilder = new WhereBuilder<Company>();
+        var whereBuilder = new EntityFilterBuilder<Company>();
         Expression<Func<Company, bool>> expression = u => u.Name == "Company 1";
 
         // Act
         var result = whereBuilder.Add(expression);
-        var expr = whereBuilder.WhereExpressions[0];
+        var expr = whereBuilder.EntityFilterList[0];
         var filtered = queryable.Where(expr.Filter).ToList();
 
         // Assert
@@ -59,18 +59,18 @@ public class WhereBuilderTests
     public void Add_ExpressionWithProperties_ReturnsWhereExpressions()
     {
         // Arrange
-        var whereBuilder = new WhereBuilder<Company>();
+        var whereBuilder = new EntityFilterBuilder<Company>();
         Expression<Func<Company, object>> propExpr = u => u.Name;
         object compareWith = "Company 1";
 
         // Act
         var result = whereBuilder.Add(propExpr, compareWith, ComparisonType.EqualTo);
-        var expr = whereBuilder.WhereExpressions[0];
+        var expr = whereBuilder.EntityFilterList[0];
         var filtered = queryable.Where(expr.Filter).ToList();
 
         // Assert
         result.Should().Be(whereBuilder);
-        whereBuilder.WhereExpressions.Should().NotBeEmpty();
+        whereBuilder.EntityFilterList.Should().NotBeEmpty();
 
         filtered.Should().NotBeNull();
         filtered.Should().HaveCount(1);
@@ -81,18 +81,18 @@ public class WhereBuilderTests
     public void Add_StringPropName_ReturnsWhereExpressions()
     {
         // Arrange
-        var whereBuilder = new WhereBuilder<Company>();
+        var whereBuilder = new EntityFilterBuilder<Company>();
         const string propName = "Name";
         object compareWith = "Company 1";
 
         // Act
         var result = whereBuilder.Add(propName, compareWith, ComparisonType.NotEqualTo);
-        var expr = whereBuilder.WhereExpressions[0];
+        var expr = whereBuilder.EntityFilterList[0];
         var filtered = queryable.Where(expr.Filter).ToList();
 
         // Assert
         result.Should().Be(whereBuilder);
-        whereBuilder.WhereExpressions.Should().NotBeEmpty();
+        whereBuilder.EntityFilterList.Should().NotBeEmpty();
 
         filtered.Should().NotBeNull();
         filtered.Should().HaveCount(1);
@@ -103,7 +103,7 @@ public class WhereBuilderTests
     public void Remove_WhenExpressionFound_ShouldRemoveFromWhereExpressions()
     {
         // Arrange
-        var whereBuilder = new WhereBuilder<Company>();
+        var whereBuilder = new EntityFilterBuilder<Company>();
         Expression<Func<Company, bool>> expression = t => t.Id == 1;
         whereBuilder.Add(expression);
 
@@ -111,14 +111,14 @@ public class WhereBuilderTests
         whereBuilder.Remove(expression);
 
         // Assert
-        whereBuilder.WhereExpressions.Should().BeEmpty();
+        whereBuilder.EntityFilterList.Should().BeEmpty();
     }
 
     [Fact]
     public void Remove_WhenExpressionNotFound_ShouldNotChangeWhereExpressions()
     {
         // Arrange
-        var whereBuilder = new WhereBuilder<Company>();
+        var whereBuilder = new EntityFilterBuilder<Company>();
         Expression<Func<Company, bool>> expression = t => t.Id == 1;
         whereBuilder.Add(t => t.Name == "Test");
 
@@ -126,14 +126,14 @@ public class WhereBuilderTests
         whereBuilder.Remove(expression);
 
         // Assert
-        whereBuilder.WhereExpressions.Should().NotBeEmpty();
+        whereBuilder.EntityFilterList.Should().NotBeEmpty();
     }
 
     [Fact]
     public void Remove_WhenPropertyExpressionFound_ShouldRemoveFromWhereExpressions()
     {
         // Arrange
-        var whereBuilder = new WhereBuilder<Company>();
+        var whereBuilder = new EntityFilterBuilder<Company>();
         Expression<Func<Company, object>> propExpr = u => u.Name;
         object compareWith = "Company 1";
         whereBuilder.Add(propExpr, compareWith, ComparisonType.EqualTo);
@@ -142,7 +142,7 @@ public class WhereBuilderTests
         whereBuilder.Remove(propExpr, compareWith, ComparisonType.EqualTo);
 
         // Assert
-        whereBuilder.WhereExpressions.Should().BeEmpty();
+        whereBuilder.EntityFilterList.Should().BeEmpty();
     }
 
     [Fact]
@@ -150,7 +150,7 @@ public class WhereBuilderTests
     {
         // Arrange
         // Arrange
-        var whereBuilder = new WhereBuilder<Company>();
+        var whereBuilder = new EntityFilterBuilder<Company>();
         const string propName = "Name";
         object compareWith = "Company 1";
 
@@ -160,6 +160,6 @@ public class WhereBuilderTests
         whereBuilder.Remove(propName, compareWith, ComparisonType.NotEqualTo);
 
         // Assert
-        whereBuilder.WhereExpressions.Should().BeEmpty();
+        whereBuilder.EntityFilterList.Should().BeEmpty();
     }
 }

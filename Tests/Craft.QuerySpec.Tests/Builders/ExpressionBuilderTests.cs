@@ -24,7 +24,7 @@ public class ExpressionBuilderTests
     public void CreateNonStringExpressionBody_ShouldReturnCorrectComparisonExpression()
     {
         // Arrange
-        FilterInfo filterInfo = new(typeof(long).FullName, "Id", "1", ComparisonType.EqualTo);
+        FilterCriteria filterInfo = new(typeof(long).FullName, "Id", "1", ComparisonType.EqualTo);
 
         // Act
         var expression = ExpressionBuilder.CreateWhereExpression<Company>(filterInfo);
@@ -60,7 +60,7 @@ public class ExpressionBuilderTests
     public void CreateWhereExpression_ShouldReturnCorrectExpression()
     {
         // Arrange
-        FilterInfo filterInfo = new(typeof(string).FullName, "Name", "Company 1", ComparisonType.EqualTo);
+        FilterCriteria filterInfo = new(typeof(string).FullName, "Name", "Company 1", ComparisonType.EqualTo);
 
         // Act
         var expression = ExpressionBuilder.CreateWhereExpression<Company>(filterInfo);

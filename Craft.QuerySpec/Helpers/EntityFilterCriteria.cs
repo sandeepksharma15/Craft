@@ -13,11 +13,11 @@ namespace Craft.QuerySpec.Helpers;
 /// </summary>
 /// <typeparam name="T">The type of the entities to be filtered.</typeparam>
 [Serializable]
-public class WhereInfo<T> where T : class
+public class EntityFilterCriteria<T> where T : class
 {
     private readonly Lazy<Func<T, bool>> filterFunc;
 
-    public WhereInfo(Expression<Func<T, bool>> filter)
+    public EntityFilterCriteria(Expression<Func<T, bool>> filter)
     {
         ArgumentNullException.ThrowIfNull(filter);
 
@@ -37,12 +37,12 @@ public class WhereInfo<T> where T : class
 }
 
 /// <summary>
-/// A custom JSON converter for the `WhereInfo<T>` class, enabling serialization and deserialization of filter expressions for entity filtering.
+/// A custom JSON converter for the `EntityFilterCriteria<T>` class, enabling serialization and deserialization of filter expressions for entity filtering.
 /// </summary>
 /// <typeparam name="T">The type of the entities being filtered.</typeparam>
-public class WhereInfoJsonConverter<T> : JsonConverter<WhereInfo<T>> where T : class
+public class EntityFilterCriteriaJsonConverter<T> : JsonConverter<EntityFilterCriteria<T>> where T : class
 {
-    public override WhereInfo<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override EntityFilterCriteria<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         Expression<Func<T, bool>> filter = null;
 
@@ -60,7 +60,7 @@ public class WhereInfoJsonConverter<T> : JsonConverter<WhereInfo<T>> where T : c
 
                 reader.Read();
 
-                if (propertyName == nameof(WhereInfo<T>.Filter))
+                if (propertyName == nameof(EntityFilterCriteria<T>.Filter))
                 {
                     var str = reader.GetString();
 
@@ -77,14 +77,14 @@ public class WhereInfoJsonConverter<T> : JsonConverter<WhereInfo<T>> where T : c
             }
         }
 
-        return new WhereInfo<T>(filter);
+        return new EntityFilterCriteria<T>(filter);
     }
 
-    public override void Write(Utf8JsonWriter writer, WhereInfo<T> value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, EntityFilterCriteria<T> value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 
-        writer.WriteString(nameof(WhereInfo<T>.Filter),
+        writer.WriteString(nameof(EntityFilterCriteria<T>.Filter),
             RemoveAccessor(value.Filter.Body.ToString()));
 
         writer.WriteEndObject();

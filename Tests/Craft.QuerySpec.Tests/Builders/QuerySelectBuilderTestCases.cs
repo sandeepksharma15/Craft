@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Craft.QuerySpec.Tests.Builders;
 
-public class SelectBuilderTests
+public class QuerySelectBuilderTestCases
 {
     [Fact]
     public void AddColumn_Should_Add_Column_To_SelectList()
@@ -13,7 +13,7 @@ public class SelectBuilderTests
         Expression<Func<MyEntity, string>> assignor = s => s.Name;
         Expression<Func<MyResult, string>> assignee = d => d.Name;
 
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
 
         // Act
         builder.Add(assignor, assignee);
@@ -29,7 +29,7 @@ public class SelectBuilderTests
     public void AddExpressionColumn_Should_Add_Column_To_SelectList()
     {
         // Arrange
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
 
         // Act
         builder.Add(s => s.Name, d => d.Name);
@@ -45,7 +45,7 @@ public class SelectBuilderTests
     public void AddPropertyName_Should_Add_Column_To_SelectList()
     {
         // Arrange
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
 
         // Act
         builder.Add("Name", "Name");
@@ -61,7 +61,7 @@ public class SelectBuilderTests
     public void AddExpressionColumn_Should_Add_Column_When_TResult_But_NoAssignTo_If_Same_Property()
     {
         // Arrange
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
 
         // Act
         builder.Add(s => s.Name);
@@ -83,7 +83,7 @@ public class SelectBuilderTests
             new MyEntity { Id = 2, Name = "Alice", Age = 25 },
             new MyEntity { Id = 3, Name = "Bob", Age = 35 }
         }.AsQueryable();
-        var selectBuilder = new SelectBuilder<MyEntity, object>()
+        var selectBuilder = new QuerySelectBuilder<MyEntity, object>()
             .Add(x => x.Name);
 
         // Act
@@ -99,7 +99,7 @@ public class SelectBuilderTests
     public void AddPropertyName_Should_Add_Column_When_TResult_But_NoAssignTo_If_Same_Property()
     {
         // Arrange
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
 
         // Act
         builder.Add("Name");
@@ -115,7 +115,7 @@ public class SelectBuilderTests
     public void AddColumn_Should_Throw_Exception_When_TResult_But_NoAssignTo_If_Not_Same_Property()
     {
         // Arrange
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
         Expression<Func<MyEntity, bool>> assignor = s => s.IsActive;
 
         // Act
@@ -131,7 +131,7 @@ public class SelectBuilderTests
         // Arrange
         Expression<Func<MyEntity, string>> assignor = s => s.Name;
 
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
 
         // Act
         Action action = () => builder.Add(assignor, null);
@@ -147,7 +147,7 @@ public class SelectBuilderTests
         Expression<Func<MyEntity, string>> assignor = s => s.Name;
         Expression<Func<MyResult, string>> assignee = d => d.Name;
 
-        var builder = new SelectBuilder<MyEntity, MyEntity>();
+        var builder = new QuerySelectBuilder<MyEntity, MyEntity>();
 
         // Act
         Action action = () => builder.Add(assignor, assignee);
@@ -160,7 +160,7 @@ public class SelectBuilderTests
     public void Build_Should_Create_SelectPredicate_When_TResult_Equals_T()
     {
         // Arrange
-        var builder = new SelectBuilder<MyEntity, MyEntity>();
+        var builder = new QuerySelectBuilder<MyEntity, MyEntity>();
 
         // Act
         var predicate = builder.Build();
@@ -178,7 +178,7 @@ public class SelectBuilderTests
         Expression<Func<MyEntity, string>> assignor = s => s.Name;
         Expression<Func<MyResult, string>> assignee = d => d.Name;
 
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
 
         // Act
         var predicate = builder.Add(assignor, assignee).Build();
@@ -205,7 +205,7 @@ public class SelectBuilderTests
             new MyEntity { Id = 3, Name = "Bob", Age = 35 }
         }.AsQueryable();
 
-        var builder = new SelectBuilder<MyEntity, MyResult>()
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>()
             .Add(idAssignor, idAssignee)
             .Add(nameAssignor, nameAssignee);
 
@@ -229,7 +229,7 @@ public class SelectBuilderTests
             new MyEntity { Id = 3, Name = "Bob", Age = 35 }
         }.AsQueryable();
 
-        var builder = new SelectBuilder<MyEntity>()
+        var builder = new QuerySelectBuilder<MyEntity>()
             .Add(idAssignor)
             .Add(nameAssignor);
 
@@ -255,7 +255,7 @@ public class SelectBuilderTests
             new MyEntity { Id = 3, Name = "Bob", Age = 35 }
         }.AsQueryable();
 
-        var builder = new SelectBuilder<MyEntity, MyResult>()
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>()
             .Add(idAssignor)
             .Add(nameAssignor)
             .Add(ageAssignor);
@@ -274,7 +274,7 @@ public class SelectBuilderTests
         Expression<Func<MyEntity, string>> assignor = s => s.Name;
         Expression<Func<MyResult, string>> assignee = d => d.Name;
 
-        var builder = new SelectBuilder<MyEntity, MyResult>();
+        var builder = new QuerySelectBuilder<MyEntity, MyResult>();
 
         // Act
         builder.Clear();

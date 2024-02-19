@@ -23,7 +23,7 @@ public static class ExpressionBuilder
     private static readonly MethodInfo _toUpperMethod = typeof(string)
         .GetMethod("ToUpper", []);
 
-    public static Expression<Func<T, bool>> CreateWhereExpression<T>(FilterInfo filterInfo)
+    public static Expression<Func<T, bool>> CreateWhereExpression<T>(FilterCriteria filterInfo)
     {
         Expression exprBody;
         ParameterExpression lambdaParam = Expression.Parameter(typeof(T));

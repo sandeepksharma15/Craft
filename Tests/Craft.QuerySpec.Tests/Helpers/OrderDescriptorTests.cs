@@ -6,11 +6,11 @@ using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
-public class OrderInfoTests
+public class OrderDescriptorTests
 {
     private readonly JsonSerializerOptions serializeOptions;
 
-    public OrderInfoTests()
+    public OrderDescriptorTests()
     {
         serializeOptions = new JsonSerializerOptions();
         serializeOptions.Converters.Add(new OrderInfoJsonConverter<MyTestClass>());
@@ -21,7 +21,7 @@ public class OrderInfoTests
     {
         // Arrange
         Expression<Func<string, object?>> orderItemExpression = s => s.Length;
-        var orderInfo = new OrderInfo<string>(orderItemExpression, OrderTypeEnum.OrderBy);
+        var orderInfo = new OrderDescriptor<string>(orderItemExpression, OrderTypeEnum.OrderBy);
 
         // Act
         var orderType = orderInfo.OrderType;
@@ -38,7 +38,7 @@ public class OrderInfoTests
         const string json = @"{""OrderItem"": ""InvalidMember"", ""OrderType"": 0}";
 
         // Act
-        var act = () => JsonSerializer.Deserialize<OrderInfo<MyTestClass>>(json, serializeOptions);
+        var act = () => JsonSerializer.Deserialize<OrderDescriptor<MyTestClass>>(json, serializeOptions);
 
         // Assert
         act.Should().Throw<ArgumentException>();
@@ -51,7 +51,7 @@ public class OrderInfoTests
         const string json = "null";
 
         // Act
-        var orderInfo = JsonSerializer.Deserialize<OrderInfo<MyTestClass>>(json, serializeOptions);
+        var orderInfo = JsonSerializer.Deserialize<OrderDescriptor<MyTestClass>>(json, serializeOptions);
 
         // Assert
         orderInfo.Should().BeNull();
@@ -62,11 +62,11 @@ public class OrderInfoTests
     {
         // Arrange
         Expression<Func<MyTestClass, object>> orderItemExpression = x => x.MyProperty;
-        var orderInfo = new OrderInfo<MyTestClass>(orderItemExpression, OrderTypeEnum.OrderByDescending);
+        var orderInfo = new OrderDescriptor<MyTestClass>(orderItemExpression, OrderTypeEnum.OrderByDescending);
 
         // Act
         var serializationInfo = JsonSerializer.Serialize(orderInfo, serializeOptions);
-        var deserializedOrderInfo = JsonSerializer.Deserialize<OrderInfo<MyTestClass>>(serializationInfo, serializeOptions);
+        var deserializedOrderInfo = JsonSerializer.Deserialize<OrderDescriptor<MyTestClass>>(serializationInfo, serializeOptions);
 
         // Assert
         deserializedOrderInfo.OrderType.Should().Be(OrderTypeEnum.OrderByDescending);

@@ -8,11 +8,11 @@ using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Builders;
 
-public class OrderBuilderTests
+public class SortOrderBuilderTests
 {
     private readonly JsonSerializerOptions serializeOptions;
 
-    public OrderBuilderTests()
+    public SortOrderBuilderTests()
     {
         // Arrange
         serializeOptions = new JsonSerializerOptions();
@@ -23,22 +23,22 @@ public class OrderBuilderTests
     public void Add_Method_Should_Add_OrderExpression()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
 
         // Act
         orderBuilder.Add(x => x.Name);
 
         // Assert
-        orderBuilder.OrderExpressions.Should().NotBeEmpty();
-        orderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
-        orderBuilder.OrderExpressions[0].OrderItem.Body.ToString().Should().Be("x.Name");
+        orderBuilder.OrderDescriptorList.Should().NotBeEmpty();
+        orderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
+        orderBuilder.OrderDescriptorList[0].OrderItem.Body.ToString().Should().Be("x.Name");
     }
 
     [Fact]
     public void Add_WithExistingOrderBy_ShouldAdjustOrderTypeToThenBy()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
         Expression<Func<Company, object>> propExpr1 = x => x.Id;
         Expression<Func<Company, object>> propExpr2 = x => x.Name;
         orderBuilder.Add(propExpr1);
@@ -47,14 +47,14 @@ public class OrderBuilderTests
         var result = orderBuilder.Add(propExpr2, OrderTypeEnum.OrderBy);
 
         // Assert
-        result.OrderExpressions[1].OrderType.Should().Be(OrderTypeEnum.ThenBy);
+        result.OrderDescriptorList[1].OrderType.Should().Be(OrderTypeEnum.ThenBy);
     }
 
     [Fact]
     public void Add_WithExistingOrderByDescending_ShouldAdjustOrderTypeToThenByDescending()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
         Expression<Func<Company, object>> propExpr1 = x => x.Id;
         Expression<Func<Company, object>> propExpr2 = x => x.Name;
         orderBuilder.Add(propExpr1, OrderTypeEnum.OrderByDescending);
@@ -63,21 +63,21 @@ public class OrderBuilderTests
         var result = orderBuilder.Add(propExpr2, OrderTypeEnum.OrderBy);
 
         // Assert
-        result.OrderExpressions[1].OrderType.Should().Be(OrderTypeEnum.ThenBy);
+        result.OrderDescriptorList[1].OrderType.Should().Be(OrderTypeEnum.ThenBy);
     }
 
     [Fact]
     public void AddProperty_Method_Should_Add_OrderExpression()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
 
         // Act
         orderBuilder.Add("Name");
 
         // Assert
-        orderBuilder.OrderExpressions.Should().NotBeEmpty();
-        orderBuilder.OrderExpressions[0].OrderItem.Should().NotBeNull();
+        orderBuilder.OrderDescriptorList.Should().NotBeEmpty();
+        orderBuilder.OrderDescriptorList[0].OrderItem.Should().NotBeNull();
     }
 
     [Theory]
@@ -86,8 +86,8 @@ public class OrderBuilderTests
     public void AdjustOrderType_WhenExistingOrderExpressionsPresent_ShouldReturnThenBy(OrderTypeEnum existingOrderType)
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<object>();
-        orderBuilder.OrderExpressions.Add(new OrderInfo<object>(null, existingOrderType));
+        var orderBuilder = new SortOrderBuilder<object>();
+        orderBuilder.OrderDescriptorList.Add(new OrderDescriptor<object>(null, existingOrderType));
 
         // Act
         var adjustedOrderType = orderBuilder.AdjustOrderType(OrderTypeEnum.OrderBy);
@@ -102,8 +102,8 @@ public class OrderBuilderTests
     public void AdjustOrderType_WhenExistingOrderExpressionsPresentAndOrderTypeIsDescending_ShouldReturnThenByDescending(OrderTypeEnum existingOrderType)
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<object>();
-        orderBuilder.OrderExpressions.Add(new OrderInfo<object>(null, existingOrderType));
+        var orderBuilder = new SortOrderBuilder<object>();
+        orderBuilder.OrderDescriptorList.Add(new OrderDescriptor<object>(null, existingOrderType));
 
         // Act
         var adjustedOrderType = orderBuilder.AdjustOrderType(OrderTypeEnum.OrderByDescending);
@@ -116,7 +116,7 @@ public class OrderBuilderTests
     public void AdjustOrderType_WhenNoExistingOrderExpressions_ShouldReturnOriginalOrderType()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<object>();
+        var orderBuilder = new SortOrderBuilder<object>();
 
         // Act
         var adjustedOrderType = orderBuilder.AdjustOrderType(OrderTypeEnum.OrderBy);
@@ -129,21 +129,21 @@ public class OrderBuilderTests
     public void Clear_Method_Should_Empty_OrderExpressions()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
         orderBuilder.Add(x => x.Name);
 
         // Act
         orderBuilder.Clear();
 
         // Assert
-        orderBuilder.OrderExpressions.Should().BeEmpty();
+        orderBuilder.OrderDescriptorList.Should().BeEmpty();
     }
 
     [Fact]
     public void Remove_Method_Should_Remove_OrderExpression()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
         Expression<Func<Company, object>> orderExpr = x => x.Name;
         orderBuilder.Add(orderExpr);
 
@@ -151,54 +151,54 @@ public class OrderBuilderTests
         orderBuilder.Remove(orderExpr);
 
         // Assert
-        orderBuilder.OrderExpressions.Should().BeEmpty();
+        orderBuilder.OrderDescriptorList.Should().BeEmpty();
     }
 
     [Fact]
     public void RemoveProperty_Method_Should_Remove_OrderExpression()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
         orderBuilder.Add("Name");
 
         // Act
         orderBuilder.Remove("Name");
 
         // Assert
-        orderBuilder.OrderExpressions.Should().BeEmpty();
+        orderBuilder.OrderDescriptorList.Should().BeEmpty();
     }
 
     [Fact]
     public void OrderBuilder_Should_Initialize_OrderExpressions_List()
     {
         // Arrange & Act
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
 
         // Assert
-        orderBuilder.OrderExpressions.Should().NotBeNull();
-        orderBuilder.OrderExpressions.Should().BeEmpty();
+        orderBuilder.OrderDescriptorList.Should().NotBeNull();
+        orderBuilder.OrderDescriptorList.Should().BeEmpty();
     }
 
     [Fact]
     public void OrderBuilder_Add_Should_Add_OrderInfo_To_OrderExpressions()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
         Expression<Func<Company, object>> orderExpr = x => x.Id;
-        var orderInfo = new OrderInfo<Company>(orderExpr);
+        var orderInfo = new OrderDescriptor<Company>(orderExpr);
 
         // Act
         orderBuilder.Add(orderInfo);
 
         // Assert
-        orderBuilder.OrderExpressions.Should().Contain(orderInfo);
+        orderBuilder.OrderDescriptorList.Should().Contain(orderInfo);
     }
 
     [Fact]
     public void Write_Should_Serialize_OrderBuilder_OrderExpressions()
     {
         // Arrange
-        var orderBuilder = new OrderBuilder<Company>();
+        var orderBuilder = new SortOrderBuilder<Company>();
         orderBuilder.Add(c => c.Name);
         orderBuilder.Add(c => c.Id);
 
@@ -217,12 +217,12 @@ public class OrderBuilderTests
         const string json = "[{\"OrderItem\":\"Name\",\"OrderType\":1},{\"OrderItem\":\"Id\",\"OrderType\":3}]";
 
         // Act
-        var orderBuilder = JsonSerializer.Deserialize<OrderBuilder<Company>>(json, serializeOptions);
+        var orderBuilder = JsonSerializer.Deserialize<SortOrderBuilder<Company>>(json, serializeOptions);
 
         // Assert
         orderBuilder.Should().NotBeNull();
-        orderBuilder.OrderExpressions.Should().HaveCount(2);
-        orderBuilder.OrderExpressions[0].OrderItem.Body.ToString().Should().Contain("x.Name");
-        orderBuilder.OrderExpressions[1].OrderItem.Body.ToString().Should().Contain("x.Id");
+        orderBuilder.OrderDescriptorList.Should().HaveCount(2);
+        orderBuilder.OrderDescriptorList[0].OrderItem.Body.ToString().Should().Contain("x.Name");
+        orderBuilder.OrderDescriptorList[1].OrderItem.Body.ToString().Should().Contain("x.Id");
     }
 }

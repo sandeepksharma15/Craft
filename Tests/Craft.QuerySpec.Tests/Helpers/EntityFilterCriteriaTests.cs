@@ -5,14 +5,14 @@ using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
-public class WhereInfoTests
+public class EntityFilterCriteriaTests
 {
     private readonly JsonSerializerOptions options;
 
-    public WhereInfoTests()
+    public EntityFilterCriteriaTests()
     {
         options = new JsonSerializerOptions();
-        options.Converters.Add(new WhereInfoJsonConverter<MyEntity>());
+        options.Converters.Add(new EntityFilterCriteriaJsonConverter<MyEntity>());
     }
 
     [Fact]
@@ -22,7 +22,7 @@ public class WhereInfoTests
         Expression<Func<string, bool>> filterExpression = s => s.Length > 5;
 
         // Act
-        var whereInfo = new WhereInfo<string>(filterExpression);
+        var whereInfo = new EntityFilterCriteria<string>(filterExpression);
 
         // Assert
         whereInfo.Filter.Should().BeEquivalentTo(filterExpression);
@@ -34,12 +34,12 @@ public class WhereInfoTests
     {
         // Arrange
         Expression<Func<MyEntity, bool>> filterExpression = x => x.Name == "John";
-        var whereInfo = new WhereInfo<MyEntity>(filterExpression);
+        var whereInfo = new EntityFilterCriteria<MyEntity>(filterExpression);
         var entity = new MyEntity { Name = "John" };
 
         // Act
         var serializationInfo = JsonSerializer.Serialize(whereInfo, options);
-        var deserializedWhereInfo = JsonSerializer.Deserialize<WhereInfo<MyEntity>>(serializationInfo, options);
+        var deserializedWhereInfo = JsonSerializer.Deserialize<EntityFilterCriteria<MyEntity>>(serializationInfo, options);
 
         // Assert
         deserializedWhereInfo.Should().NotBeNull();
@@ -51,7 +51,7 @@ public class WhereInfoTests
     public void WhereInfo_Constructor_NullFilter_ThrowsArgumentNullException()
     {
         // Arrange
-        Action act = () => new WhereInfo<MyEntity>(null);
+        Action act = () => new EntityFilterCriteria<MyEntity>(null);
 
         // Act & Assert
         act.Should().Throw<ArgumentNullException>();
@@ -62,7 +62,7 @@ public class WhereInfoTests
     {
         // Arrange
         Expression<Func<MyEntity, bool>> filter = x => x.Name == "John";
-        var whereInfo = new WhereInfo<MyEntity>(filter);
+        var whereInfo = new EntityFilterCriteria<MyEntity>(filter);
         var entity = new MyEntity { Name = "John" };
 
         // Act & Assert
@@ -74,7 +74,7 @@ public class WhereInfoTests
     {
         // Arrange
         Expression<Func<MyEntity, bool>> filter = x => x.Name == "John";
-        var whereInfo = new WhereInfo<MyEntity>(filter);
+        var whereInfo = new EntityFilterCriteria<MyEntity>(filter);
         var entity = new MyEntity { Name = "John" };
 
         // Act & Assert
@@ -86,7 +86,7 @@ public class WhereInfoTests
     {
         // Arrange
         Expression<Func<MyEntity, bool>> filter = x => x.Name == "John";
-        var whereInfo = new WhereInfo<MyEntity>(filter);
+        var whereInfo = new EntityFilterCriteria<MyEntity>(filter);
         var entity = new MyEntity { Name = "Jane" };
 
         // Act & Assert
@@ -100,7 +100,7 @@ public class WhereInfoTests
         const string json = "{\"Filter\": {"; // Missing closing brace
 
         // Act & Assert
-        Action act = () => JsonSerializer.Deserialize<WhereInfo<MyEntity>>(json, options);
+        Action act = () => JsonSerializer.Deserialize<EntityFilterCriteria<MyEntity>>(json, options);
         act.Should().Throw<JsonException>();
     }
 
@@ -111,7 +111,7 @@ public class WhereInfoTests
         const string json = "{\"InvalidProperty\": \"Name == 'John'\"}";
 
         // Act & Assert
-        Action act = () => JsonSerializer.Deserialize<WhereInfo<MyEntity>>(json, options);
+        Action act = () => JsonSerializer.Deserialize<EntityFilterCriteria<MyEntity>>(json, options);
         act.Should().Throw<JsonException>();
     }
 
@@ -122,7 +122,7 @@ public class WhereInfoTests
         const string json = "{\"Filter\": \"InvalidSyntax\""; // Missing expression body
 
         // Act & Assert
-        Action act = () => JsonSerializer.Deserialize<WhereInfo<MyEntity>>(json, options);
+        Action act = () => JsonSerializer.Deserialize<EntityFilterCriteria<MyEntity>>(json, options);
         act.Should().Throw<JsonException>();
     }
 
@@ -130,7 +130,7 @@ public class WhereInfoTests
     public void WhereInfoJsonConverter_Read_NullJson_ThrowsException()
     {
         // Act
-        Action act = () => JsonSerializer.Deserialize<WhereInfo<MyEntity>>("\"null\"", options);
+        Action act = () => JsonSerializer.Deserialize<EntityFilterCriteria<MyEntity>>("\"null\"", options);
 
         // Assert
         act.Should().Throw<ArgumentNullException>();
@@ -147,7 +147,7 @@ public class WhereInfoTests
         const string json = "{\"Filter\": \"Name == 'John'\"}";
 
         // Act
-        var result = JsonSerializer.Deserialize<WhereInfo<MyEntity>>(json, options);
+        var result = JsonSerializer.Deserialize<EntityFilterCriteria<MyEntity>>(json, options);
 
         // Assert
         result.Should().NotBeNull();

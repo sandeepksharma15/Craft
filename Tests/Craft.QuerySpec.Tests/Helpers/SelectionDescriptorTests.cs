@@ -6,7 +6,7 @@ using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
-public class SelectInfoTests
+public class SelectionDescriptorTests
 {
     [Fact]
     public void Constructor_WithInvalidPropName_ShouldThrowArgumentNullException()
@@ -14,7 +14,7 @@ public class SelectInfoTests
         // Arrange
 
         // Act
-        Action act = () => new SelectInfo<Company, Company>("InvalidProperty");
+        Action act = () => new SelectionDescriptor<Company, Company>("InvalidProperty");
 
         // Assert
         act.Should().Throw<ArgumentException>();
@@ -27,7 +27,7 @@ public class SelectInfoTests
         Expression<Func<Company, object>> nullExpression = null;
 
         // Act
-        Action act = () => new SelectInfo<Company, Company>(nullExpression);
+        Action act = () => new SelectionDescriptor<Company, Company>(nullExpression);
 
         // Assert
         act.Should().Throw<ArgumentNullException>();
@@ -40,7 +40,7 @@ public class SelectInfoTests
         const string propName = null;
 
         // Act
-        Action act = () => new SelectInfo<Company, Company>(propName);
+        Action act = () => new SelectionDescriptor<Company, Company>(propName);
 
         // Assert
         act.Should().Throw<ArgumentException>();
@@ -53,7 +53,7 @@ public class SelectInfoTests
         Expression<Func<Company, object>> validExpression = x => x.Name;
 
         // Act
-        var selectInfo = new SelectInfo<Company, Company>(validExpression);
+        var selectInfo = new SelectionDescriptor<Company, Company>(validExpression);
 
         // Assert
         selectInfo.Assignor.Should().BeEquivalentTo(validExpression);
@@ -65,7 +65,7 @@ public class SelectInfoTests
     {
         // Arrange
         // Act
-        var selectInfo = new SelectInfo<Company, Company>("Name");
+        var selectInfo = new SelectionDescriptor<Company, Company>("Name");
 
         // Assert
         selectInfo.Assignor.Should().NotBeNull();
@@ -78,7 +78,7 @@ public class SelectInfoTests
         Expression<Func<Company, long>> assignor = e => e.Id;
 
         // Act
-        var selectInfo = new SelectInfo<Company, MyResult>(assignor);
+        var selectInfo = new SelectionDescriptor<Company, MyResult>(assignor);
 
         // Assert
         selectInfo.Assignor.Should().Be(assignor);
@@ -92,7 +92,7 @@ public class SelectInfoTests
         Expression<Func<Company, object>> assignor = e => e.Name;
 
         // Act & Assert
-        new Action(() => new SelectInfo<Company, Company>(assignor)).Should().NotThrow();
+        new Action(() => new SelectionDescriptor<Company, Company>(assignor)).Should().NotThrow();
     }
 
     [Fact]
@@ -103,7 +103,7 @@ public class SelectInfoTests
         Expression<Func<MyResult, object>> assignee = re => re.ResultName;
 
         // Act & Assert
-        new Action(() => new SelectInfo<Company, MyResult>(assignor, assignee)).Should().NotThrow();
+        new Action(() => new SelectionDescriptor<Company, MyResult>(assignor, assignee)).Should().NotThrow();
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public class SelectInfoTests
         // Arrange
 
         // Act
-        var selectInfo = new SelectInfo<Company, MyResult>("Name", "ResultName");
+        var selectInfo = new SelectionDescriptor<Company, MyResult>("Name", "ResultName");
 
         // Assert
         selectInfo.Assignor.Should().NotBeNull();
@@ -126,7 +126,7 @@ public class SelectInfoTests
         Expression<Func<Company, object>> assignor = e => e.Name;
 
         // Act & Assert
-        new Action(() => new SelectInfo<Company, MyResult>(assignor, null))
+        new Action(() => new SelectionDescriptor<Company, MyResult>(assignor, null))
             .Should().Throw<ArgumentException>().WithMessage("You must pass a lambda for the assignee");
     }
 
@@ -139,14 +139,14 @@ public class SelectInfoTests
         Expression<Func<Company, string>> assignorExpression = x => x.Name;
         Expression<Func<MyResult, string>> assigneeExpression = x => x.ResultName;
 
-        var selectInfo = new SelectInfo<Company, MyResult>(assignorExpression, assigneeExpression);
+        var selectInfo = new SelectionDescriptor<Company, MyResult>(assignorExpression, assigneeExpression);
 
         serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new SelectInfoJsonConverter<Company, MyResult>());
+        serializeOptions.Converters.Add(new SelectionDescriptorJsonConverter<Company, MyResult>());
 
         // Act
         var serializationInfo = JsonSerializer.Serialize(selectInfo, serializeOptions);
-        var deserializedSelectInfo = JsonSerializer.Deserialize<SelectInfo<Company, MyResult>>(serializationInfo, serializeOptions);
+        var deserializedSelectInfo = JsonSerializer.Deserialize<SelectionDescriptor<Company, MyResult>>(serializationInfo, serializeOptions);
 
         // Assert
         deserializedSelectInfo.Assignor.Should().BeEquivalentTo(assignorExpression);
