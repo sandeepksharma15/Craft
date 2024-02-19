@@ -123,7 +123,7 @@ public class QueryTests
         serializeOptions.Converters.Add(new OrderInfoJsonConverter<Company>());
         serializeOptions.Converters.Add(new SelectInfoJsonConverter<Company, object>());
         serializeOptions.Converters.Add(new WhereInfoJsonConverter<Company>());
-        serializeOptions.Converters.Add(new SearchInfoJsonConverter<Company>());
+        serializeOptions.Converters.Add(new SqlLikeSearchInfoJsonConverter<Company>());
 
         var serializedQuery = JsonSerializer.Serialize(query, serializeOptions);
         var deserializedQuery = JsonSerializer.Deserialize<Query<Company, object>>(serializedQuery, serializeOptions);

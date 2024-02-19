@@ -45,7 +45,7 @@ public class Query<T> : IQuery<T> where T : class
 
     // Builders for building where and order expressions.
     public OrderBuilder<T> OrderBuilder { get; internal set; } = new();
-    public SearchBuilder<T> SearchBuilder { get; internal set; } = new();
+    public SqlSearchCriteriaBuilder<T> SearchBuilder { get; internal set; } = new();
     public WhereBuilder<T> WhereBuilder { get; internal set; } = new();
 
     // Function for post-processing results.

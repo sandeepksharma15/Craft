@@ -7,7 +7,7 @@ using FluentAssertions;
 
 namespace Craft.QuerySpec.Tests.Helpers;
 
-public class SearchInfoTests
+public class SqlLikeSearchInfoTests
 {
     private JsonSerializerOptions serializeOptions;
 
@@ -16,46 +16,46 @@ public class SearchInfoTests
     {
         // Arrange
         Expression<Func<MyResult, string>> searchItem = x => x.ResultName;
-        const string searchTerm = "x%y";
+        const string searchString = "x%y";
         const int searchGroup = 2;
 
         // Act
-        var searchInfo = new SearchInfo<MyResult>(searchItem, searchTerm, searchGroup);
+        var searchInfo = new SqlLikeSearchInfo<MyResult>(searchItem, searchString, searchGroup);
 
         // Assert
         searchInfo.SearchGroup.Should().Be(searchGroup);
-        searchInfo.SearchTerm.Should().Be(searchTerm);
+        searchInfo.SearchString.Should().Be(searchString);
         searchInfo.SearchItem.Should().Be(searchItem);
     }
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void Constructor_InvalidSearchTerm_ThrowsException(string searchTerm)
+    public void Constructor_InvalidSearchTerm_ThrowsException(string searchString)
     {
         // Arrange
         Expression<Func<MyResult, string>> searchItem = x => x.ResultName;
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => new SearchInfo<MyResult>(searchItem, searchTerm));
+        Assert.Throws<ArgumentException>(() => new SqlLikeSearchInfo<MyResult>(searchItem, searchString));
     }
 
     [Fact]
     public void Constructor_NullSearchExpression_ThrowsException()
     {
         // Arrange & Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new SearchInfo<object>(null, "validTerm"));
+        Assert.Throws<ArgumentNullException>(() => new SqlLikeSearchInfo<object>(null, "validTerm"));
     }
 
     [Fact]
     public void DefaultConstructor_Initialization()
     {
         // Arrange & Act
-        var searchInfo = new SearchInfo<MyResult>();
+        var searchInfo = new SqlLikeSearchInfo<MyResult>();
 
         // Assert
         searchInfo.SearchGroup.Should().Be(0); // Assuming default value is 0.
-        searchInfo.SearchTerm.Should().BeNull();
+        searchInfo.SearchString.Should().BeNull();
         searchInfo.SearchItem.Should().BeNull();
     }
 
@@ -64,20 +64,20 @@ public class SearchInfoTests
     {
         // Arrange
         Expression<Func<MyResult, string>> searchItem = x => x.ResultName;
-        const string searchTerm = "x%y";
+        const string searchString = "x%y";
         const int searchGroup = 2;
-        var searchInfo = new SearchInfo<MyResult>(searchItem, searchTerm, searchGroup);
+        var searchInfo = new SqlLikeSearchInfo<MyResult>(searchItem, searchString, searchGroup);
 
         serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new SearchInfoJsonConverter<MyResult>());
+        serializeOptions.Converters.Add(new SqlLikeSearchInfoJsonConverter<MyResult>());
 
         // Act
         var serializationInfo = JsonSerializer.Serialize(searchInfo, serializeOptions);
-        var deserializedInfo = JsonSerializer.Deserialize<SearchInfo<MyResult>>(serializationInfo, serializeOptions);
+        var deserializedInfo = JsonSerializer.Deserialize<SqlLikeSearchInfo<MyResult>>(serializationInfo, serializeOptions);
 
         // Assert
         deserializedInfo.SearchItem.Should().NotBeNull();
-        deserializedInfo.SearchTerm.Should().Be(searchTerm);
+        deserializedInfo.SearchString.Should().Be(searchString);
         deserializedInfo.SearchGroup.Should().Be(searchGroup);
         deserializedInfo.SearchItem.Should().BeEquivalentTo(searchItem);
     }

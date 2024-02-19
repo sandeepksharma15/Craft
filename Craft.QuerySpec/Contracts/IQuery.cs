@@ -27,7 +27,7 @@ public interface IQuery<T> where T : class
     int? Skip { get; set; }
     int? Take { get; set; }
 
-    SearchBuilder<T> SearchBuilder { get; }
+    SqlSearchCriteriaBuilder<T> SearchBuilder { get; }
 
     WhereBuilder<T> WhereBuilder { get; }
 

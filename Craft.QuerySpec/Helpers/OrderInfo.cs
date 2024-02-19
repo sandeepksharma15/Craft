@@ -8,10 +8,22 @@ using Craft.QuerySpec.Enums;
 namespace Craft.QuerySpec.Helpers;
 
 [Serializable]
-public class OrderInfo<T>(LambdaExpression orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy) where T : class
+public class OrderInfo<T> where T : class
 {
-    public LambdaExpression OrderItem { get; internal set; } = orderItem;
-    public OrderTypeEnum OrderType { get; internal set; } = orderType;
+    public OrderInfo(LambdaExpression orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
+    {
+        OrderItem = orderItem;
+        OrderType = orderType;
+    }
+
+    public OrderInfo(Expression<Func<T, object>> orderItem, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
+    {
+        OrderItem = orderItem;
+        OrderType = orderType;
+    }
+
+    public LambdaExpression OrderItem { get; internal set; }
+    public OrderTypeEnum OrderType { get; internal set; }
 }
 
 /// <summary>

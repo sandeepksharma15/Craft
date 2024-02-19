@@ -23,11 +23,11 @@ public static class SearchExtension
     /// <param name="criterias">
     /// <list type="bullet">
     ///     <item>Selector, the property to apply the SQL LIKE against.</item>
-    ///     <item>SearchTerm, the value to use for the SQL LIKE.</item>
+    ///     <item>SearchString, the value to use for the SQL LIKE.</item>
     /// </list>
     /// </param>
     /// <returns></returns>
-    public static IQueryable<T> Search<T>(this IQueryable<T> source, IEnumerable<SearchInfo<T>> criterias)
+    public static IQueryable<T> Search<T>(this IQueryable<T> source, IEnumerable<SqlLikeSearchInfo<T>> criterias)
         where T : class
     {
         Expression expr = null;
@@ -35,7 +35,7 @@ public static class SearchExtension
 
         foreach (var criteria in criterias)
         {
-            if (string.IsNullOrEmpty(criteria.SearchTerm))
+            if (string.IsNullOrEmpty(criteria.SearchString))
                 continue;
 
             var propertySelector = ParameterReplacerVisitor.Replace(criteria.SearchItem,
@@ -44,7 +44,7 @@ public static class SearchExtension
             _ = propertySelector ?? throw new InvalidExpressionException();
 
             // Create a closure
-            var searchTermAsExpression = ((Expression<Func<string>>)(() => criteria.SearchTerm)).Body;
+            var searchTermAsExpression = ((Expression<Func<string>>)(() => criteria.SearchString)).Body;
 
             var likeExpression = Expression.Call(
                                     null,
