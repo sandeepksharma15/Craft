@@ -101,14 +101,14 @@ public class SortOrderBuilder<T> where T : class
     }
 }
 
-public class OrderBuilderJsonConverter<T> : JsonConverter<SortOrderBuilder<T>> where T : class
+public class SortOrderBuilderJsonConverter<T> : JsonConverter<SortOrderBuilder<T>> where T : class
 {
     private static readonly JsonSerializerOptions serializeOptions;
 
-    static OrderBuilderJsonConverter()
+    static SortOrderBuilderJsonConverter()
     {
         serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new OrderInfoJsonConverter<T>());
+        serializeOptions.Converters.Add(new OrderDescriptorJsonConverter<T>());
     }
 
     public override bool CanConvert(Type objectType)
@@ -119,9 +119,9 @@ public class OrderBuilderJsonConverter<T> : JsonConverter<SortOrderBuilder<T>> w
         // Create a new SortOrderBuilder
         var orderBuilder = new SortOrderBuilder<T>();
 
-        // We Want To Clone The Options To Add The OrderInfoJsonConverter
+        // We Want To Clone The Options To Add The OrderDescriptorJsonConverter
         var localOptions = options.GetClone();
-        localOptions.Converters.Add(new OrderInfoJsonConverter<T>());
+        localOptions.Converters.Add(new OrderDescriptorJsonConverter<T>());
 
         // Check for array start
         if (reader.TokenType != JsonTokenType.StartArray)

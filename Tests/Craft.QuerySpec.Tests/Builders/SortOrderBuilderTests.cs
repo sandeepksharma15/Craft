@@ -16,7 +16,7 @@ public class SortOrderBuilderTests
     {
         // Arrange
         serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new OrderBuilderJsonConverter<Company>());
+        serializeOptions.Converters.Add(new SortOrderBuilderJsonConverter<Company>());
     }
 
     [Fact]

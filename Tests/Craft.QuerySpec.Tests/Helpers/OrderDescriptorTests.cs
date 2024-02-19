@@ -13,7 +13,7 @@ public class OrderDescriptorTests
     public OrderDescriptorTests()
     {
         serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new OrderInfoJsonConverter<MyTestClass>());
+        serializeOptions.Converters.Add(new OrderDescriptorJsonConverter<MyTestClass>());
     }
 
     [Fact]

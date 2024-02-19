@@ -31,7 +31,7 @@ public class OrderDescriptor<T> where T : class
 /// ensuring proper handling of LambdaExpressions representing order items and OrderTypeEnum values.
 /// </summary>
 /// <typeparam name="T">The type of the entity being ordered.</typeparam>
-public class OrderInfoJsonConverter<T> : JsonConverter<OrderDescriptor<T>> where T : class
+public class OrderDescriptorJsonConverter<T> : JsonConverter<OrderDescriptor<T>> where T : class
 {
     public override OrderDescriptor<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
