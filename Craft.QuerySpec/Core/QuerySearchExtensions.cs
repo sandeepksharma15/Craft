@@ -12,7 +12,7 @@ public static class QuerySearchExtensions
         if (member is null) return query;
         if (searchTerm is null) return query;
 
-        query.SearchBuilder.Add(member, searchTerm, searchGroup);
+        query.SqlLikeSearchCriteriaBuilder.Add(member, searchTerm, searchGroup);
 
         return query;
     }
@@ -24,7 +24,7 @@ public static class QuerySearchExtensions
         if (memberName is null) return query;
         if (searchTerm is null) return query;
 
-        query.SearchBuilder.Add(memberName, searchTerm, searchGroup);
+        query.SqlLikeSearchCriteriaBuilder.Add(memberName, searchTerm, searchGroup);
 
         return query;
     }

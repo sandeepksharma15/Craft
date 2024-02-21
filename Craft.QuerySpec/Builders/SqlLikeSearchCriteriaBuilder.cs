@@ -7,63 +7,63 @@ using Craft.QuerySpec.Helpers;
 
 namespace Craft.QuerySpec.Builders;
 
-public class SqlSearchCriteriaBuilder<T> where T : class
+public class SqlLikeSearchCriteriaBuilder<T> where T : class
 {
-    public List<SqlLikeSearchInfo<T>> SearchCriteriaList { get; }
+    public List<SqlLikeSearchInfo<T>> SqlLikeSearchCriteriaList { get; }
 
-    public SqlSearchCriteriaBuilder() => SearchCriteriaList = [];
+    public SqlLikeSearchCriteriaBuilder() => SqlLikeSearchCriteriaList = [];
 
-    public long Count => SearchCriteriaList.Count;
+    public long Count => SqlLikeSearchCriteriaList.Count;
 
-    public SqlSearchCriteriaBuilder<T> Add(SqlLikeSearchInfo<T> searchInfo)
+    public SqlLikeSearchCriteriaBuilder<T> Add(SqlLikeSearchInfo<T> searchInfo)
     {
         ArgumentNullException.ThrowIfNull(nameof(searchInfo));
 
-        SearchCriteriaList.Add(searchInfo);
+        SqlLikeSearchCriteriaList.Add(searchInfo);
         return this;
     }
 
-    public SqlSearchCriteriaBuilder<T> Add(Expression<Func<T, object>> member, string searchString, int searchGroup = 1)
+    public SqlLikeSearchCriteriaBuilder<T> Add(Expression<Func<T, object>> member, string searchString, int searchGroup = 1)
     {
-        SearchCriteriaList.Add(new SqlLikeSearchInfo<T>(member, searchString, searchGroup));
+        SqlLikeSearchCriteriaList.Add(new SqlLikeSearchInfo<T>(member, searchString, searchGroup));
         return this;
     }
 
-    public SqlSearchCriteriaBuilder<T> Add(string memberName, string searchString, int searchGroup = 1)
+    public SqlLikeSearchCriteriaBuilder<T> Add(string memberName, string searchString, int searchGroup = 1)
     {
         var member = ExpressionBuilder.GetPropertyExpression<T>(memberName);
-        SearchCriteriaList.Add(new SqlLikeSearchInfo<T>(member, searchString, searchGroup));
+        SqlLikeSearchCriteriaList.Add(new SqlLikeSearchInfo<T>(member, searchString, searchGroup));
         return this;
     }
 
-    public SqlSearchCriteriaBuilder<T> Clear()
+    public SqlLikeSearchCriteriaBuilder<T> Clear()
     {
-        SearchCriteriaList.Clear();
+        SqlLikeSearchCriteriaList.Clear();
         return this;
     }
 
-    public SqlSearchCriteriaBuilder<T> Remove(SqlLikeSearchInfo<T> searchInfo)
+    public SqlLikeSearchCriteriaBuilder<T> Remove(SqlLikeSearchInfo<T> searchInfo)
     {
         ArgumentNullException.ThrowIfNull(nameof(searchInfo));
 
-        SearchCriteriaList.Remove(searchInfo);
+        SqlLikeSearchCriteriaList.Remove(searchInfo);
         return this;
     }
 
-    public SqlSearchCriteriaBuilder<T> Remove(Expression<Func<T, object>> member)
+    public SqlLikeSearchCriteriaBuilder<T> Remove(Expression<Func<T, object>> member)
     {
         ArgumentNullException.ThrowIfNull(nameof(member));
 
         var comparer = new ExpressionSemanticEqualityComparer();
-        var searchInfo = SearchCriteriaList.Find(x => comparer.Equals(x.SearchItem, member));
+        var searchInfo = SqlLikeSearchCriteriaList.Find(x => comparer.Equals(x.SearchItem, member));
 
         if (searchInfo != null)
-            SearchCriteriaList.Remove(searchInfo);
+            SqlLikeSearchCriteriaList.Remove(searchInfo);
 
         return this;
     }
 
-    public SqlSearchCriteriaBuilder<T> Remove(string memberName)
+    public SqlLikeSearchCriteriaBuilder<T> Remove(string memberName)
     {
         ArgumentException.ThrowIfNullOrEmpty(nameof(memberName));
 
@@ -73,14 +73,14 @@ public class SqlSearchCriteriaBuilder<T> where T : class
     }
 }
 
-public class SearchBuilderJsonConverter<T> : JsonConverter<SqlSearchCriteriaBuilder<T>> where T : class
+public class SqlSearchCriteriaBuilderJsonConverter<T> : JsonConverter<SqlLikeSearchCriteriaBuilder<T>> where T : class
 {
     public override bool CanConvert(Type objectType)
-        => objectType == typeof(SqlSearchCriteriaBuilder<T>);
+        => objectType == typeof(SqlLikeSearchCriteriaBuilder<T>);
 
-    public override SqlSearchCriteriaBuilder<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override SqlLikeSearchCriteriaBuilder<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var searchBuilder = new SqlSearchCriteriaBuilder<T>();
+        var searchBuilder = new SqlLikeSearchCriteriaBuilder<T>();
 
         // We Want To Clone The Options To Add The SqlLikeSearchInfoJsonConverter
         var localOptions = options.GetClone();
@@ -109,7 +109,7 @@ public class SearchBuilderJsonConverter<T> : JsonConverter<SqlSearchCriteriaBuil
         return searchBuilder;
     }
 
-    public override void Write(Utf8JsonWriter writer, SqlSearchCriteriaBuilder<T> value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, SqlLikeSearchCriteriaBuilder<T> value, JsonSerializerOptions options)
     {
         // Start The Array
         writer.WriteStartArray();
@@ -118,7 +118,7 @@ public class SearchBuilderJsonConverter<T> : JsonConverter<SqlSearchCriteriaBuil
         var localOptions = options.GetClone();
         localOptions.Converters.Add(new SqlLikeSearchInfoJsonConverter<T>());
 
-        foreach (var searchInfo in value.SearchCriteriaList)
+        foreach (var searchInfo in value.SqlLikeSearchCriteriaList)
         {
             var json = JsonSerializer.Serialize(searchInfo, localOptions);
             writer.WriteRawValue(json);

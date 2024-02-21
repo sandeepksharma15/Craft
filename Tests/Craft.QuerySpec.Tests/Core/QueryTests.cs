@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Castle.Core.Resource;
+using Craft.QuerySpec.Builders;
 using Craft.QuerySpec.Core;
 using Craft.QuerySpec.Helpers;
 using Craft.TestHelper.Models;
@@ -99,8 +100,8 @@ public class QueryTests
         // Assert
         query.AsNoTracking.Should().BeFalse();
         query.Skip.Should().Be(0);
-        query.WhereBuilder.EntityFilterList.Count.Should().Be(0);
-        query.SelectBuilder.Count.Should().Be(0);
+        query.EntityFilterBuilder.EntityFilterList.Count.Should().Be(0);
+        query.QuerySelectBuilder.Count.Should().Be(0);
         query.SelectorMany.Should().BeNull();
     }
 
@@ -108,7 +109,7 @@ public class QueryTests
     public void SerializeDeserialize_SimpleQuery_PreservesValues()
     {
         // Arrange
-        var query = new Query<Company, object>
+        var query = new Query<Company, Company>
         {
             // Set some query specifications
             AsNoTracking = true,
@@ -120,20 +121,20 @@ public class QueryTests
 
         // Act
         var serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new OrderDescriptorJsonConverter<Company>());
-        serializeOptions.Converters.Add(new SelectDescriptorJsonConverter<Company, object>());
-        serializeOptions.Converters.Add(new EntityFilterCriteriaJsonConverter<Company>());
-        serializeOptions.Converters.Add(new SqlLikeSearchInfoJsonConverter<Company>());
+        serializeOptions.Converters.Add(new SortOrderBuilderJsonConverter<Company>());
+        serializeOptions.Converters.Add(new QuerySelectBuilderJsonConverter<Company, Company>());
+        serializeOptions.Converters.Add(new EntityFilterBuilderJsonConverter<Company>());
+        serializeOptions.Converters.Add(new SqlSearchCriteriaBuilderJsonConverter<Company>());
 
         var serializedQuery = JsonSerializer.Serialize(query, serializeOptions);
-        var deserializedQuery = JsonSerializer.Deserialize<Query<Company, object>>(serializedQuery, serializeOptions);
+        var deserializedQuery = JsonSerializer.Deserialize<Query<Company, Company>>(serializedQuery, serializeOptions);
 
         // Assert
         deserializedQuery.Should().NotBeNull();
-        deserializedQuery.WhereBuilder.Count.Should().Be(1);
-        deserializedQuery.OrderBuilder.OrderDescriptorList.Count.Should().Be(1);
+        deserializedQuery.EntityFilterBuilder.Count.Should().Be(1);
+        deserializedQuery.SortOrderBuilder.OrderDescriptorList.Count.Should().Be(1);
         deserializedQuery.AsNoTracking.Should().BeTrue();
         deserializedQuery.Skip.Should().Be(10);
-        deserializedQuery.SelectBuilder.Count.Should().Be(1);
+        deserializedQuery.QuerySelectBuilder.Count.Should().Be(1);
     }
 }

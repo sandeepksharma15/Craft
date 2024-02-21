@@ -12,7 +12,7 @@ public static class QuerySelectExtensions
         if (query is null) return null;
         if (column is null) return query;
 
-        query.SelectBuilder.Add(column);
+        query.QuerySelectBuilder.Add(column);
 
         return query;
     }
@@ -25,7 +25,7 @@ public static class QuerySelectExtensions
         if (assignor is null) return query;
         if (assignee is null) return query;
 
-        query.SelectBuilder.Add(assignor, assignee);
+        query.QuerySelectBuilder.Add(assignor, assignee);
 
         return query;
     }
@@ -37,7 +37,7 @@ public static class QuerySelectExtensions
         if (query is null) return null;
         if (assignorPropName is null) return query;
 
-        query.SelectBuilder.Add(assignorPropName);
+        query.QuerySelectBuilder.Add(assignorPropName);
 
         return query;
     }
@@ -50,7 +50,7 @@ public static class QuerySelectExtensions
         if (assignorPropName is null) return query;
         if (assigneePropName is null) return query;
 
-        query.SelectBuilder.Add(assignorPropName, assigneePropName);
+        query.QuerySelectBuilder.Add(assignorPropName, assigneePropName);
 
         return query;
     }

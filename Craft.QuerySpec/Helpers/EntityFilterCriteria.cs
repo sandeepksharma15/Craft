@@ -91,5 +91,9 @@ public class EntityFilterCriteriaJsonConverter<T> : JsonConverter<EntityFilterCr
     }
 
     private static string RemoveAccessor(string source)
-                => Regex.Replace(source, @"\((\w+)\.", string.Empty);
+    {
+        var result =  Regex.Replace(source, @"\((\w+)\.", "(");
+
+        return result;
+    }
 }

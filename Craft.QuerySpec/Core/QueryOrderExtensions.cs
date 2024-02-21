@@ -11,7 +11,7 @@ public static class QueryOrderExtensions
         if (query is null) return null;
         if (propExpr is null) return query;
 
-        query.OrderBuilder.Add(propExpr);
+        query.SortOrderBuilder.Add(propExpr);
 
         return query;
     }
@@ -21,7 +21,7 @@ public static class QueryOrderExtensions
         if (query is null) return null;
         if (propExpr is null) return query;
 
-        query.OrderBuilder.Add(propExpr, OrderTypeEnum.OrderByDescending);
+        query.SortOrderBuilder.Add(propExpr, OrderTypeEnum.OrderByDescending);
 
         return query;
     }
@@ -31,7 +31,7 @@ public static class QueryOrderExtensions
         if (query is null) return null;
         if (propExpr is null) return query;
 
-        query.OrderBuilder.Add(propExpr, OrderTypeEnum.ThenBy);
+        query.SortOrderBuilder.Add(propExpr, OrderTypeEnum.ThenBy);
 
         return query;
     }
@@ -41,7 +41,7 @@ public static class QueryOrderExtensions
         if (query is null) return null;
         if (propExpr is null) return query;
 
-        query.OrderBuilder.Add(propExpr, OrderTypeEnum.ThenByDescending);
+        query.SortOrderBuilder.Add(propExpr, OrderTypeEnum.ThenByDescending);
 
         return query;
     }
@@ -51,7 +51,7 @@ public static class QueryOrderExtensions
         if (query is null) return null;
         if (propName is null) return query;
 
-        query.OrderBuilder.Add(propName);
+        query.SortOrderBuilder.Add(propName);
 
         return query;
     }
@@ -61,7 +61,7 @@ public static class QueryOrderExtensions
         if (query is null) return null;
         if (propName is null) return query;
 
-        query.OrderBuilder.Add(propName, OrderTypeEnum.OrderByDescending);
+        query.SortOrderBuilder.Add(propName, OrderTypeEnum.OrderByDescending);
 
         return query;
     }
@@ -71,7 +71,7 @@ public static class QueryOrderExtensions
         if (query is null) return null;
         if (propName is null) return query;
 
-        query.OrderBuilder.Add(propName, OrderTypeEnum.ThenBy);
+        query.SortOrderBuilder.Add(propName, OrderTypeEnum.ThenBy);
 
         return query;
     }
@@ -81,7 +81,7 @@ public static class QueryOrderExtensions
         if (query is null) return null;
         if (propName is null) return query;
 
-        query.OrderBuilder.Add(propName, OrderTypeEnum.ThenByDescending);
+        query.SortOrderBuilder.Add(propName, OrderTypeEnum.ThenByDescending);
 
         return query;
     }

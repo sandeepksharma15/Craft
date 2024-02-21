@@ -11,7 +11,7 @@ public static class QueryWhereExtensions
         if (query is null) return null;
         if (expression is null) return query;
 
-        query.WhereBuilder.Add(expression);
+        query.EntityFilterBuilder.Add(expression);
 
         return query;
     }
@@ -22,7 +22,7 @@ public static class QueryWhereExtensions
         if (query is null) return null;
         if (propExpr is null) return query;
 
-        query.WhereBuilder.Add(propExpr, compareWith, comparisonType);
+        query.EntityFilterBuilder.Add(propExpr, compareWith, comparisonType);
 
         return query;
     }
@@ -33,7 +33,7 @@ public static class QueryWhereExtensions
         if (query is null) return null;
         if (propName is null) return query;
 
-        query.WhereBuilder.Add(propName, compareWith, comparisonType);
+        query.EntityFilterBuilder.Add(propName, compareWith, comparisonType);
 
         return query;
     }

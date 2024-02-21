@@ -41,16 +41,16 @@ public class QueryEvaluator : IEvaluator, ISelectEvaluator
     {
         ArgumentNullException.ThrowIfNull(nameof(query));
 
-        if (query.SelectBuilder.Count == 0 && query.SelectorMany is null)
+        if (query.QuerySelectBuilder.Count == 0 && query.SelectorMany is null)
             throw new InvalidOperationException("No Selection defined in query");
 
-        if (query.SelectBuilder.Count > 0 && query.SelectorMany is not null)
+        if (query.QuerySelectBuilder.Count > 0 && query.SelectorMany is not null)
             throw new InvalidOperationException("Cannot define both Select and SelectMany in query");
 
         queryable = GetQuery(queryable, (IQuery<T>)query);
 
         return query.SelectorMany is null
-            ? queryable.Select(query.SelectBuilder.Build())
+            ? queryable.Select(query.QuerySelectBuilder.Build())
             : queryable.SelectMany(query.SelectorMany);
     }
 }
