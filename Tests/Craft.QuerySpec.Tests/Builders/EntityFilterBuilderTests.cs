@@ -225,6 +225,6 @@ public class EntityFilterBuilderTests
         var json = JsonSerializer.Serialize(filterBuilder, serializeOptions);
 
         // Assert
-        json.Should().Be("[{\"Filter\":\"Name == \\u0022John\\u0022)\"}]");
+        json.Should().Be("[{\"Filter\":\"(Name == \\u0022John\\u0022)\"}]");
     }
 }

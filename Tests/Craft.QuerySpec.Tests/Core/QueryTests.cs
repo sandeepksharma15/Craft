@@ -111,7 +111,6 @@ public class QueryTests
         // Arrange
         var query = new Query<Company, Company>
         {
-            // Set some query specifications
             AsNoTracking = true,
             Skip = 10
         };
@@ -121,10 +120,7 @@ public class QueryTests
 
         // Act
         var serializeOptions = new JsonSerializerOptions();
-        serializeOptions.Converters.Add(new SortOrderBuilderJsonConverter<Company>());
-        serializeOptions.Converters.Add(new QuerySelectBuilderJsonConverter<Company, Company>());
-        serializeOptions.Converters.Add(new EntityFilterBuilderJsonConverter<Company>());
-        serializeOptions.Converters.Add(new SqlSearchCriteriaBuilderJsonConverter<Company>());
+        serializeOptions.Converters.Add(new QueryJsonConverter<Company, Company>());
 
         var serializedQuery = JsonSerializer.Serialize(query, serializeOptions);
         var deserializedQuery = JsonSerializer.Deserialize<Query<Company, Company>>(serializedQuery, serializeOptions);
