@@ -1,7 +1,9 @@
-﻿using Craft.QuerySpec.Contracts;
+﻿using Craft.QuerySpec.Builders;
+using Craft.QuerySpec.Contracts;
 using Craft.QuerySpec.Core;
 using Craft.TestHelper.Models;
 using FluentAssertions;
+using Moq;
 
 namespace Craft.QuerySpec.Tests.Core;
 
@@ -86,5 +88,90 @@ public class QueryExtensionsTests
         // Assert
         result.Should().NotBeNull();
         result.AsNoTracking.Should().BeTrue();
+    }
+
+    [Fact]
+    public void SetsNothing_GivenNoPostProcessingAction()
+    {
+        // Arrange && Act
+        IQuery<Company> query = new Query<Company>();
+
+        // Assert
+        query.PostProcessingAction.Should().BeNull();
+    }
+
+    [Fact]
+    public void SetPostProcessingAction_SetsAction_NotNullQuery()
+    {
+        // Arrange
+        IQuery<Company> query = new Query<Company>();
+
+        // Act
+        var result = query.SetPostProcessingAction(x => x);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.PostProcessingAction.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void SetsNothing_TResult_GivenNoPostProcessingAction()
+    {
+        // Arrange && Act
+        IQuery<Company> query = new Query<Company, Company>();
+
+        // Assert
+        query.PostProcessingAction.Should().BeNull();
+    }
+
+    [Fact]
+    public void SetPostProcessingAction_TResult_SetsAction_NotNullQuery()
+    {
+        // Arrange
+        IQuery<Company, Company> query = new Query<Company, Company>();
+
+        // Act
+        var result = query.SetPostProcessingAction(x => x);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.PostProcessingAction.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void IsWithoutOrder_ReturnsTrue_NoSortOrderBuilder()
+    {
+        // Arrange
+        IQuery<Company> query = new Query<Company>();
+
+        // Act
+        var result = query.IsWithoutOrder();
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsWithoutOrder_ReturnsFalse_NonEmptyOrderDescriptorList()
+    {
+        // Arrange
+        IQuery<Company> query = new Query<Company>();
+        query.OrderBy(x => x.Id);
+
+        // Act
+        var result = query.IsWithoutOrder();
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsWithoutOrder_ReturnsTrue_NullQuery()
+    {
+        // Act
+        var result = ((IQuery<string>)null).IsWithoutOrder();
+
+        // Assert
+        result.Should().BeTrue();
     }
 }

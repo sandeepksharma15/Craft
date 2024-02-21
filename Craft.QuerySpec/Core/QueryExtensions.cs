@@ -44,7 +44,7 @@ public static class QueryExtensions
         return query;
     }
 
-    public static IQuery<T> PostProcessingAction<T>(this IQuery<T> query, Func<IEnumerable<T>, IEnumerable<T>> postProcessingAction) where T : class
+    public static IQuery<T> SetPostProcessingAction<T>(this IQuery<T> query, Func<IEnumerable<T>, IEnumerable<T>> postProcessingAction) where T : class
     {
         if (query is null) return null;
 
@@ -52,7 +52,7 @@ public static class QueryExtensions
         return query;
     }
 
-    public static IQuery<T, TResult> PostProcessingAction<T, TResult>(this IQuery<T, TResult> query, Func<IEnumerable<TResult>, IEnumerable<TResult>> postProcessingAction) where T : class where TResult : class
+    public static IQuery<T, TResult> SetPostProcessingAction<T, TResult>(this IQuery<T, TResult> query, Func<IEnumerable<TResult>, IEnumerable<TResult>> postProcessingAction) where T : class where TResult : class
     {
         if (query is null) return null;
 

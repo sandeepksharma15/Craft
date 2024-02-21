@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Runtime.Serialization;
 using Craft.QuerySpec.Builders;
 
 namespace Craft.QuerySpec.Contracts;
@@ -25,7 +24,7 @@ public interface IQuery<T> where T : class
     bool IgnoreQueryFilters { get; internal set; }
 
     int? Skip { get; set; }
-   int? Take { get; set; }
+    int? Take { get; set; }
 
     SortOrderBuilder<T> SortOrderBuilder { get; }
     Func<IEnumerable<T>, IEnumerable<T>> PostProcessingAction { get; internal set; }

@@ -106,7 +106,34 @@ public class QueryTests
     }
 
     [Fact]
-    public void SerializeDeserialize_SimpleQuery_PreservesValues()
+    public void SerializeDeserialize_SimpleQuery_T_PreservesValues()
+    {
+        // Arrange
+        var query = new Query<Company>
+        {
+            AsNoTracking = true,
+            Skip = 10
+        };
+        query.Where(c => c.Name == "John");
+        query.OrderBy(c => c.Id);
+
+        // Act
+        var serializeOptions = new JsonSerializerOptions();
+        serializeOptions.Converters.Add(new QueryJsonConverter<Company>());
+
+        var serializedQuery = JsonSerializer.Serialize(query, serializeOptions);
+        var deserializedQuery = JsonSerializer.Deserialize<Query<Company>>(serializedQuery, serializeOptions);
+
+        // Assert
+        deserializedQuery.Should().NotBeNull();
+        deserializedQuery.EntityFilterBuilder.Count.Should().Be(1);
+        deserializedQuery.SortOrderBuilder.OrderDescriptorList.Count.Should().Be(1);
+        deserializedQuery.AsNoTracking.Should().BeTrue();
+        deserializedQuery.Skip.Should().Be(10);
+    }
+
+    [Fact]
+    public void SerializeDeserialize_SimpleQuery_T_TResult_PreservesValues()
     {
         // Arrange
         var query = new Query<Company, Company>
