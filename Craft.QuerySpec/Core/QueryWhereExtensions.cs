@@ -8,8 +8,7 @@ public static class QueryWhereExtensions
 {
     public static IQuery<T> Where<T>(this IQuery<T> query, Expression<Func<T, bool>> expression) where T : class
     {
-        if (query is null) return null;
-        if (expression is null) return query;
+        if (query is null || expression is null) return query;
 
         query.EntityFilterBuilder.Add(expression);
 
@@ -19,8 +18,7 @@ public static class QueryWhereExtensions
     public static IQuery<T> Where<T>(this IQuery<T> query, Expression<Func<T, object>> propExpr,
         object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo) where T : class
     {
-        if (query is null) return null;
-        if (propExpr is null) return query;
+        if (query is null || propExpr is null) return query;
 
         query.EntityFilterBuilder.Add(propExpr, compareWith, comparisonType);
 
@@ -30,8 +28,7 @@ public static class QueryWhereExtensions
     public static IQuery<T> Where<T>(this IQuery<T> query, string propName,
         object compareWith, ComparisonType comparisonType = ComparisonType.EqualTo) where T : class
     {
-        if (query is null) return null;
-        if (propName is null) return query;
+        if (query is null || propName is null) return query;
 
         query.EntityFilterBuilder.Add(propName, compareWith, comparisonType);
 

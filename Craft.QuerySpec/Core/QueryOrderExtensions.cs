@@ -8,8 +8,7 @@ public static class QueryOrderExtensions
 {
     public static IQuery<T> OrderBy<T>(this IQuery<T> query, Expression<Func<T, object>> propExpr) where T : class
     {
-        if (query is null) return null;
-        if (propExpr is null) return query;
+        if (query is null || propExpr is null) return query;
 
         query.SortOrderBuilder.Add(propExpr);
 
@@ -18,8 +17,7 @@ public static class QueryOrderExtensions
 
     public static IQuery<T> OrderByDescending<T>(this IQuery<T> query, Expression<Func<T, object>> propExpr) where T : class
     {
-        if (query is null) return null;
-        if (propExpr is null) return query;
+        if (query is null || propExpr is null) return query;
 
         query.SortOrderBuilder.Add(propExpr, OrderTypeEnum.OrderByDescending);
 
@@ -28,8 +26,7 @@ public static class QueryOrderExtensions
 
     public static IQuery<T> ThenBy<T>(this IQuery<T> query, Expression<Func<T, object>> propExpr) where T : class
     {
-        if (query is null) return null;
-        if (propExpr is null) return query;
+        if (query is null || propExpr is null) return query;
 
         query.SortOrderBuilder.Add(propExpr, OrderTypeEnum.ThenBy);
 
@@ -38,8 +35,7 @@ public static class QueryOrderExtensions
 
     public static IQuery<T> ThenByDescending<T>(this IQuery<T> query, Expression<Func<T, object>> propExpr) where T : class
     {
-        if (query is null) return null;
-        if (propExpr is null) return query;
+        if (query is null || propExpr is null) return query;
 
         query.SortOrderBuilder.Add(propExpr, OrderTypeEnum.ThenByDescending);
 
@@ -48,8 +44,7 @@ public static class QueryOrderExtensions
 
     public static IQuery<T> OrderBy<T>(this IQuery<T> query, string propName) where T : class
     {
-        if (query is null) return null;
-        if (propName is null) return query;
+        if (query is null || propName is null) return query;
 
         query.SortOrderBuilder.Add(propName);
 
@@ -58,8 +53,7 @@ public static class QueryOrderExtensions
 
     public static IQuery<T> OrderByDescending<T>(this IQuery<T> query, string propName) where T : class
     {
-        if (query is null) return null;
-        if (propName is null) return query;
+        if (query is null || propName is null) return query;
 
         query.SortOrderBuilder.Add(propName, OrderTypeEnum.OrderByDescending);
 
@@ -68,8 +62,7 @@ public static class QueryOrderExtensions
 
     public static IQuery<T> ThenBy<T>(this IQuery<T> query, string propName) where T : class
     {
-        if (query is null) return null;
-        if (propName is null) return query;
+        if (query is null || propName is null) return query;
 
         query.SortOrderBuilder.Add(propName, OrderTypeEnum.ThenBy);
 
@@ -78,8 +71,7 @@ public static class QueryOrderExtensions
 
     public static IQuery<T> ThenByDescending<T>(this IQuery<T> query, string propName) where T : class
     {
-        if (query is null) return null;
-        if (propName is null) return query;
+        if (query is null || propName is null) return query;
 
         query.SortOrderBuilder.Add(propName, OrderTypeEnum.ThenByDescending);
 

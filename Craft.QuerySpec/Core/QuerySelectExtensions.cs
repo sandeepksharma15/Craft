@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Craft.QuerySpec.Contracts;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Craft.QuerySpec.Core;
 
@@ -9,8 +10,7 @@ public static class QuerySelectExtensions
         where T : class
         where TResult : class
     {
-        if (query is null) return null;
-        if (column is null) return query;
+        if (query is null || column is null) return query;
 
         query.QuerySelectBuilder.Add(column);
 
@@ -21,9 +21,7 @@ public static class QuerySelectExtensions
         where T : class
         where TResult : class
     {
-        if (query is null) return null;
-        if (assignor is null) return query;
-        if (assignee is null) return query;
+        if (query is null || assignor is null || assignee is null) return query;
 
         query.QuerySelectBuilder.Add(assignor, assignee);
 
@@ -34,8 +32,7 @@ public static class QuerySelectExtensions
         where T : class
         where TResult : class
     {
-        if (query is null) return null;
-        if (assignorPropName is null) return query;
+        if (query is null || assignorPropName is null) return query;
 
         query.QuerySelectBuilder.Add(assignorPropName);
 
@@ -46,9 +43,7 @@ public static class QuerySelectExtensions
         where T : class
         where TResult : class
     {
-        if (query is null) return null;
-        if (assignorPropName is null) return query;
-        if (assigneePropName is null) return query;
+        if (query is null || assignorPropName is null || assigneePropName is null) return query;
 
         query.QuerySelectBuilder.Add(assignorPropName, assigneePropName);
 
@@ -59,8 +54,7 @@ public static class QuerySelectExtensions
         where T : class
         where TResult : class
     {
-        if (query is null) return null;
-        if (selector is null) return query;
+        if (query is null || selector is null) return query;
 
         query.SelectorMany = selector;
 

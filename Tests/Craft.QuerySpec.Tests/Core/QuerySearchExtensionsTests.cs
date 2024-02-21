@@ -98,5 +98,4 @@ public class QuerySearchExtensionsTests
         // Assert
         result.Should().BeSameAs(query);
     }
-
 }
