@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Moq;
 
-namespace Domain.Tests.Base;
+namespace Craft.Domain.Tests.Base;
 
 public class VmBaseTests
 {
