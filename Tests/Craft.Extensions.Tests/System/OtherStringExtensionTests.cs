@@ -156,6 +156,7 @@ public class OtherStringExtensionTests
     [Theory]
     [InlineData("hello world", "hello", "hi", StringComparison.Ordinal, "hi world")]
     [InlineData("test123test", "123", "456", StringComparison.OrdinalIgnoreCase, "test456test")]
+    [InlineData("test123test", "789", "456", StringComparison.OrdinalIgnoreCase, "test123test")]
     [InlineData("example.txt", ".txt", ".TXT", StringComparison.Ordinal, "example.TXT")]
     [InlineData("empty", "", "replacement", StringComparison.Ordinal, "empty")]
     [InlineData(null, "search", "replace", StringComparison.OrdinalIgnoreCase, null)]

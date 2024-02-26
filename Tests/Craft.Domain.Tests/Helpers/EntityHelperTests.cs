@@ -129,6 +129,19 @@ public class EntityHelperTests
     }
 
     [Fact]
+    public void HasDefaultId_ShouldReturnTrue_WhenEntityImplemented()
+    {
+        // Arrange
+        var entity = new TestEntity();
+
+        // Act
+        var result = entity.HasDefaultId();
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
     public void HasDefaultId_ShouldReturnTrue_WhenEntityIdIsNegativeInt()
     {
         // Arrange

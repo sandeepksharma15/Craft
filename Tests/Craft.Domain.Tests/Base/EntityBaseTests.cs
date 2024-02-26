@@ -19,6 +19,17 @@ public class EntityBaseTests
     }
 
     [Fact]
+    public void SetConcurrencyStamp_Should_Be_SetValue()
+    {
+        // Arrange
+        var entity = new MockEntity { Id = 1, ConcurrencyStamp = "test" };
+
+        // Assert
+        entity.ConcurrencyStamp.Should().NotBeNull();
+        entity.ConcurrencyStamp.Should().Be("test");
+    }
+
+    [Fact]
     public void EqualityOperator_Should_Return_False_For_Different_Id()
     {
         // Arrange
@@ -235,6 +246,20 @@ public class EntityBaseTests
 
         // Assert
         entity.IsDeleted.Should().BeFalse();
+    }
+
+    [Fact]
+    public void SetIsDeleted_Should_Be_SetValue()
+    {
+        // Arrange
+        var entity = new MockEntity(1)
+        {
+            // Act
+            IsDeleted = true
+        };
+
+        // Assert
+        entity.IsDeleted.Should().BeTrue();
     }
 
     [Fact]
