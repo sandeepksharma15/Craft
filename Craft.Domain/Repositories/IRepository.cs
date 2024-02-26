@@ -1,5 +1,5 @@
 ﻿using Craft.Domain.Contracts;
-using Craft.Domain.QueryModels;
+using Craft.Domain.Helpers;
 using Craft.QuerySpec.Contracts;
 
 namespace Craft.Domain.Repositories;

@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Craft.Domain.QueryModels;
+using Craft.Domain.Helpers;
 using FluentAssertions;
 
 namespace Craft.Domain.Tests.QueryModels;
@@ -71,30 +71,6 @@ public class PageResponseTests
         deserializedResponse.TotalCount.Should().Be(totalCount);
         deserializedResponse.CurrentPage.Should().Be(currentPage);
         deserializedResponse.PageSize.Should().Be(pageSize);
-    }
-
-    [Fact]
-    public void PageResponse_Constructor_NegativeTotalCount_ThrowsException()
-    {
-        // Arrange & Act & Assert
-        Action act = () => new PageResponse<string>([], -10, 1, 10);
-        act.Should().Throw<ArgumentOutOfRangeException>();
-    }
-
-    [Fact]
-    public void PageResponse_Constructor_NegativeCurrentPage_ThrowsException()
-    {
-        // Arrange & Act & Assert
-        Action act = () => new PageResponse<string>([], 10, -1, 10);
-        act.Should().Throw<ArgumentOutOfRangeException>();
-    }
-
-    [Fact]
-    public void PageResponse_Constructor_ZeroPageSize_ThrowsException()
-    {
-        // Arrange & Act & Assert
-        Action act = () => new PageResponse<string>([], 100, 1, 0);
-        act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Fact]

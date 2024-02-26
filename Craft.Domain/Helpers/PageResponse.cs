@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Craft.Domain.QueryModels;
+namespace Craft.Domain.Helpers;
 
 /// <summary>
 /// Represents a paginated response containing a collection of items and pagination information.
@@ -15,7 +15,7 @@ public class PageResponse<T> : PaginationInfo where T : class
     public IEnumerable<T> Items { get; }
 
     [JsonConstructor]
-    public PageResponse(IEnumerable<T> items, long totalCount, int currentPage, int pageSize)
+    public PageResponse(IEnumerable<T> items, ulong totalCount, uint currentPage, uint pageSize)
     {
         Items = items ?? [];
         CurrentPage = currentPage;

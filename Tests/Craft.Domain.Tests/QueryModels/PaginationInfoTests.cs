@@ -1,4 +1,4 @@
-﻿using Craft.Domain.QueryModels;
+﻿using Craft.Domain.Helpers;
 using FluentAssertions;
 
 namespace Craft.Domain.Tests.QueryModels;

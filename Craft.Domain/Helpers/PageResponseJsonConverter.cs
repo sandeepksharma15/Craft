@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Craft.Domain.QueryModels;
+namespace Craft.Domain.Helpers;
 
 public class PageResponseJsonConverter<T> : JsonConverter<PageResponse<T>> where T : class
 {
@@ -11,9 +11,9 @@ public class PageResponseJsonConverter<T> : JsonConverter<PageResponse<T>> where
     public override PageResponse<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         IEnumerable<T> items = null;
-        int currentPage = 1;
-        int pageSize = 10;
-        long totalCount = 0;
+        uint currentPage = 1;
+        uint pageSize = 10;
+        ulong totalCount = 0;
 
         // Start the object
         if (reader.TokenType != JsonTokenType.StartObject)
@@ -36,13 +36,13 @@ public class PageResponseJsonConverter<T> : JsonConverter<PageResponse<T>> where
                     items = JsonSerializer.Deserialize<IEnumerable<T>>(ref reader, options);
                     break;
                 case "CurrentPage":
-                    currentPage = JsonSerializer.Deserialize<int>(ref reader, options);
+                    currentPage = JsonSerializer.Deserialize<uint>(ref reader, options);
                     break;
                 case "PageSize":
-                    pageSize = JsonSerializer.Deserialize<int>(ref reader, options);
+                    pageSize = JsonSerializer.Deserialize<uint>(ref reader, options);
                     break;
                 case "TotalCount":
-                    totalCount = JsonSerializer.Deserialize<long>(ref reader, options);
+                    totalCount = JsonSerializer.Deserialize<ulong>(ref reader, options);
                     break;
                 default:
                     reader.Skip();
