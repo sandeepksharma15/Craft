@@ -36,13 +36,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{B5E311
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conceptualize", "Sample\Conceptualize\Conceptualize.csproj", "{E31A975A-F1A0-4D8F-BCDF-EB6C7EC34FE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Domain", "Craft.Domain\Craft.Domain.csproj", "{BF2CB4A9-86BE-43D9-8B2B-1C44AD6DC51A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Domain", "Craft.Domain\Craft.Domain.csproj", "{BF2CB4A9-86BE-43D9-8B2B-1C44AD6DC51A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Domain.Tests", "Tests\Craft.Domain.Tests\Craft.Domain.Tests.csproj", "{BD130514-1109-42A4-BD9F-4EC3B59BC9AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Domain.Tests", "Tests\Craft.Domain.Tests\Craft.Domain.Tests.csproj", "{BD130514-1109-42A4-BD9F-4EC3B59BC9AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Logging", "Craft.Logging\Craft.Logging.csproj", "{C9C2CAF0-CA0E-4E02-9ABD-29259D166EBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging", "Craft.Logging\Craft.Logging.csproj", "{C9C2CAF0-CA0E-4E02-9ABD-29259D166EBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Logging.Tests", "Tests\Craft.Logging.Tests\Craft.Logging.Tests.csproj", "{EEB50540-31A5-4784-9B8A-E078E59FE48E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Logging.Tests", "Tests\Craft.Logging.Tests\Craft.Logging.Tests.csproj", "{EEB50540-31A5-4784-9B8A-E078E59FE48E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Auditing", "Craft.Auditing\Craft.Auditing.csproj", "{E6B25935-A775-4D72-BAA4-7BB79FAF4BDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Auditing.Tests", "Tests\Craft.Auditing.Tests\Craft.Auditing.Tests.csproj", "{2EF6B50D-E8D1-4ABE-BDB8-8D8E2DE1692C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,6 +118,14 @@ Global
 		{EEB50540-31A5-4784-9B8A-E078E59FE48E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEB50540-31A5-4784-9B8A-E078E59FE48E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEB50540-31A5-4784-9B8A-E078E59FE48E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B25935-A775-4D72-BAA4-7BB79FAF4BDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B25935-A775-4D72-BAA4-7BB79FAF4BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B25935-A775-4D72-BAA4-7BB79FAF4BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B25935-A775-4D72-BAA4-7BB79FAF4BDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EF6B50D-E8D1-4ABE-BDB8-8D8E2DE1692C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EF6B50D-E8D1-4ABE-BDB8-8D8E2DE1692C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EF6B50D-E8D1-4ABE-BDB8-8D8E2DE1692C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EF6B50D-E8D1-4ABE-BDB8-8D8E2DE1692C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,6 +140,7 @@ Global
 		{E31A975A-F1A0-4D8F-BCDF-EB6C7EC34FE6} = {B5E31159-C5C8-461D-97EB-68BE3B2FF281}
 		{BD130514-1109-42A4-BD9F-4EC3B59BC9AB} = {7BD2436A-7951-4038-95C4-A197F19DBB10}
 		{EEB50540-31A5-4784-9B8A-E078E59FE48E} = {7BD2436A-7951-4038-95C4-A197F19DBB10}
+		{2EF6B50D-E8D1-4ABE-BDB8-8D8E2DE1692C} = {7BD2436A-7951-4038-95C4-A197F19DBB10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C18CAFD-9007-45E4-ABF0-2C2F8D44B51D}
