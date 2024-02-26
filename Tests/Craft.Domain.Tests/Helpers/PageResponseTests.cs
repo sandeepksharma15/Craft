@@ -2,7 +2,7 @@
 using Craft.Domain.Helpers;
 using FluentAssertions;
 
-namespace Craft.Domain.Tests.QueryModels;
+namespace Craft.Domain.Tests.Helpers;
 
 public class PageResponseTests
 {

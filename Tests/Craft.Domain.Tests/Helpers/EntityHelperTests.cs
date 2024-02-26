@@ -2,7 +2,7 @@
 using Craft.Domain.Helpers;
 using FluentAssertions;
 
-namespace Craft.Domain.Tests.Base;
+namespace Craft.Domain.Tests.Helpers;
 
 public class EntityHelperTests
 {
