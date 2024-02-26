@@ -19,7 +19,7 @@ public class EntityFilterBuilder<T> where T : class
 
     public EntityFilterBuilder<T> Add(Expression<Func<T, bool>> expression)
     {
-        ArgumentNullException.ThrowIfNullOrEmpty(nameof(expression));
+        ArgumentNullException.ThrowIfNull(expression);
 
         if (expression.CanReduce)
             expression = (Expression<Func<T, bool>>)expression.ReduceAndCheck();

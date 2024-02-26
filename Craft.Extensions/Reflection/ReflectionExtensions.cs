@@ -152,8 +152,7 @@ public static class ReflectionExtensions
 
     public static T GetClone<T>(this T input)
     {
-        if (input == null)
-            throw new ArgumentNullException(nameof(input), "Input object cannot be null.");
+        ArgumentNullException.ThrowIfNull(input);
 
         var type = typeof(T);
         var visited = new Dictionary<object, object>();

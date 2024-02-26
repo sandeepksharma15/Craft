@@ -166,7 +166,7 @@ public static class OtherStringExtensions
     public static string ToMd5(this string str)
     {
         // Ensure the input string is not null or empty
-        ArgumentNullException.ThrowIfNull(nameof(str));
+        ArgumentNullException.ThrowIfNull(str);
 
         // Convert the input string to bytes
         byte[] inputBytes = Encoding.UTF8.GetBytes(str);

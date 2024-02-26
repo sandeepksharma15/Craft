@@ -39,7 +39,7 @@ public class QueryEvaluator : IEvaluator, ISelectEvaluator
         where T : class
         where TResult : class
     {
-        ArgumentNullException.ThrowIfNull(nameof(query));
+        ArgumentNullException.ThrowIfNull(query);
 
         if (query.QuerySelectBuilder.Count == 0 && query.SelectorMany is null)
             throw new InvalidOperationException("No Selection defined in query");

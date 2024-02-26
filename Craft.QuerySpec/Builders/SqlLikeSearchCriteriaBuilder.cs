@@ -17,7 +17,7 @@ public class SqlLikeSearchCriteriaBuilder<T> where T : class
 
     public SqlLikeSearchCriteriaBuilder<T> Add(SqlLikeSearchInfo<T> searchInfo)
     {
-        ArgumentNullException.ThrowIfNull(nameof(searchInfo));
+        ArgumentNullException.ThrowIfNull(searchInfo);
 
         SqlLikeSearchCriteriaList.Add(searchInfo);
         return this;
@@ -44,7 +44,7 @@ public class SqlLikeSearchCriteriaBuilder<T> where T : class
 
     public SqlLikeSearchCriteriaBuilder<T> Remove(SqlLikeSearchInfo<T> searchInfo)
     {
-        ArgumentNullException.ThrowIfNull(nameof(searchInfo));
+        ArgumentNullException.ThrowIfNull(searchInfo);
 
         SqlLikeSearchCriteriaList.Remove(searchInfo);
         return this;
@@ -52,7 +52,7 @@ public class SqlLikeSearchCriteriaBuilder<T> where T : class
 
     public SqlLikeSearchCriteriaBuilder<T> Remove(Expression<Func<T, object>> member)
     {
-        ArgumentNullException.ThrowIfNull(nameof(member));
+        ArgumentNullException.ThrowIfNull(member);
 
         var comparer = new ExpressionSemanticEqualityComparer();
         var searchInfo = SqlLikeSearchCriteriaList.Find(x => comparer.Equals(x.SearchItem, member));

@@ -28,7 +28,7 @@ public class SortOrderBuilder<T> where T : class
 
     public SortOrderBuilder<T> Add(OrderDescriptor<T> orderInfo)
     {
-        ArgumentNullException.ThrowIfNull(nameof(orderInfo));
+        ArgumentNullException.ThrowIfNull(orderInfo);
         orderInfo.OrderType = AdjustOrderType(orderInfo.OrderType);
         OrderDescriptorList.Add(orderInfo);
         return this;
@@ -39,7 +39,7 @@ public class SortOrderBuilder<T> where T : class
     /// </summary>
     public SortOrderBuilder<T> Add(Expression<Func<T, object>> propExpr, OrderTypeEnum orderType = OrderTypeEnum.OrderBy)
     {
-        ArgumentNullException.ThrowIfNull(nameof(propExpr));
+        ArgumentNullException.ThrowIfNull(propExpr);
         OrderDescriptorList.Add(new OrderDescriptor<T>(propExpr, AdjustOrderType(orderType)));
         return this;
     }
@@ -68,7 +68,7 @@ public class SortOrderBuilder<T> where T : class
     /// </summary>
     public SortOrderBuilder<T> Remove(Expression<Func<T, object>> propExpr)
     {
-        ArgumentNullException.ThrowIfNull(nameof(propExpr));
+        ArgumentNullException.ThrowIfNull(propExpr);
         var comparer = new ExpressionSemanticEqualityComparer();
         var orderInfo = OrderDescriptorList.Find(x => comparer.Equals(x.OrderItem, propExpr));
 
