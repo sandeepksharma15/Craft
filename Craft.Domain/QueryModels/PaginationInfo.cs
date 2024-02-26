@@ -2,20 +2,48 @@
 
 public class PaginationInfo
 {
+    private long _totalCount;
+    private int _pageSize;
+    private int _currentPage;
+
     /// <summary>
     /// The current page number (1-based indexing).
     /// </summary>
-    public int CurrentPage { get; set; }
+    public int CurrentPage
+    {
+        get => _currentPage;
+        set
+        {
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, 1, nameof(value));
+            _currentPage = value;
+        }
+    }
 
     /// <summary>
     /// The number of items per page.
     /// </summary>
-    public int PageSize { get; set; }
+    public int PageSize
+    {
+        get => _pageSize;
+        set
+        {
+            ArgumentOutOfRangeException.ThrowIfLessThan(value,1,nameof(value));
+            _pageSize = value;
+        }
+    }
 
     /// <summary>
     /// The total number of items in the data set.
     /// </summary>
-    public long TotalCount { get; set; }
+    public long TotalCount
+    {
+        get => _totalCount;
+        set
+        {
+            ArgumentOutOfRangeException.ThrowIfLessThan(value, 0, nameof(value));
+            _totalCount = value;
+        }
+    }
 
     /// <summary>
     /// Calculates the starting index of the current page (1-based indexing).

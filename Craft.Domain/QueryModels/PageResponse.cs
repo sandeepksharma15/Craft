@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Craft.Domain.QueryModels;
 
@@ -8,7 +7,7 @@ namespace Craft.Domain.QueryModels;
 /// </summary>
 /// <typeparam name="T">The type of items in the collection.</typeparam>
 [Serializable]
-public class PageResponse<T> : PaginationInfo, ISerializable where T : class
+public class PageResponse<T> : PaginationInfo where T : class
 {
     /// <summary>
     /// The collection of items in the current page.
@@ -22,21 +21,5 @@ public class PageResponse<T> : PaginationInfo, ISerializable where T : class
         CurrentPage = currentPage;
         PageSize = pageSize;
         TotalCount = totalCount;
-    }
-
-    public PageResponse(SerializationInfo info, StreamingContext context)
-    {
-        Items = (IEnumerable<T>)info.GetValue(nameof(Items), typeof(IEnumerable<T>));
-        CurrentPage = info.GetInt32(nameof(CurrentPage));
-        PageSize = info.GetInt32(nameof(PageSize));
-        TotalCount = info.GetInt64(nameof(TotalCount));
-    }
-
-    public void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        info.AddValue(nameof(Items), Items);
-        info.AddValue(nameof(CurrentPage), CurrentPage);
-        info.AddValue(nameof(PageSize), PageSize);
-        info.AddValue(nameof(TotalCount), TotalCount);
     }
 }
