@@ -4,10 +4,13 @@ namespace Craft.Domain.Helpers;
 
 public static class EntityHelper
 {
-    public static bool Equals(this IEntity entity1, IEntity entity2)
-        => EntityEquals(entity1, entity2);
-
-    public static bool EntityEquals(IEntity entity1, IEntity entity2)
+    /// <summary>
+    /// Determines if two entities are equal.
+    /// </summary>
+    /// <param name="entity1">The first entity.</param>
+    /// <param name="entity2">The second entity.</param>
+    /// <returns>True if the entities are equal, false otherwise.</returns>
+    public static bool EntityEquals<TKey>(this IEntity<TKey> entity1, IEntity<TKey> entity2)
     {
         if (entity1 == null || entity2 == null)
             return false;
@@ -15,22 +18,37 @@ public static class EntityHelper
         if (ReferenceEquals(entity1, entity2))
             return true;
 
-        // Must have a IS-A relation of types or must be same type
-        Type typeOfEntity1 = entity1.GetType();
-        Type typeOfEntity2 = entity2.GetType();
-
-        if (!typeOfEntity1.IsAssignableFrom(typeOfEntity2) && !typeOfEntity2.IsAssignableFrom(typeOfEntity1))
+        // Must have a IS-A relation of types or must be same type (Must be of compatible types)
+        if (entity1.GetType().IsNotCompatibleWith(entity2.GetType()))
             return false;
 
         // IDs should be same
-        if (entity1.Id != entity2.Id)
+        if (!EqualityComparer<TKey>.Default.Equals(entity1.Id, entity2.Id))
             return false;
 
         // Different tenants may have an entity with same Id.
-        return entity1 is not IHasTenant tenant1 || entity2 is not IHasTenant tenant2
-            || tenant1.TenantId == tenant2.TenantId;
+        // Check tenant IDs if applicable
+        if (entity1 is IHasTenant tenant1 && entity2 is IHasTenant tenant2)
+            return tenant1.TenantId == tenant2.TenantId;
+
+        return true;
     }
 
+    /// <summary>
+    /// Determines if two entities are equal.
+    /// </summary>
+    /// <param name="entity1">The first entity.</param>
+    /// <param name="entity2">The second entity.</param>
+    /// <returns>True if the entities are equal, false otherwise.</returns>
+    public static bool EntityEquals(this IEntity entity1, IEntity entity2)
+        => entity1.EntityEquals<KeyType>(entity2);
+
+    /// <summary>
+    /// Checks if an entity has a default ID value.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the entity's Id property.</typeparam>
+    /// <param name="entity">The entity to check.</param>
+    /// <returns>True if the entity has a default ID, false otherwise.</returns>
     public static bool HasDefaultId<TKey>(this IEntity<TKey> entity)
     {
         if (EqualityComparer<TKey>.Default.Equals(entity.Id, default))
@@ -46,18 +64,46 @@ public static class EntityHelper
         return false;
     }
 
+    /// <summary>
+    /// Simplified version of HasDefaultId for non-generic usage.
+    /// </summary>
+    /// <param name="entity">The entity to check.</param>
+    /// <returns>True if the entity has a default ID, false otherwise.</returns>
     public static bool HasDefaultId(this IEntity entity)
         => HasDefaultId<KeyType>(entity);
 
-    public static bool IsEntity(this Type type)
+    /// <summary>
+    /// Determines if a type implements the IEntity interface.
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <returns>True if the type is an entity, false otherwise.</returns>
+    public static bool IsEntity<TKey>(this Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
-        return typeof(IEntity).IsAssignableFrom(type);
+        return typeof(IEntity<TKey>).IsAssignableFrom(type);
     }
 
+    /// <summary>
+    /// Determines if a type implements the IEntity interface.
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <returns>True if the type is an entity, false otherwise.</returns>
+    public static bool IsEntity(this Type type)
+        => type.IsEntity<KeyType>();
+
+    /// <summary>
+    /// Determines if a type or its generic version implements the IHasTenant interface.
+    /// </summary>
+    /// <typeparam name="TEntity">The type to check.</typeparam>
+    /// <returns>True if the type is multi-tenant, false otherwise.</returns>
     public static bool IsMultiTenant<TEntity>() where TEntity : IEntity
         => IsMultiTenant(typeof(TEntity));
 
+    /// <summary>
+    /// Determines if a type implements or derives from the IHasTenant interface.
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <returns>True if the type is multi-tenant, false otherwise.</returns>
     public static bool IsMultiTenant(this Type type)
         => typeof(IHasTenant).IsAssignableFrom(type);
 }

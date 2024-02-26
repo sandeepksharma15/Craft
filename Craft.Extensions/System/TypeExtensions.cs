@@ -175,4 +175,10 @@ public static class TypeExtensions
                 return false;
         }
     }
+
+    public static bool IsCompatibleWith(this Type type1, Type type2)
+        => type1.IsAssignableFrom(type2) || type2.IsAssignableFrom(type1);
+
+    public static bool IsNotCompatibleWith(this Type type1, Type type2)
+        => !type1.IsCompatibleWith(type2);
 }

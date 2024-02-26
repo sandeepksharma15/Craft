@@ -14,7 +14,7 @@ public class EntityHelperTests
         IEntity entity2 = new TestEntity { Id = 2 };
 
         // Act
-        bool result = EntityHelper.EntityEquals(entity1, entity2);
+        bool result = entity1.EntityEquals(entity2);
 
         // Assert
         result.Should().BeFalse();
@@ -28,7 +28,7 @@ public class EntityHelperTests
         IEntity entity2 = new TestEntity { Id = 1 };
 
         // Act
-        bool result = EntityHelper.EntityEquals(entity1, entity2);
+        bool result = entity1.EntityEquals(entity2);
 
         // Assert
         result.Should().BeTrue();
@@ -42,7 +42,7 @@ public class EntityHelperTests
         IEntity entity2 = new TestEntity { Id = 1 };
 
         // Act
-        bool result = EntityHelper.EntityEquals(entity1, entity2);
+        bool result = entity1.EntityEquals(entity2);
 
         // Assert
         result.Should().BeFalse();
@@ -56,7 +56,7 @@ public class EntityHelperTests
         IEntity entity2 = null;
 
         // Act
-        bool result = EntityHelper.EntityEquals(entity1, entity2);
+        bool result = entity1.EntityEquals(entity2);
 
         // Assert
         result.Should().BeFalse();
@@ -70,7 +70,7 @@ public class EntityHelperTests
         IEntity entity2 = entity1;
 
         // Act
-        bool result = EntityHelper.EntityEquals(entity1, entity2);
+        bool result = entity1.EntityEquals(entity2);
 
         // Assert
         result.Should().BeTrue();
@@ -83,7 +83,7 @@ public class EntityHelperTests
         var entity = new FakeEntity<int> { Id = 1 };
 
         // Act
-        var result = EntityHelper.HasDefaultId(entity);
+        var result = entity.HasDefaultId();
 
         // Assert
         result.Should().BeFalse();
@@ -96,7 +96,7 @@ public class EntityHelperTests
         var entity = new FakeEntity<int> { Id = 10 };
 
         // Act
-        var result = EntityHelper.HasDefaultId(entity);
+        var result = entity.HasDefaultId();
 
         // Assert
         result.Should().BeFalse();
@@ -109,7 +109,7 @@ public class EntityHelperTests
         var entity = new FakeEntity<long> { Id = 1 };
 
         // Act
-        var result = EntityHelper.HasDefaultId(entity);
+        var result = entity.HasDefaultId();
 
         // Assert
         result.Should().BeFalse();
@@ -122,7 +122,7 @@ public class EntityHelperTests
         var entity = new FakeEntity<int> { Id = default };
 
         // Act
-        var result = EntityHelper.HasDefaultId(entity);
+        var result = entity.HasDefaultId();
 
         // Assert
         result.Should().BeTrue();
@@ -135,7 +135,7 @@ public class EntityHelperTests
         var entity = new FakeEntity<int> { Id = -1 };
 
         // Act
-        var result = EntityHelper.HasDefaultId(entity);
+        var result = entity.HasDefaultId();
 
         // Assert
         result.Should().BeTrue();
@@ -148,7 +148,7 @@ public class EntityHelperTests
         var entity = new FakeEntity<long> { Id = -1 };
 
         // Act
-        var result = EntityHelper.HasDefaultId(entity);
+        var result = entity.HasDefaultId();
 
         // Assert
         result.Should().BeTrue();
@@ -161,7 +161,7 @@ public class EntityHelperTests
         Type type = typeof(TestEntity);
 
         // Act
-        bool result = EntityHelper.IsEntity(type);
+        bool result = type.IsEntity();
 
         // Assert
         result.Should().BeTrue();
@@ -174,7 +174,7 @@ public class EntityHelperTests
         Type type = typeof(NonEntityClass);
 
         // Act
-        bool result = EntityHelper.IsEntity(type);
+        bool result = type.IsEntity();
 
         // Assert
         result.Should().BeFalse();
@@ -187,7 +187,7 @@ public class EntityHelperTests
         Type type = null;
 
         // Act
-        Action action = () => EntityHelper.IsEntity(type);
+        Action action = () => type.IsEntity();
 
         // Assert
         action.Should().Throw<ArgumentNullException>();
@@ -226,7 +226,7 @@ public class EntityHelperTests
         Type type = null;
 
         // Act
-        bool result = EntityHelper.IsMultiTenant(type);
+        bool result = type.IsMultiTenant();
 
         // Assert
         result.Should().Be(false);
