@@ -1,6 +1,6 @@
 ﻿namespace Craft.Domain.Helpers;
 
-public class PaginationInfo
+public class PageInfo
 {
     public uint CurrentPage { get; set; } = 1;
     public uint PageSize { get; set; } = 10;
