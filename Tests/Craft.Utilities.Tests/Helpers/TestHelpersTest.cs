@@ -78,4 +78,39 @@ public class TestHelpersTest
 
         act.Should().ThrowExactly<Xunit.Sdk.XunitException>();
     }
+
+    [Fact]
+    public void AreTheySame_Should_Handle_Nullable_Properties()
+    {
+        // Arrange
+        TestClass obj1 = new() { Id = 1, Name = "Object 1", Tags = null };
+        TestClass obj2 = new() { Id = 1, Name = "Object 1", Tags = null };
+
+        // Act
+        Action act = () => TestHelpers.AreTheySame(obj1, obj2);
+
+        // Assert
+        act.Should().NotThrow();
+    }
+
+    [Fact]
+    public void AreTheySame_Should_Throw_Exception_When_One_Object_Is_Null()
+    {
+        // Arrange
+        TestClass obj1 = new() { Id = 1, Name = "Object 1", Tags = null };
+        TestClass obj2 = null;
+
+        // Act
+        Action act = () => TestHelpers.AreTheySame(obj1, obj2);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'another')");
+    }
+
+    private class TestClass
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<string> Tags { get; set; }
+    }
 }
