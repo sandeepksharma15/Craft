@@ -4,11 +4,11 @@ using FluentAssertions;
 
 namespace Auditing.Tests;
 
-public class DisableAuditingAttributeTests
+public class NoAuditAttributeTests
 {
     private static bool HasDisableAuditingAttribute(Type type)
     {
-        return type.IsDefined(typeof(DisableAuditingAttribute), inherit: false);
+        return type.IsDefined(typeof(NoAuditAttribute), inherit: false);
     }
 
     [Fact]
@@ -59,7 +59,8 @@ public class DisableAuditingAttributeTests
     //    // Act & Assert
     //    Assert.Throws<InvalidOperationException>(() => HasDisableAuditingAttribute(nonDerivedClassType));
     //}
-    [DisableAuditing]
+
+    [NoAudit]
     private class BaseClass
     {
         // Base class implementation
@@ -70,13 +71,13 @@ public class DisableAuditingAttributeTests
         // Derived class implementation
     }
 
-    [DisableAuditing]
+    [NoAudit]
     private class EntityDerivedClass : EntityBase
     {
         // Derived class implementation
     }
 
-    [DisableAuditing]
+    [NoAudit]
     private class NotDerivedClass
     {
         // Not derived from Entity

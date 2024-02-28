@@ -32,7 +32,7 @@ public class TypeExtensionsTests
         result.Should().BeTrue();
     }
 
-    [DisableAuditing]
+    [NoAudit]
     private class TestClassWithDisableAuditingAttribute;
 
     private class TestClassWithoutDisableAuditingAttribute;
