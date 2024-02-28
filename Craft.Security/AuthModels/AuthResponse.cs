@@ -3,7 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace Craft.Security.AuthModels;
 
-public record AuthResponse([property: JsonPropertyName("jwtToken")] string JwtToken,
+/// <summary>
+/// Represents the response object containing authentication information.
+/// </summary>
+public record AuthResponse(
+    [property: JsonPropertyName("jwtToken")] string JwtToken,
     [property: JsonPropertyName("refreshToken")] string RefreshToken,
     [property: JsonPropertyName("refreshTokenExpiryTime")] DateTime RefreshTokenExpiryTime)
 {
@@ -11,7 +15,7 @@ public record AuthResponse([property: JsonPropertyName("jwtToken")] string JwtTo
         => new(string.Empty, string.Empty, DateTime.MinValue);
 
     public bool IsEmpty
-        => JwtToken?.Length == 0 && RefreshToken?.Length == 0 && RefreshTokenExpiryTime == DateTime.MinValue;
+        => JwtToken.IsNullOrEmpty() && RefreshToken.IsNullOrEmpty() && RefreshTokenExpiryTime == DateTime.MinValue;
 
     public static AuthResponse GetAuthResult(string jsonData)
     {
