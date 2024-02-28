@@ -3,6 +3,10 @@ using Craft.Security.Extensions;
 
 namespace Craft.Security.CurrentUserService;
 
+/// <summary>
+/// Represents the current user information retrieved from the specified provider.
+/// </summary>
+/// <typeparam name="TKey">The type used to represent the user's ID.</typeparam>
 public class CurrentUser<TKey> : ICurrentUser<TKey>
 {
     public CurrentUser(ICurrentUserProvider currentUserProvider)
@@ -16,7 +20,7 @@ public class CurrentUser<TKey> : ICurrentUser<TKey>
 
     public TKey Id { get; set; }
 
-    public string Name => _user?.Identity?.Name;
+    public string Name => IsAuthenticated() ? _user?.GetFirstName() : string.Empty;
 
     public string GetEmail() => IsAuthenticated() ? _user?.GetEmail() : string.Empty;
 
@@ -43,7 +47,7 @@ public class CurrentUser<TKey> : ICurrentUser<TKey>
 
     public string GetTenant() => IsAuthenticated() ? _user?.GetTenant() : string.Empty;
 
-    public IEnumerable<Claim> GetUserClaims() => _user?.Claims;
+    public IEnumerable<Claim> GetUserClaims() => IsAuthenticated() ? _user?.Claims : [];
 
     public bool IsAuthenticated() => _user?.Identity?.IsAuthenticated is true;
 
