@@ -11,7 +11,7 @@ public static class AuditingHelpers
         var modelNames = AppDomain.CurrentDomain.GetAssemblies()
                .SelectMany(s => s.GetTypes())
                .Where(t => typeof(EntityBase).IsAssignableFrom(t)
-                           && t.IsClass && !t.IsAbstract && t.HasAuditAttributeDisabled())
+                           && t.IsClass && !t.IsAbstract && t.HasNoAuditAttribute())
                .Select(t => t.Name)
                .ToList();
 

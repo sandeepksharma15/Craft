@@ -4,6 +4,6 @@ namespace Craft.Auditing.Extensions;
 
 public static class TypeExtensions
 {
-    public static bool HasAuditAttributeDisabled(this Type type)
+    public static bool HasNoAuditAttribute(this Type type)
         => type.IsDefined(typeof(NoAuditAttribute), inherit: false);
 }

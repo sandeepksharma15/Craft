@@ -13,7 +13,7 @@ public class TypeExtensionsTests
         var type = typeof(TestClassWithoutDisableAuditingAttribute);
 
         // Act
-        var result = type.HasAuditAttributeDisabled();
+        var result = type.HasNoAuditAttribute();
 
         // Assert
         result.Should().BeFalse();
@@ -26,7 +26,7 @@ public class TypeExtensionsTests
         var type = typeof(TestClassWithDisableAuditingAttribute);
 
         // Act
-        var result = type.HasAuditAttributeDisabled();
+        var result = type.HasNoAuditAttribute();
 
         // Assert
         result.Should().BeTrue();
