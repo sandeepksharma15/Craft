@@ -244,6 +244,39 @@ public class EntityHelperTests
         // Assert
         result.Should().Be(false);
     }
+
+    [Fact]
+    public void GetEntityKeyType_NullInput_ReturnsNull()
+    {
+        // Arrange
+        Type type = null;
+
+        // Act
+        var keyType = type.GetEntityKeyType();
+
+        // Assert
+        keyType.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetEntityKeyType_NonEntityType_ThrowsArgumentException()
+    {
+        // Act & Assert
+        Action act = () => typeof(NonEntityClass).GetEntityKeyType();
+
+        act.Should().ThrowExactly<ArgumentException>();
+    }
+
+    [Fact]
+    public void GetEntityKeyType_ValidEntityType_ReturnsKeyType()
+    {
+        // Arrange
+        // Act
+        var keyType = typeof(TestEntity).GetEntityKeyType();
+
+        // Assert
+        keyType.Should().Be(typeof(long));
+    }
 }
 
 public class MultiTenantEntity : IEntity, IHasTenant

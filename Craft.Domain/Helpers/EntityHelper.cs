@@ -1,4 +1,5 @@
-﻿using Craft.Domain.Contracts;
+﻿using System.Reflection;
+using Craft.Domain.Contracts;
 
 namespace Craft.Domain.Helpers;
 
@@ -20,6 +21,10 @@ public static class EntityHelper
 
         // Must have a IS-A relation of types or must be same type (Must be of compatible types)
         if (entity1.GetType().IsNotCompatibleWith(entity2.GetType()))
+            return false;
+
+        // If both entities have default IDs, they are not equal
+        if (entity1.HasDefaultId() && entity2.HasDefaultId())
             return false;
 
         // IDs should be same
@@ -106,4 +111,24 @@ public static class EntityHelper
     /// <returns>True if the type is multi-tenant, false otherwise.</returns>
     public static bool IsMultiTenant(this Type type)
         => typeof(IHasTenant).IsAssignableFrom(type);
+
+    /// <summary>
+    /// Retrieves the entity key type for a given entity type.
+    /// </summary>
+    /// <param name="entityType">The type to check for an entity key type.</param>
+    /// <returns>The entity key type, or null if not found.</returns>
+    /// <exception cref="ArgumentException">Thrown if the entity type does not implement IEntity.</exception>
+    public static Type? GetEntityKeyType(this Type entityType)
+    {
+        if (entityType == null) return null;
+
+        if (!typeof(IEntity).IsAssignableFrom(entityType))
+            throw new ArgumentException($"{nameof(entityType)} is not an entity; it should implement {nameof(IEntity)}");
+
+        foreach (var interfaceType in entityType.GetTypeInfo().GetInterfaces())
+            if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEntity<>))
+                return interfaceType.GenericTypeArguments[0];
+
+        return null;
+    }
 }
