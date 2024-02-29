@@ -39,4 +39,13 @@
 	  <ProjectReference Include="..\..\Craft.MultiTenant\Craft.MultiTenant.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="ConfigurationStoreTestSettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="ConfigurationStoreTestSettings_NoDefaults.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
