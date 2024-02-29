@@ -2,7 +2,7 @@
 
 namespace Craft.Domain.HttpServices;
 
-public interface IReadHttpService<T, TKey> : IHttpService where T : class, IEntity<TKey>, IModel<TKey>
+public interface IHttpReadService<T, TKey> : IHttpService where T : class, IEntity<TKey>, IModel<TKey>
 {
     /// <summary>
     /// Gets a list of all the entities.
@@ -29,4 +29,4 @@ public interface IReadHttpService<T, TKey> : IHttpService where T : class, IEnti
     Task<long> GetCountAsync(CancellationToken cancellationToken = default);
 }
 
-public interface IReadHttpService<T> : IReadHttpService<T, KeyType> where T : class, IEntity, IModel;
+public interface IHttpReadService<T> : IHttpReadService<T, KeyType> where T : class, IEntity, IModel;

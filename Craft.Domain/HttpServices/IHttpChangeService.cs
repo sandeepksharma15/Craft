@@ -2,7 +2,7 @@
 
 namespace Craft.Domain.HttpServices;
 
-public interface IChangeHttpService<T, ViewT, DataTransferT, TKey> : IReadHttpService<T, TKey>
+public interface IHttpChangeService<T, ViewT, DataTransferT, TKey> : IHttpReadService<T, TKey>
     where T : class, IEntity<TKey>, IModel<TKey>
     where ViewT : class, IModel<TKey>
     where DataTransferT : class, IModel<TKey>
@@ -52,7 +52,7 @@ public interface IChangeHttpService<T, ViewT, DataTransferT, TKey> : IReadHttpSe
     Task<HttpResponseMessage> UpdateRangeAsync(IEnumerable<ViewT> models, CancellationToken cancellationToken = default);
 }
 
-public interface IChangeHttpService<T, ViewT, DataTransferT> : IChangeHttpService<T, ViewT, DataTransferT, KeyType>
+public interface IHttpChangeService<T, ViewT, DataTransferT> : IHttpChangeService<T, ViewT, DataTransferT, KeyType>
     where T : class, IEntity, IModel
     where ViewT : class, IModel
     where DataTransferT : class, IModel;

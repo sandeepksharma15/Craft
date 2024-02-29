@@ -1,9 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Authors>Sandeep SHARMA</Authors>
+		<LangVersion>preview</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Mapster" Version="7.4.1-pre01" />
+		<PackageReference Include="ClosedXML" Version="0.104.0-preview2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.0" />
+		<PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Craft.Auditing\Craft.Auditing.csproj" />
+	  <ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />
+	  <ProjectReference Include="..\Craft.Extensions\Craft.Extensions.csproj" />
+	  <ProjectReference Include="..\Craft.Security\Craft.Security.csproj" />
+	</ItemGroup>
 
 </Project>

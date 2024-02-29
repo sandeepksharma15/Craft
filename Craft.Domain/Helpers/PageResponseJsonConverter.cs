@@ -11,9 +11,9 @@ public class PageResponseJsonConverter<T> : JsonConverter<PageResponse<T>> where
     public override PageResponse<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         IEnumerable<T> items = null;
-        uint currentPage = 1;
-        uint pageSize = 10;
-        ulong totalCount = 0;
+        int currentPage = 1;
+        int pageSize = 10;
+        long totalCount = 0;
 
         // Start the object
         if (reader.TokenType != JsonTokenType.StartObject)
@@ -36,13 +36,13 @@ public class PageResponseJsonConverter<T> : JsonConverter<PageResponse<T>> where
                     items = JsonSerializer.Deserialize<IEnumerable<T>>(ref reader, options);
                     break;
                 case "CurrentPage":
-                    currentPage = JsonSerializer.Deserialize<uint>(ref reader, options);
+                    currentPage = JsonSerializer.Deserialize<int>(ref reader, options);
                     break;
                 case "PageSize":
-                    pageSize = JsonSerializer.Deserialize<uint>(ref reader, options);
+                    pageSize = JsonSerializer.Deserialize<int>(ref reader, options);
                     break;
                 case "TotalCount":
-                    totalCount = JsonSerializer.Deserialize<ulong>(ref reader, options);
+                    totalCount = JsonSerializer.Deserialize<long>(ref reader, options);
                     break;
                 default:
                     reader.Skip();

@@ -20,6 +20,15 @@ public static class QueryExtensions
         return query;
     }
 
+    public static IQuery<T> IgnoreAutoIncludes<T>(this IQuery<T> query) where T : class
+    {
+        if (query is null) return null;
+
+        query.IgnoreAutoIncludes = true;
+
+        return query;
+    }
+
     public static IQuery<T> IgnoreQueryFilters<T>(this IQuery<T> query) where T : class
     {
         if (query is null) return null;

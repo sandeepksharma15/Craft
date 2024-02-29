@@ -15,7 +15,7 @@ public class PageResponse<T> : PageInfo where T : class
     public IEnumerable<T> Items { get; }
 
     [JsonConstructor]
-    public PageResponse(IEnumerable<T> items, ulong totalCount, uint currentPage, uint pageSize)
+    public PageResponse(IEnumerable<T> items, long totalCount, int currentPage, int pageSize)
     {
         Items = items ?? [];
         CurrentPage = currentPage;

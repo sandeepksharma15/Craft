@@ -2,14 +2,14 @@
 
 public class PageInfo
 {
-    public uint CurrentPage { get; set; } = 1;
-    public uint PageSize { get; set; } = 10;
-    public ulong TotalCount { get; set; } = 0;
+    public int CurrentPage { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
+    public long TotalCount { get; set; } = 0;
 
     /// <summary>
     /// Calculates the starting index of the current page (1-based indexing).
     /// </summary>
-    public uint From => ((CurrentPage - 1) * PageSize) + 1;
+    public int From => ((CurrentPage - 1) * PageSize) + 1;
 
     /// <summary>
     /// Indicates whether there is a next page available.
@@ -24,10 +24,10 @@ public class PageInfo
     /// <summary>
     /// Calculates the ending index for the current page, considering available items.
     /// </summary>
-    public uint To => (uint)(From + Math.Min(PageSize - 1, TotalCount - From));
+    public int To => (int)(From + Math.Min(PageSize - 1, TotalCount - From));
 
     /// <summary>
     /// Calculates the total number of pages based on the total count and page size.
     /// </summary>
-    public uint TotalPages => (uint)Math.Ceiling(TotalCount / (double)PageSize);
+    public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
 }

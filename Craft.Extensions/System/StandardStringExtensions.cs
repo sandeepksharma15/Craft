@@ -77,6 +77,9 @@ public static class StandardStringExtensions
         return lastDelimiterIndex >= 0 ? source[(lastDelimiterIndex + 1)..] : source;
     }
 
+    public static string GetClassName(this Type type)
+        => type.ToString().GetStringAfterLastDelimiter();
+
     /// <summary>
     /// Checks whether the specified string is null, empty, or consists only of white-space characters.
     /// </summary>
