@@ -62,6 +62,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.MultiTenant", "Craft.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.MultiTenant.Tests", "Tests\Craft.MultiTenant.Tests\Craft.MultiTenant.Tests.csproj", "{35C58CBF-661E-47D2-925D-688F8E453787}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Infrastructure", "Craft.Infrastructure\Craft.Infrastructure.csproj", "{839717B8-3443-43A0-BE47-CFAE4FA3DE31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Infrastructure.Tests", "Tests\Craft.Infrastructure.Tests\Craft.Infrastructure.Tests.csproj", "{5E69274C-1F0C-439D-8BB6-AD08A51E524D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,6 +172,14 @@ Global
 		{35C58CBF-661E-47D2-925D-688F8E453787}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35C58CBF-661E-47D2-925D-688F8E453787}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35C58CBF-661E-47D2-925D-688F8E453787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{839717B8-3443-43A0-BE47-CFAE4FA3DE31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{839717B8-3443-43A0-BE47-CFAE4FA3DE31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{839717B8-3443-43A0-BE47-CFAE4FA3DE31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{839717B8-3443-43A0-BE47-CFAE4FA3DE31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E69274C-1F0C-439D-8BB6-AD08A51E524D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E69274C-1F0C-439D-8BB6-AD08A51E524D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E69274C-1F0C-439D-8BB6-AD08A51E524D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E69274C-1F0C-439D-8BB6-AD08A51E524D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,6 +198,7 @@ Global
 		{BFEFCA51-27E2-406C-A173-D314A71C5C73} = {7BD2436A-7951-4038-95C4-A197F19DBB10}
 		{E9A8583D-0821-42E1-9460-E7BBC1F6ACE0} = {7BD2436A-7951-4038-95C4-A197F19DBB10}
 		{35C58CBF-661E-47D2-925D-688F8E453787} = {7BD2436A-7951-4038-95C4-A197F19DBB10}
+		{5E69274C-1F0C-439D-8BB6-AD08A51E524D} = {7BD2436A-7951-4038-95C4-A197F19DBB10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C18CAFD-9007-45E4-ABF0-2C2F8D44B51D}

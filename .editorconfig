@@ -314,6 +314,7 @@ dotnet_diagnostic.IDE011.severity =none
 dotnet_diagnostic.IDE1006.severity =none
 
 dotnet_diagnostic.RCS1001.severity =none
+dotnet_diagnostic.RCS1003.severity =none
 
 dotnet_diagnostic.SCS0005.severity =warning
 dotnet_diagnostic.SCS0006.severity =warning
