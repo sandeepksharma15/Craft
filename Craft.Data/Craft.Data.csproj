@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Craft.Auditing\Craft.Auditing.csproj" />
+    <ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />
+    <ProjectReference Include="..\Craft.Security\Craft.Security.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -37,7 +37,6 @@ public static class ConditionRemover
     {
         private readonly Expression _conditionToRemove = conditionToRemove.Body;
 
-        [global::System.Diagnostics.CodeAnalysis.SuppressMessage("Roslynator", "RCS1158:Static member in generic type should use a type parameter", Justification = "<Pending>")]
         public static bool IsEquivalentCondition(Expression expression1, Expression expression2)
         {
             if (expression1.CanReduce) expression1 = expression1.Reduce();
