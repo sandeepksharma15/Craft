@@ -2,7 +2,7 @@
 
 namespace Craft.Domain.Repositories;
 
-public interface IReadRepository<T, TKey> : IRepository where T : class, IEntity<TKey>, new()
+public interface IReadRepository<T, TKey> : ICoreRepository<T, TKey> where T : class, IEntity<TKey>, new()
 {
     /// <summary>
     /// Gets a list of all the entities.

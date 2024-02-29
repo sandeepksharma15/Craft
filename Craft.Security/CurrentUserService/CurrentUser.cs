@@ -33,6 +33,8 @@ public class CurrentUser<TKey> : ICurrentUser<TKey>
                 ? (TKey)Convert.ChangeType(_user.GetUserId(), typeof(TKey))
                 : default;
 
+    public TKey GetUserId() => GetId();
+
     public string GetImageUrl() => IsAuthenticated() ? _user?.GetImageUrl() : string.Empty;
 
     public string GetJwtToken() => IsAuthenticated() ? _user?.GetJwtToken() : string.Empty;
