@@ -1,7 +1,6 @@
 ﻿using Craft.Domain.Contracts;
 using Craft.MultiTenant.Builder;
 using Craft.MultiTenant.Contracts;
-using Craft.MultiTenant.Extensions;
 using Craft.MultiTenant.Models;
 using Craft.MultiTenant.Options;
 using Craft.MultiTenant.Services;
