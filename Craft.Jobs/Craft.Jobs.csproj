@@ -29,4 +29,9 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Craft.Data\Craft.Data.csproj" />
+	  <ProjectReference Include="..\Craft.MultiTenant\Craft.MultiTenant.csproj" />
+	</ItemGroup>
+
 </Project>

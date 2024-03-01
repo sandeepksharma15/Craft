@@ -8,7 +8,7 @@ namespace Craft.Security.Models;
 public class CraftUser<TKey> : IdentityUser<TKey>, ICraftUser<TKey>
     where TKey : IEquatable<TKey>
 {
-    public readonly string UserId = "UserId";
+    public static readonly string UserId = "UserId";
 
     public CraftUser() => SecurityStamp = Guid.NewGuid().ToString();
 
