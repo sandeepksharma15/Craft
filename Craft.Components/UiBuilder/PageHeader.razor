@@ -1,0 +1,19 @@
+﻿@using Craft.Components.Base
+
+@inherits CraftComponent
+
+@if (Visible)
+{
+    <MudElement HtmlTag="div" Class="d-flex flex-row mt-2 mb-4">
+        <MudElement HtmlTag="div" Class="d-flex flex-column">
+            <MudText Typo="Typo.h4" Class="mud-primary-text">@Title</MudText>
+            <MudBreadcrumbs Separator="@Separator" Items="@Items" Class="@_captionClass"></MudBreadcrumbs>
+        </MudElement>
+
+        <MudSpacer />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Search" OnClick="@OnSearchClick" aria-label="search" />
+        <MudIconButton Icon="@Icons.Material.Filled.ImportExport" OnClick="@OnExportClick" aria-label="export" />
+        <MudIconButton Icon="@Icons.Material.Filled.Share" OnClick="@OnShareClick" aria-label="share" />
+    </MudElement>
+}

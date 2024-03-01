@@ -1,0 +1,25 @@
+﻿@namespace Craft.Components.UiHelpers
+
+@using Craft.Components.Base
+@using Craft.Utilities.Helpers
+
+@inherits CraftComponent
+
+@if (Visible)
+{
+    <div Class="d-flex justify-center">
+        <MudProgressCircular Color="Color" Indeterminate="true" />
+    </div>
+}
+
+@code {
+    [Parameter] public Color Color { get; set; } = GetRandomColor();
+
+    private static Color GetRandomColor()
+    {
+        Color[] colors =
+            { Color.Default, Color.Primary, Color.Secondary, Color.Info, Color.Success, Color.Warning, Color.Error };
+
+        return colors[RandomHelper.GetRandom(colors.Length)];
+    }
+}

@@ -1,0 +1,12 @@
+﻿<MudHidden Breakpoint="Breakpoint.Xs">
+    <MudImage Src="images/appflow-logo.png" Height="36" Width="36" Alt="logo"></MudImage>
+    <MudText Typo="Typo.h3" Class="ml-4">@AppName</MudText>
+</MudHidden>
+
+<MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+    <MudText Typo="Typo.h4">@AppName</MudText>
+</MudHidden>
+
+@code {
+    [Parameter] public string AppName { get; set; } = string.Empty;
+}

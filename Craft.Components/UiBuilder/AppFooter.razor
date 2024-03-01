@@ -1,0 +1,14 @@
+﻿<div style="height: 40px;"></div>
+
+<MudDivider Style="flex-grow: 0;" />
+
+<div class="af-footer">
+    <div class="af-copyright mud-text-disabled">@Copyright</div>
+
+    <div class="af-rights mud-text-disabled">@Rights</div>
+</div>
+
+@code {
+    [Parameter] public string Copyright { get; set; }
+    [Parameter] public string Rights { get; set; }
+}

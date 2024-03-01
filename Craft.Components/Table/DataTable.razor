@@ -1,0 +1,200 @@
+﻿@namespace Craft.Components.Table
+
+@using Craft.Components.Generic
+@using Craft.Components.Table.Contracts
+@using Craft.Components.Table.Enums
+@using Microsoft.AspNetCore.Components.Rendering
+
+@typeparam TableItem
+
+<SpinLoader IsLoading="@(_entities == null)">
+    <ContentTemplate>
+        @* Display The Filter List Here *@
+        @if (_filteredColumns.Count > 0)
+        {
+            <div class="d-flex flex-wrap">
+@*                 @foreach (var field in _filteredFields)
+                {
+                    <div class="d-flex align-items-center me-2 mb-2">
+                        <span class="me-1">@field.Caption</span>
+                        <MudIcon Icon="bi bi-x" Color="Color.Error" Class="me-1" Size="Size.Small" @onclick="@(() => RemoveFilterAsync(field))" />
+                    </div>
+                }
+ *@            </div>
+        }
+
+        <CascadingValue Value="(IDataTable<TableItem>)this" Name="DataTable" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+
+        @if (_entities != null&& _entities.Count > 0)
+        {
+            <table role="grid" class="@ClassName" @attributes="UnknownParameters">
+                <thead>
+                    <tr>
+                        @_renderColumnHeaders
+                    </tr>
+                </thead>
+                <tbody>
+                    @_renderTableBody
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <MudAlert Severity="Severity.Info">
+                There are no records available
+            </MudAlert>
+        }
+
+        @_renderPageFooter
+    </ContentTemplate>
+</SpinLoader>
+
+@code {
+
+    private void RenderActionColumn(RenderTreeBuilder __builder, TableItem entity, IColumn<TableItem> column)
+    {
+        // @*Add This Column Only When We Have An action Item*@
+        if (ReadIcon || EditIcon || DeleteIcon)
+        {
+            <td class="text-center" style="width: 5rem;">
+                @if (ReadIcon)
+                {
+                    <a href="@(String.Format(ReadURI, column.Render(entity)))">
+                        <MudIcon Icon="bi bi-binoculars" Class="me-1" Size="Size.Small" />
+                    </a>
+                }
+
+                @if (EditIcon)
+                {
+                    <a @onclick="@(()=>EditEntity(String.Format(EditUri, column.Render(entity))))" style="cursor: pointer;">
+                        <MudIcon Icon="bi bi-pencil" Class="me-1" Size="Size.Small" />
+                    </a>
+                }
+
+                @if (DeleteIcon)
+                {
+                    <a @onclick="@( () => DeleteEntityAsync(column.Render(entity)))" style="cursor: pointer;">
+                        <MudIcon Icon="bi bi-trash3" Color="Color.Error" Class="me-1" Size="Size.Small" />
+                    </a>
+                }
+            </td>
+        }
+    }
+
+    private void RenderRow(RenderTreeBuilder __builder, int rowIndex, TableItem entity)
+    {
+        <tr @key="@(ItemKey(entity))" aria-rowindex="@rowIndex">
+            @foreach (IColumn<TableItem> column in Columns)
+            {
+                if (column.Caption.ToLower() == "id")
+                {
+                    RenderActionColumn(__builder, entity, column);
+                }
+                else
+                    @if (column.Visible)
+                    {
+                        <td class="@column.Class @column.Align.GetDescription() text-truncate">
+                            @if (column.Template == null)
+                            {
+                                @column.Render(entity)
+                            }
+                            else
+                            {
+                                @column.Template(entity)
+                            }
+                        </td>
+                    }
+            }
+        </tr>
+    }
+
+    private void RenderTableBody(RenderTreeBuilder __builder)
+    {
+        var rowIndex = 2; // 1 is for the header row
+
+        foreach (TableItem entity in _entities)
+        {
+            RenderRow(__builder, rowIndex++, entity);
+        }
+    }
+
+    private void RenderColumnHeaders(RenderTreeBuilder __builder)
+    {
+        // @*Add This Column Only When We Have An action Item*@
+        if (ReadIcon || EditIcon || DeleteIcon)
+        {
+            <th class="text-center" style="width: 5rem;">
+                Actions
+            </th>
+        }
+
+        foreach (IColumn<TableItem> column in Columns)
+        {
+            if (column.Caption.ToLower() == "id")
+                continue;
+
+            if (column.Visible)
+            {
+                <th scope="col" style="cursor: pointer; @(column.Width.IsNonEmpty() ? $"width:{column.Width}" : "")"
+                    class="@column.Align.GetDescription() text-truncate">
+                    <div @onclick="@( () => SortTableAsync(column))">
+                        @if (column.Align != Alignment.Right)
+                            @column.Caption
+
+
+                        <SortIcon Class="ms-auto" SortDirection="@column.SortDirection"></SortIcon>
+
+                        @if (column.Align == Alignment.Right)
+                            @column.Caption
+
+                    </div>
+                </th>
+            }
+        }
+    }
+
+    private void RenderPageFooter(RenderTreeBuilder __builder)
+    {
+        <MudGrid Justify="Justify.SpaceBetween" Class="mt-3">
+            <MudItem>@_renderPageButtons</MudItem>
+            <MudItem>@_renderPageDropdown</MudItem>
+            <MudItem>@_renderPagination</MudItem>
+        </MudGrid>
+    }
+
+    private void RenderPageButtons(RenderTreeBuilder __builder)
+    {
+        @if (AddButton && AddUri.IsNonEmpty())
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.AddCircle" Class="me-3" OnClick="@AddEntity">
+                @AddButtonName
+            </MudButton>
+        }
+
+        @if (BackButton)
+        {
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.ArrowBack" Class="me-3" OnClick="@GoBack">
+                Back
+            </MudButton>         
+        }
+    }
+
+    private void RenderPageDropdown(RenderTreeBuilder __builder)
+    {
+        <MudSelect T="int" Label="Page Size" @bind-Value="@CurrentPageSize" AnchorOrigin="Origin.BottomCenter" Margin="Margin.Dense" 
+                Dense="true" Variant="Variant.Outlined">
+            <MudSelectItem T="int" Value="10" />
+            <MudSelectItem T="int" Value="20" />
+            <MudSelectItem T="int" Value="25" />
+            <MudSelectItem T="int" Value="50" />
+        </MudSelect>
+    }
+
+    private void RenderPagination(RenderTreeBuilder __builder)
+    {
+        <MudPagination Rectangular="true" ShowFirstButton="true" ShowLastButton="true" BoundaryCount="1" MiddleCount="2"
+            Count="@_pagenInfo.TotalPages" @bind-Selected="@CurrentPageIndex" />
+    }
+}

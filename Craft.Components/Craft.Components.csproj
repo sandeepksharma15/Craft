@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
@@ -22,11 +22,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Craft.Core\Craft.Core.csproj" />
 		<ProjectReference Include="..\Craft.Extensions\Craft.Extensions.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="wwwroot\" />
+		<ProjectReference Include="..\Craft.Utilities\Craft.Utilities.csproj" />
 	</ItemGroup>
 
 </Project>

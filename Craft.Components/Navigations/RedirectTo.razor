@@ -1,0 +1,15 @@
+﻿@namespace Craft.Components.Navigations
+
+@code {
+    
+    [Parameter, EditorRequired]
+    public string Path { get; set; }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.NavigateTo(Path);
+    }
+}

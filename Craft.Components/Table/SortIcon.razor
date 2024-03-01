@@ -1,0 +1,12 @@
+﻿@using Craft.Components.Base
+
+@namespace Craft.Components.Table
+
+@inherits CraftComponent
+
+<span class="@Class" style="@Style" @attributes="UserAttributes">
+    @if (SortDirection != Craft.Components.Table.Enums.SortDirection.None)
+    {
+        <MudIcon Icon="@icon" Style="font-size: 1rem;" Size="Size.Small" />
+    }
+</span>

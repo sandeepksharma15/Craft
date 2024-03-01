@@ -1,0 +1,12 @@
+﻿
+@if(!message.IsNullOrEmpty())
+{
+    var statusMessageClass = message.StartsWith("Error") ? Severity.Error : Severity.Success;
+
+    <MudAlert Severity="@statusMessageClass" ShowCloseIcon="true" Elevation="1">
+        @Message
+    </MudAlert>
+}
+
+
+

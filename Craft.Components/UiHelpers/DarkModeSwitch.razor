@@ -1,0 +1,13 @@
+﻿@using Craft.Components.Base
+@using MudBlazor;
+
+@namespace Craft.Components.UiHelpers
+
+@inherits CraftComponent
+
+<MudToggleIconButton Toggled="@DarkMode" ToggledChanged="@ToggleLightMode" Color="Color.Inherit"
+                     Icon="@Icons.Material.Filled.DarkMode" Title="Off"
+                     ToggledIcon="@Icons.Material.Filled.LightMode" Size="Size.Medium" ToggledTitle="On" />
+
+
+

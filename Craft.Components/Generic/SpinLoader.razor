@@ -1,0 +1,34 @@
+﻿@using Craft.Components.Base
+@using MudBlazor
+
+@inherits CraftComponent
+
+@if (IsLoading)
+{
+    @if (LoadingTemplate is null)
+    {
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    }
+    else
+    {
+        @LoadingTemplate
+    }
+}
+else
+{
+    @*Display Content If All Goes Well Or Faulted Template Is Not Provided*@
+    if (!IsFaulted)
+    {
+        @ContentTemplate
+    }
+
+    @*Display Faulted Template If Something Is Wrong*@
+    if (IsFaulted)
+    {
+        <MudAlert Severity="Severity.Error">
+            Something has gone wrong :-( Please contact the administrator or report an issue
+        </MudAlert>
+                
+    }
+}
+
