@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Craft.Domain.Base;
 
 namespace Craft.TestHelper.Models;
 
-public class Store
+public class Store : EntityBase
 {
     public string City { get; set; }
 
@@ -10,6 +11,5 @@ public class Store
     public Company Company { get; set; }
 
     public long CompanyId { get; set; }
-    public virtual long Id { get; set; }
     public string Name { get; set; }
 }

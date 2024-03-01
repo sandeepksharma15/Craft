@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Craft.Domain.Base;
 
 namespace Craft.TestHelper.Models;
 
-public class Company
+public class Company : EntityBase
 {
     [ForeignKey("CountryId")]
     public Country Country { get; set; }
 
     public long CountryId { get; set; }
-    public virtual long Id { get; set; }
     public string Name { get; set; }
     public List<Store> Stores { get; set; }
 }

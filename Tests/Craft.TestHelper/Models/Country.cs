@@ -1,9 +1,10 @@
-﻿namespace Craft.TestHelper.Models;
+﻿using Craft.Domain.Base;
 
-public class Country
+namespace Craft.TestHelper.Models;
+
+public class Country : EntityBase
 {
     public List<Company> Companies { get; set; }
-    public virtual long Id { get; set; }
     public string Name { get; set; }
 }
 

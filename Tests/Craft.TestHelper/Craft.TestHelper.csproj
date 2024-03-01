@@ -15,4 +15,8 @@
 		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.2" />
 		<PackageReference Include="xunit.extensibility.core" Version="2.7.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Craft.Domain\Craft.Domain.csproj" />
+	</ItemGroup>
 </Project>

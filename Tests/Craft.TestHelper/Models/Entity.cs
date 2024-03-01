@@ -1,4 +1,6 @@
-﻿namespace Craft.TestHelper.Models;
+﻿using Craft.Domain.Contracts;
+
+namespace Craft.TestHelper.Models;
 
 public class Entity : ISoftDelete
 {
