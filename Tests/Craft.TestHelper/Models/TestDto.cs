@@ -2,7 +2,7 @@
 
 namespace Craft.TestHelper.Models;
 
-public class TestEntity : EntityBase
+public class TestDto : DtoBase
 {
     public string Name { get; set; } = string.Empty;
 }

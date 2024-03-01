@@ -31,8 +31,4 @@
 		<ProjectReference Include="..\Craft.TestHelper\Craft.TestHelper.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Controllers\" />
-	</ItemGroup>
-
 </Project>
