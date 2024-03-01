@@ -2,7 +2,7 @@
 using Craft.Security.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Craft.Data.DbContexts;
+namespace Craft.Data.Contracts;
 
 public interface ICraftDbContext
 {

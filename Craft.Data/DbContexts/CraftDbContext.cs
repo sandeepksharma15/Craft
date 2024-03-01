@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Craft.Domain.Contracts;
 using System.Diagnostics.CodeAnalysis;
+using Craft.Data.Contracts;
 
 namespace Craft.Data.DbContexts;
 

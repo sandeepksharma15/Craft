@@ -8,8 +8,29 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.1">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
+		<PackageReference Include="MySqlConnector" Version="2.3.5">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+		<PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.3.1-dev">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0-beta.2" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.6">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Craft.Auditing\Craft.Auditing.csproj" />
 		<ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />
+		<ProjectReference Include="..\Craft.MultiTenant\Craft.MultiTenant.csproj" />
 		<ProjectReference Include="..\Craft.Security\Craft.Security.csproj" />
 	</ItemGroup>
 
