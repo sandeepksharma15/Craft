@@ -48,25 +48,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Auditing", "Craft.Aud
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Auditing.Tests", "Tests\Craft.Auditing.Tests\Craft.Auditing.Tests.csproj", "{2EF6B50D-E8D1-4ABE-BDB8-8D8E2DE1692C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Security", "Craft.Security\Craft.Security.csproj", "{09E6C006-B484-4D12-8D1D-4F19F1A52E75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Security", "Craft.Security\Craft.Security.csproj", "{09E6C006-B484-4D12-8D1D-4F19F1A52E75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Security.Tests", "Tests\Craft.Security.Tests\Craft.Security.Tests.csproj", "{BFEFCA51-27E2-406C-A173-D314A71C5C73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Security.Tests", "Tests\Craft.Security.Tests\Craft.Security.Tests.csproj", "{BFEFCA51-27E2-406C-A173-D314A71C5C73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Jobs", "Craft.Jobs\Craft.Jobs.csproj", "{C54F532C-034C-40CE-A403-C1580426F6AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Jobs", "Craft.Jobs\Craft.Jobs.csproj", "{C54F532C-034C-40CE-A403-C1580426F6AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Core", "Craft.Core\Craft.Core.csproj", "{EC76182E-D2D5-4BBE-BB7A-C7904AE7461F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Core", "Craft.Core\Craft.Core.csproj", "{EC76182E-D2D5-4BBE-BB7A-C7904AE7461F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Core.Tests", "Tests\Craft.Core.Tests\Craft.Core.Tests.csproj", "{E9A8583D-0821-42E1-9460-E7BBC1F6ACE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Core.Tests", "Tests\Craft.Core.Tests\Craft.Core.Tests.csproj", "{E9A8583D-0821-42E1-9460-E7BBC1F6ACE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.MultiTenant", "Craft.MultiTenant\Craft.MultiTenant.csproj", "{0C039B14-687B-447C-B8F2-D5104E35496E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.MultiTenant", "Craft.MultiTenant\Craft.MultiTenant.csproj", "{0C039B14-687B-447C-B8F2-D5104E35496E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.MultiTenant.Tests", "Tests\Craft.MultiTenant.Tests\Craft.MultiTenant.Tests.csproj", "{35C58CBF-661E-47D2-925D-688F8E453787}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.MultiTenant.Tests", "Tests\Craft.MultiTenant.Tests\Craft.MultiTenant.Tests.csproj", "{35C58CBF-661E-47D2-925D-688F8E453787}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Infrastructure", "Craft.Infrastructure\Craft.Infrastructure.csproj", "{839717B8-3443-43A0-BE47-CFAE4FA3DE31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Infrastructure", "Craft.Infrastructure\Craft.Infrastructure.csproj", "{839717B8-3443-43A0-BE47-CFAE4FA3DE31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Infrastructure.Tests", "Tests\Craft.Infrastructure.Tests\Craft.Infrastructure.Tests.csproj", "{5E69274C-1F0C-439D-8BB6-AD08A51E524D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Infrastructure.Tests", "Tests\Craft.Infrastructure.Tests\Craft.Infrastructure.Tests.csproj", "{5E69274C-1F0C-439D-8BB6-AD08A51E524D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Data", "Craft.Data\Craft.Data.csproj", "{1C8B1BD5-67E3-41E4-BB87-965B0AF0E732}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craft.Data", "Craft.Data\Craft.Data.csproj", "{1C8B1BD5-67E3-41E4-BB87-965B0AF0E732}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.Components", "Craft.Components\Craft.Components.csproj", "{B88C0F12-28A4-4E03-8791-3F6BA3AB5932}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -186,6 +188,10 @@ Global
 		{1C8B1BD5-67E3-41E4-BB87-965B0AF0E732}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C8B1BD5-67E3-41E4-BB87-965B0AF0E732}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C8B1BD5-67E3-41E4-BB87-965B0AF0E732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B88C0F12-28A4-4E03-8791-3F6BA3AB5932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B88C0F12-28A4-4E03-8791-3F6BA3AB5932}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B88C0F12-28A4-4E03-8791-3F6BA3AB5932}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B88C0F12-28A4-4E03-8791-3F6BA3AB5932}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
