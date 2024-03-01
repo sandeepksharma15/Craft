@@ -103,6 +103,6 @@ public class ChangeRepository<T, TKey>(DbContext appDbContext, ILogger<ChangeRep
     }
 }
 
-public class ModificationRepository<T>(DbContext appDbContext, ILogger<ChangeRepository<T, KeyType>> logger)
+public class ChangeRepository<T>(DbContext appDbContext, ILogger<ChangeRepository<T, KeyType>> logger)
     : ChangeRepository<T, KeyType>(appDbContext, logger), IChangeRepository<T>
         where T : class, IEntity, new() { }

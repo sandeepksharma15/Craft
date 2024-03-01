@@ -27,6 +27,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Craft.Core\Craft.Core.csproj" />
+		<ProjectReference Include="..\Craft.TestHelper\Craft.TestHelper.csproj" />
 	</ItemGroup>
 
 </Project>

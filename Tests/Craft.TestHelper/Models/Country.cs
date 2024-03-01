@@ -7,8 +7,3 @@ public class Country : EntityBase
     public List<Company> Companies { get; set; }
     public string Name { get; set; }
 }
-
-public class CompanyName
-{
-    public string Name { get; set; }
-}

@@ -6,8 +6,7 @@ public sealed class PaginationEvaluator : IEvaluator
 {
     public static PaginationEvaluator Instance { get; } = new PaginationEvaluator();
 
-    private PaginationEvaluator()
-    { }
+    private PaginationEvaluator() { }
 
     public IQueryable<T> GetQuery<T>(IQueryable<T> queryable, IQuery<T> query) where T : class
     {

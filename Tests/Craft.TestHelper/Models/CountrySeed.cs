@@ -12,17 +12,8 @@ public static class CountrySeed
     {
         return
         [
-          new()
-          {
-              Id = 1,
-              Name = COUNTRY_NAME_1,
-          },
-
-            new()
-            {
-                Id = 2,
-                Name = COUNTRY_NAME_2,
-            }
+            new() { Id = 1, Name = COUNTRY_NAME_1, },
+            new() { Id = 2, Name = COUNTRY_NAME_2, }
         ];
     }
 }

@@ -12,3 +12,8 @@ public class Company : EntityBase
     public string Name { get; set; }
     public List<Store> Stores { get; set; }
 }
+
+public class CompanyName
+{
+    public string Name { get; set; }
+}

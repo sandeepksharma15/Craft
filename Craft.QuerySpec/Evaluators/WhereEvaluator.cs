@@ -4,8 +4,7 @@ namespace Craft.QuerySpec.Evaluators;
 
 public sealed class WhereEvaluator : IEvaluator
 {
-    private WhereEvaluator()
-    { }
+    private WhereEvaluator() { }
 
     public static WhereEvaluator Instance { get; } = new WhereEvaluator();
 

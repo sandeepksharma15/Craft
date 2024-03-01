@@ -2,6 +2,7 @@
 using Craft.Domain.Helpers;
 using Craft.Domain.Repositories;
 using Craft.QuerySpec.Contracts;
+using Craft.QuerySpec.Evaluators;
 using Craft.QuerySpec.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -69,7 +70,7 @@ public class Repository<T, TKey>(DbContext appDbContext, ILogger<Repository<T, T
             .ToListAsync(cancellationToken);
 
         var totalCount = await _dbSet
-            .WithQuery(query)
+            .WithQuery(query, WhereEvaluator.Instance)
             .CountAsync(cancellationToken);
 
         int pageSize = query.Take.Value;
