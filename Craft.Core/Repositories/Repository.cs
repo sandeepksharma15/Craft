@@ -69,6 +69,7 @@ public class Repository<T, TKey>(DbContext appDbContext, ILogger<Repository<T, T
             .WithQuery(query)
             .ToListAsync(cancellationToken);
 
+        // We need to count the total records (matching the query) without the projection
         var totalCount = await _dbSet
             .WithQuery(query, WhereEvaluator.Instance)
             .CountAsync(cancellationToken);
@@ -88,8 +89,9 @@ public class Repository<T, TKey>(DbContext appDbContext, ILogger<Repository<T, T
             .WithQuery(query)
             .ToListAsync(cancellationToken);
 
+        // We need to count the total records (matching the query) without the projection
         var totalCount = await _dbSet
-            .WithQuery(query)
+            .WithQuery(query, WhereEvaluator.Instance)
             .CountAsync(cancellationToken);
 
         int pageSize = query.Take.Value;
