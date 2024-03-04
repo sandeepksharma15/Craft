@@ -40,7 +40,7 @@ public static class BackgroundJobExtensions
         _logger.Information($"Hangfire: Current Storage Provider : {storageSettings.StorageProvider}");
         _logger.Information("For more Hangfire storage, visit https://www.hangfire.io/extensions.html");
 
-        services.AddSingleton<JobActivator, AppFrameJobActivator>();
+        services.AddSingleton<JobActivator, CraftJobActivator>();
 
         services.AddHangfire((provider, hangfireConfig) => hangfireConfig
             .UseDatabase(storageSettings.StorageProvider, storageSettings.ConnectionString, config)

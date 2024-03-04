@@ -26,4 +26,9 @@ public class CraftRole<TKey> : IdentityRole<TKey>, ICraftRole<TKey>
     public void Deactivate() => IsActive = false;
 }
 
-public class CraftRole : CraftRole<KeyType>, ICraftRole;
+public class CraftRole : CraftRole<KeyType>, ICraftRole
+{
+    public CraftRole() { }
+
+    public CraftRole(string name, string description = null) : base(name, description) { }
+}

@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Craft.Jobs.Jobs;
 
-public class AppFrameJobActivator(IServiceScopeFactory scopeFactory) : JobActivator
+public class CraftJobActivator(IServiceScopeFactory scopeFactory) : JobActivator
 {
     private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
 
@@ -24,8 +24,11 @@ public class AppFrameJobActivator(IServiceScopeFactory scopeFactory) : JobActiva
 
         public Scope(PerformContext context, IServiceScope scope)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            ArgumentNullException.ThrowIfNull(context, nameof(context));
+            ArgumentNullException.ThrowIfNull(scope, nameof(scope));
+
+            _context = context;
+            _scope = scope;
 
             ReceiveParameters();
         }
