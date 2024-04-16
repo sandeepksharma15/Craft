@@ -113,7 +113,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         _logger.LogDebug("[ViewportResizeListener] DisposeAsync Invoked");
-#pragma warning disable RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
+//#pragma warning disable RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
         try
         {
             if (_moduleTask.IsValueCreated)
@@ -126,7 +126,7 @@ public class ViewportResizeListener : IViewportResizeListener, IAsyncDisposable
             GC.SuppressFinalize(this);
         }
         catch (Exception) { }
-#pragma warning restore RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
+//#pragma warning restore RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
     }
 
     private void Subscribe(EventHandler<ResizeEventArgs>? value)

@@ -17,7 +17,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
 
     public ResizeOptions ResizeOptions { get; }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
     public ContainerResizeListener(IJSRuntime jsRuntime, ILogger<ContainerResizeListener> logger, IOptions<ResizeOptions>? options = null)
     {
         _semaphore = new(1, 5);
@@ -49,7 +49,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
     {
         _logger.LogDebug("[ContainerResizeListener] DisposeAsync Invoked");
 
-#pragma warning disable RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
+//#pragma warning disable RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
         try
         {
             var elementIds = _observerManager.Observers.Select(x => x.Key.ElementId).ToList();
@@ -71,7 +71,7 @@ public class ContainerResizeListener : IContainerResizeListener, IAsyncDisposabl
             GC.SuppressFinalize(this);
         }
         catch (Exception) { }
-#pragma warning restore RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
+//#pragma warning restore RCS1075, S2486 // Avoid empty catch clause that catches System.Exception.
     }
 
     public async ValueTask<Breakpoint> GetContainerBreakpointAsync(string elementId)

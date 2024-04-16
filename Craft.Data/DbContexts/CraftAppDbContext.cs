@@ -15,7 +15,7 @@ public abstract class CraftAppDbContext : CraftDbContext, ICraftAppDbContext
     private readonly ICurrentUser _currentUser;
     private readonly DatabaseOptions _dbOptions;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
     protected CraftAppDbContext(DbContextOptions options, IOptions<DatabaseOptions> dbOptions,
         ITenant currentTenant, ICurrentUser currentUser) : base(options)
     {

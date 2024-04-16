@@ -24,7 +24,7 @@ public abstract class CraftDbContext : IdentityDbContext<CraftUser, CraftRole, K
     public DbSet<LoginHistory> LoginHistories { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
-    [SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
+    //[SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
     protected CraftDbContext(DbContextOptions options) : base(options)
     {
     }

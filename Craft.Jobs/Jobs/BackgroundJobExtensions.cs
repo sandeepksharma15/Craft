@@ -57,14 +57,14 @@ public static class BackgroundJobExtensions
     {
         var dashboardOptions = config.GetSection("HangfireSettings:Dashboard").Get<DashboardOptions>();
 
-        dashboardOptions.Authorization = new[]
-        {
+        dashboardOptions.Authorization = 
+        [
            new HangfireAuthenticationFilter
            {
                 User = config.GetSection("HangfireSettings:Credentials:User").Value,
                 Pass = config.GetSection("HangfireSettings:Credentials:Password").Value
            }
-        };
+        ];
 
         return app.UseHangfireDashboard(config["HangfireSettings:Route"], dashboardOptions);
     }

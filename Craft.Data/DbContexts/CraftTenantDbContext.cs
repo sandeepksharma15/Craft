@@ -8,7 +8,7 @@ namespace Craft.Data.DbContexts;
 public abstract class CraftTenantDbContext<T> : CraftDbContext, ITenantStoreDbContext<T>
     where T : class, ITenant, new()
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
     protected CraftTenantDbContext(DbContextOptions options) : base(options) { }
 
     public DbSet<T> Tenants { get; set; }
