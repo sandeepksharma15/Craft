@@ -91,9 +91,7 @@ public class DbSetExtensionsTests
             context.SaveChanges();
 
             // Act
-#pragma warning disable RCS1033, S1125 // Remove redundant boolean literal.
             var result = context.Entities.RemoveFromQueryFilter(e => e.IsActive == true);
-#pragma warning restore RCS1033, S1125 // Remove redundant boolean literal.
 
             // Assert
             result.Count().Should().Be(2); // Both entities should be returned
@@ -122,9 +120,7 @@ public class DbSetExtensionsTests
             context.SaveChanges();
 
             // Act
-#pragma warning disable RCS1033, S1125 // Remove redundant boolean literal.
             var result = context.Entities.RemoveFromQueryFilter(e => e.IsActive == true);
-#pragma warning restore RCS1033, S1125 // Remove redundant boolean literal.
 
             // Assert
             result.Count().Should().Be(2); // Both entities should be returned

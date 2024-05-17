@@ -99,7 +99,7 @@ public class ConfigurationStoreTests : TenantStoreTestBase
     }
 
     [Fact]
-    public async void ThrowWhenTryingToGetIdentifierGivenNullIdentifier()
+    public async Task ThrowWhenTryingToGetIdentifierGivenNullIdentifier()
     {
         var store = CreateTestStore();
 

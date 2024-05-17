@@ -15,7 +15,7 @@ public class ViewportResizeListenerServiceTests : TestContext
     public async Task GetBreakpoint_ShouldInvokeJSInterop()
     {
         // Arrange
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.MediaQuery/resizeListener.js"]);
         JSInterop
             .Setup<Breakpoint>("getBreakpoint", "084b2348")
             .SetResult(Breakpoint.Widescreen);
@@ -34,7 +34,7 @@ public class ViewportResizeListenerServiceTests : TestContext
     public async Task GetViewportSize_ShouldReturnExpectedResult()
     {
         // Arrange
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.MediaQuery/resizeListener.js"]);
         JSInterop
             .Setup<ViewportSizeEventArgs>("getViewportSize", "084b2348")
             .SetResult(new ViewportSizeEventArgs { Height = 400, Width = 400 });
@@ -53,7 +53,7 @@ public class ViewportResizeListenerServiceTests : TestContext
     public async Task IsBreakpointMatching_ShouldInvokeGetBreakpointIfNotCached()
     {
         // Arrange
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.MediaQuery/resizeListener.js"]);
         JSInterop
             .Setup<Breakpoint>("getBreakpoint", "084b2348")
             .SetResult(Breakpoint.Widescreen);
@@ -72,7 +72,7 @@ public class ViewportResizeListenerServiceTests : TestContext
     public async Task MatchMedia_ShouldInvokeJSInterop()
     {
         // Arrange
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.MediaQuery/resizeListener.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.MediaQuery/resizeListener.js"]);
         JSInterop
             .Setup<bool>("matchMediaQuery", "someMediaQuery", "084b2348")
             .SetResult(true);

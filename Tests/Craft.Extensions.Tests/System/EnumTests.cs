@@ -106,7 +106,6 @@ public class EnumTests
     [InlineData("Orange", SomeEnum.Apple | SomeEnum.Orange, true)]
     [InlineData("Banana", SomeEnum.Apple | SomeEnum.Orange, false)]
     [InlineData("orange", SomeEnum.Orange, true)]
-#pragma warning disable RCS1257 // Use enum field explicitly.
     [InlineData("Orange", (SomeEnum)3, true)]
     public void Contains_ShouldReturnExpectedResult_WhenCalledWithValidInputs(string agent, SomeEnum flags, bool expected)
     {

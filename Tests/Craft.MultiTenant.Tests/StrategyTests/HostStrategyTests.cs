@@ -79,7 +79,7 @@ public class HostStrategyTests
     [InlineData("example.ok.test", "*.__TENANT__.?.?", "example")] // 3rd last segment
     [InlineData("w.example.ok.test", "*.?.__TENANT__.?.?", "example")] // 3rd last of 4+ segments
     [InlineData("example.com", "__TENANT__", "example.com")] // match entire domain (2.1)
-    public async void ReturnExpectedIdentifier(string host, string template, string expected)
+    public async Task ReturnExpectedIdentifier(string host, string template, string expected)
     {
         var httpContext = CreateHttpContextMock(host);
         var strategy = new HostStrategy(template);

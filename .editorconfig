@@ -339,6 +339,8 @@ dotnet_diagnostic.CS8032.severity =none
 
 dotnet_diagnostic.CS8632.severity =none
 
+dotnet_diagnostic.xUnit1045.severity =none
+
 csharp_style_prefer_method_group_conversion = true:silent
 csharp_style_prefer_top_level_statements = true:silent
 csharp_style_prefer_local_over_anonymous_function = true:suggestion

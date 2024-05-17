@@ -12,7 +12,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("jsAlert", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -30,7 +30,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("changeCssById", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -48,7 +48,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("changeCssBySelector", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -66,7 +66,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("changeGlobalCssVariable", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -84,7 +84,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.Setup<bool>("jsConfirm", _ => true).SetResult(true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -102,7 +102,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("copyToClipboard", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -120,7 +120,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.Setup<bool>("IsDarkMode", _ => true).SetResult(true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -138,7 +138,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.Setup<bool>("IsTouchSupported", _ => true).SetResult(true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -156,7 +156,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("jsLog", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -174,7 +174,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.Setup<string>("jsPrompt", _ => true).SetResult("Result");
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -192,7 +192,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("scrollToTop", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -210,7 +210,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("updateStyleProperty", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
@@ -228,7 +228,7 @@ public class CommonJsFunctionsProviderTests : TestContext
     {
         // Arrange
         var loggerMock = new Mock<ILogger<CommonJsFunctionsProvider>>();
-        JSInterop.SetupModule("import", new string[] { "./_content/Craft.JsHelpers/commonMethods.js" });
+        JSInterop.SetupModule("import", ["./_content/Craft.JsHelpers/commonMethods.js"]);
         JSInterop.SetupVoid("updateStylePropertyBySelector", _ => true);
         JSInterop.Mode = JSRuntimeMode.Loose;
 
