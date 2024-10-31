@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Linq.Expressions;
 
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace System.Reflection;
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 public static class ReflectionExtensions
 {

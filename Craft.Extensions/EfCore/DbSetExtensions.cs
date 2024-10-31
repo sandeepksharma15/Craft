@@ -3,7 +3,9 @@ using Craft.Extensions.Expressions;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace Microsoft.EntityFrameworkCore;
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 public static class DbSetExtensions
 {

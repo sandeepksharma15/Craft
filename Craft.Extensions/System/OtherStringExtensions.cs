@@ -68,7 +68,7 @@ public static class OtherStringExtensions
         if (string.IsNullOrEmpty(input)) return input;
 
         // Split the string into words and remove empty entries
-        var words = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var words = input.Split([' '], StringSplitOptions.RemoveEmptyEntries);
 
         // Join the words with a single space
         return string.Join(" ", words);
