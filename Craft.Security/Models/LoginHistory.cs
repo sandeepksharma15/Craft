@@ -27,8 +27,6 @@ public class LoginHistory<TKey> : ILoginHistory<TKey> where TKey : IEquatable<TK
     public DateTime? LastLoginOn { get; set; }
 
     [ForeignKey("UserId")]
-    public virtual CraftUser User { get; set; }
-
     public TKey UserId { get; set; }
 }
 

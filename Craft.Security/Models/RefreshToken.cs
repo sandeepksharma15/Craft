@@ -27,7 +27,6 @@ public class RefreshToken<TKey> : IRefreshToken<TKey> where TKey : IEquatable<TK
     public string Token { get; set; }
 
     [ForeignKey("UserId")]
-    public virtual CraftUser User { get; set; }
     public TKey UserId { get; set; }
 }
 
