@@ -13,7 +13,7 @@ public class BasePathStrategy : ITenantStrategy
 
         var pathSegments = path
             .Value?
-            .Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            .Split(['/'], StringSplitOptions.RemoveEmptyEntries);
 
         if (pathSegments is null || pathSegments.Length == 0)
             return Task.FromResult<string>(null);

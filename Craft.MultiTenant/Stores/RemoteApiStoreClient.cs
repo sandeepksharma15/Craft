@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+
 using Craft.Domain.Contracts;
 using Craft.MultiTenant.Contracts;
 
@@ -7,12 +8,14 @@ namespace Craft.MultiTenant.Stores;
 public class RemoteApiStoreClient<T> where T : class, ITenant, IEntity, new()
 {
     private readonly IHttpClientFactory _clientFactory;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
     public RemoteApiStoreClient(IHttpClientFactory clientFactory)
     {
         ArgumentNullException.ThrowIfNull(clientFactory, nameof(clientFactory));
 
         _clientFactory = clientFactory;
+        _jsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
     }
 
     public async Task<T> GetByIdentifierAsync(string endpointTemplate, string identifier)
@@ -26,8 +29,6 @@ public class RemoteApiStoreClient<T> where T : class, ITenant, IEntity, new()
 
         var json = await response.Content.ReadAsStringAsync();
 
-#pragma warning disable CA1869 // Cache and reuse 'JsonSerializerOptions' instances
-        return JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-#pragma warning restore CA1869 // Cache and reuse 'JsonSerializerOptions' instances
+        return JsonSerializer.Deserialize<T>(json, _jsonSerializerOptions);
     }
 }
