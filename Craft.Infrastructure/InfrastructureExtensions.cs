@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace AppFrame.Infrastructure;
+namespace Craft.Infrastructure;
 
 public static class InfrastructureExtensions
 {
