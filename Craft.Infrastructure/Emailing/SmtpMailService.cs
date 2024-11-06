@@ -56,7 +56,7 @@ public class SmtpMailService(IOptions<MailSettings> settings, ILogger<SmtpMailSe
             email.Body = builder.ToMessageBody();
 
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.StartTls, cancellationToken);
+            await smtp.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.None, cancellationToken);
             await smtp.AuthenticateAsync(_settings.UserName, _settings.Password, cancellationToken);
             await smtp.SendAsync(email, cancellationToken);
             await smtp.DisconnectAsync(true, cancellationToken);
