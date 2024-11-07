@@ -1,0 +1,16 @@
+﻿.btn-icon {
+    display: inline-flex;
+    /*align-items: center;*/
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    background-color: #eeeeee;
+    color: #0d6efd;
+    transition: background-color 0.3s ease;
+    transition: transform 0.2s ease;
+}
+
+.btn-icon:hover {
+    background-color: #dedede;
+    transform: scale(1.02);
+}
