@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Multitenancy.Tests.ServiceTests;
+namespace Craft.MultiTenant.Tests.ServiceTests;
 
 public class TenantResolverTests
 {
@@ -23,7 +23,7 @@ public class TenantResolverTests
 
         services.
             AddMultiTenant<Tenant>(options => options.IgnoredIdentifiers.Add("lol")).
-            WithDelegateStrategy(_ => Task.FromResult<string?>("lol")). // should be ignored
+            WithDelegateStrategy(_ => Task.FromResult("lol")). // should be ignored
             WithStaticStrategy("initech").
             WithInMemoryStore().
             WithConfigurationStore();
@@ -45,9 +45,9 @@ public class TenantResolverTests
         var services = new ServiceCollection();
         services.
             AddMultiTenant<Tenant>().
-            WithDelegateStrategy(_ => Task.FromResult<string?>("strategy1")).
+            WithDelegateStrategy(_ => Task.FromResult("strategy1")).
             WithStaticStrategy("strategy2").
-            WithDelegateStrategy(_ => Task.FromResult<string?>("strategy3")).
+            WithDelegateStrategy(_ => Task.FromResult("strategy3")).
             WithInMemoryStore();
         var sp = services.BuildServiceProvider();
 
@@ -97,7 +97,7 @@ public class TenantResolverTests
 
         services.AddLogging().
             AddMultiTenant<Tenant>().
-            WithDelegateStrategy(_ => Task.FromResult<string?>("not-found")).
+            WithDelegateStrategy(_ => Task.FromResult("not-found")).
             WithStaticStrategy("also-not-found").
             WithInMemoryStore().
             WithConfigurationStore();
@@ -124,7 +124,7 @@ public class TenantResolverTests
 
         services.
             AddMultiTenant<Tenant>().
-            WithDelegateStrategy(_ => Task.FromResult<string?>(null)).
+            WithDelegateStrategy(_ => Task.FromResult<string>(null)).
             WithInMemoryStore().
             WithConfigurationStore();
         var sp = services.BuildServiceProvider();
@@ -171,7 +171,7 @@ public class TenantResolverTests
 
         services.
             AddMultiTenant<Tenant>().
-            WithDelegateStrategy(_ => Task.FromResult<string?>("not-found")).
+            WithDelegateStrategy(_ => Task.FromResult("not-found")).
             WithStaticStrategy("initech").
             WithInMemoryStore().
             WithConfigurationStore();

@@ -3,7 +3,7 @@ using Craft.Auditing.Extensions;
 using Craft.Domain.Base;
 using FluentAssertions;
 
-namespace Auditing.Tests;
+namespace Craft.Auditing.Tests;
 
 public class NoAuditAttributeTests
 {

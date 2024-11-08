@@ -2,7 +2,7 @@
 using Craft.Auditing.Extensions;
 using FluentAssertions;
 
-namespace Auditing.Tests;
+namespace Craft.Auditing.Tests;
 
 public class TypeExtensionsTests
 {

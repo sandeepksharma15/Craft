@@ -310,6 +310,7 @@ dotnet_diagnostic.S4581.severity =suggestion
 dotnet_diagnostic.S6562.severity =none
 
 dotnet_diagnostic.IDE011.severity =none
+dotnet_diagnostic.IDE0079.severity =none
 dotnet_diagnostic.IDE1006.severity =none
 dotnet_diagnostic.IDE0290.severity =none
 

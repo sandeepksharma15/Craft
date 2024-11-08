@@ -5,7 +5,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Auditing.Tests;
+namespace Craft.Auditing.Tests;
 
 public class AuditLogTests
 {

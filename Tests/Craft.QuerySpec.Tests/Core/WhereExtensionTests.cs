@@ -5,7 +5,7 @@ using Craft.QuerySpec.Enums;
 using Craft.TestHelper.Models;
 using FluentAssertions;
 
-namespace AppSpec.Tests.Core;
+namespace Craft.QuerySpec.Tests.Core;
 
 public class WhereExtensionTests
 {

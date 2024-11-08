@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Craft.TestHelper;
 
-namespace AppSpec.Tests.Extensions;
+namespace Craft.QuerySpec.Tests.Extensions;
 
 [Collection(nameof(SystemTestCollectionDefinition))]
 public class DbSetExtensionsTests
