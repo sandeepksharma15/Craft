@@ -8,7 +8,7 @@ public abstract class CraftComponent : ComponentBase
     [Parameter] public string Class { get; set; }
     [Parameter] public ElementReference ElementRef { get; set; }
     [Parameter] public Action<ElementReference> ElementRefChanged { get; set; }
-    public string Id { get; set; }
+    [Parameter] public string Id { get; set; }
     [Parameter] public string Style { get; set; }
     [Parameter] public object Tag { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public IDictionary<string, object> UserAttributes { get; set; }
@@ -16,7 +16,7 @@ public abstract class CraftComponent : ComponentBase
 
     protected override void OnInitialized()
     {
-        Id = Guid.NewGuid().ToString("N")[..10];
+        Id ??= Guid.NewGuid().ToString("N")[..10];
     }
 
     protected internal string GetId()
