@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Craft.Components.Base;
+namespace Craft.UiComponents.Base;
 
 public abstract class CraftComponent : ComponentBase
 {

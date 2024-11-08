@@ -1,4 +1,4 @@
-using Craft.Components.Base;
+using Craft.UiComponents.Base;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

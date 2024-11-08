@@ -1,11 +1,11 @@
 ﻿using Bunit;
-using Craft.Components.Base;
+using Craft.UiComponents.Base;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace Craft.Components.Tests.Base;
+namespace Craft.UiComponents.Tests.Base;
 
 public class CraftComponentTests : TestContext
 {
