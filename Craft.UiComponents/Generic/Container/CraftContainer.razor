@@ -1,0 +1,8 @@
+﻿@inherits CraftComponent
+
+@if (Visible)
+{
+    <div @attributes="UserAttributes" class="@Classname" style="@Style">
+        @ChildContent
+    </div>
+}
