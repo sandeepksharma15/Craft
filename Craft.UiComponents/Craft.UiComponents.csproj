@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -9,10 +9,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="compilerconfig.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="compilerconfig.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BuildWebCompiler2022" Version="1.14.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
 	</ItemGroup>
 
@@ -21,6 +30,8 @@
 		<ProjectReference Include="..\Craft.Utilities\Craft.Utilities.csproj" />
 	</ItemGroup>
 
-
+	<ItemGroup>
+	  <Folder Include="wwwroot\" />
+	</ItemGroup>
 
 </Project>
