@@ -1,0 +1,12 @@
+﻿@import "Customize.scss";
+@import "../node_modules/bootstrap/scss/mixins/container";
+
+// MudBlazor uses smaller padding for container on small screens
+// MudAppBar uses that system and I want CraftContainer to respond in similar fashion
+@media (max-width: $breakpoint-sm) {
+    .container, .container-fluid, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm
+    {
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+}

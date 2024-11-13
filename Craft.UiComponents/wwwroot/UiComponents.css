@@ -12396,3 +12396,10 @@ a[aria-disabled=true] {
   pointer-events: none;
   text-decoration: none;
 }
+
+@media (max-width: 600px) {
+  .container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}
