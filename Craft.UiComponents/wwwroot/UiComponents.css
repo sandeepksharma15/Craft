@@ -754,7 +754,7 @@ progress {
 
 @media (min-width: 600px) {
   .container-sm, .container {
-    max-width: 584px;
+    max-width: 568px;
   }
 }
 @media (min-width: 960px) {
@@ -12520,19 +12520,19 @@ a[aria-disabled=true] {
   border-left: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 576px) {
+@media (max-width: 600px) {
   .navbar-expand-sm .navbar-brand,
   .navbar-expand-sm .nav-link {
     border: none !important;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   .navbar-expand-md .navbar-brand,
   .navbar-expand-md .nav-link {
     border: none !important;
   }
 }
-@media (max-width: 992px) {
+@media (max-width: 1280px) {
   .navbar-expand-lg .navbar-brand,
   .navbar-expand-lg .nav-link {
     border: none !important;

@@ -5,6 +5,8 @@
 // Variables
 
 // Mixins
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
 
 @mixin btn-shadow($color){
   @include gradient-y-three-colors(tint-color($color, 5%), $color, 20%, shade-color($color, 20%));
@@ -83,7 +85,7 @@
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 600px) {
   .navbar-expand-sm {
     .navbar-brand,
     .nav-link {
@@ -92,7 +94,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   .navbar-expand-md {
     .navbar-brand,
     .nav-link {
@@ -101,7 +103,7 @@
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1280px) {
   .navbar-expand-lg {
     .navbar-brand,
     .nav-link {
