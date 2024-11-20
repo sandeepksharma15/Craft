@@ -9,13 +9,10 @@ public partial class CraftContainer : CraftComponent
 {
     protected string Classname =>
         new CssBuilder("")
-            .AddClass("container", (MaxWidth == ViewPortSize.Default && IsFluid != true))
-            .AddClass($"container-{MaxWidth.GetDescription()}", (MaxWidth != ViewPortSize.Default && IsFluid != true))
-            .AddClass($"container-fluid", IsFluid == true)
+            .AddClass("container", MaxWidth == ContainerSize.Default)
+            .AddClass($"container-{MaxWidth.GetDescription()}", MaxWidth != ContainerSize.Default)
             .AddClass(Class)
             .Build();
 
-    [Parameter] public ViewPortSize MaxWidth { get; set; } = ViewPortSize.Default;
-
-    [Parameter] public bool IsFluid { get; set; } 
+    [Parameter] public ContainerSize MaxWidth { get; set; } = ContainerSize.Default;
 }

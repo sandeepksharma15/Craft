@@ -2,7 +2,7 @@
 
 namespace Craft.UiComponents.Enums;
 
-public enum ViewPortSize
+public enum ContainerSize
 {
     [Description("")]
     Default,
@@ -23,5 +23,8 @@ public enum ViewPortSize
     ExtraLarge,
 
     [Description("xxl")]
-    WideScreen
+    WideScreen,
+
+    [Description("fluid")]
+    Fluid
 }
