@@ -2,7 +2,7 @@
 
 @if (Visible)
 {
-    <div @attributes="UserAttributes" class="@Classname" style="@Style">
+    <div id="@Id" @ref="@ElementRef" @attributes="UserAttributes" class="@Classname" style="@Style">
         @ChildContent
     </div>
 }

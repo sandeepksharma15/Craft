@@ -9,10 +9,10 @@ public partial class CraftContainer : CraftComponent
 {
     protected string Classname =>
         new CssBuilder("")
-            .AddClass("container", MaxWidth == ContainerSize.Default)
-            .AddClass($"container-{MaxWidth.GetDescription()}", MaxWidth != ContainerSize.Default)
+            .AddClass("container", MaxWidth == ContainerType.Default)
+            .AddClass($"container-{MaxWidth.GetDescription()}", MaxWidth != ContainerType.Default)
             .AddClass(Class)
             .Build();
 
-    [Parameter] public ContainerSize MaxWidth { get; set; } = ContainerSize.Default;
+    [Parameter] public ContainerType MaxWidth { get; set; } = ContainerType.Default;
 }

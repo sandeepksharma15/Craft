@@ -2,10 +2,10 @@
 
 namespace Craft.UiComponents.Enums;
 
-public enum Color
+public enum CraftColor
 {
     [Description("")]
-    Reset,
+    Default,
 
     [Description("primary")]
     Primary,

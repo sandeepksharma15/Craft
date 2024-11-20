@@ -1,0 +1,12 @@
+﻿@inherits CraftComponent
+
+@if (Visible)
+{
+    <nav id="@Id" @ref="@ElementRef" @attributes="UserAttributes" class="@Classname" style="@Style">
+        <div class="container-fluid">
+            <CascadingValue Value="@(this)" IsFixed="true">
+                @ChildContent
+            </CascadingValue>
+        </div>
+    </nav>
+}

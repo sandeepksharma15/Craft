@@ -51,12 +51,6 @@
     border-left: 1px solid rgba(255, 255, 255, .1);
   }
 
-  &-brand {
-    padding: .75rem 1rem subtract(24px, .75rem);
-    margin-right: 0;
-    border-right: 1px solid rgba(0, 0, 0, .2);
-  }
-
   .nav-item.active .nav-link {
     background-color: rgba(0, 0, 0, .3);
     border-left: 1px solid rgba(0, 0, 0, .2);

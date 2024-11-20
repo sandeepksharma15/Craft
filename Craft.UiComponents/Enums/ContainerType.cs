@@ -2,7 +2,7 @@
 
 namespace Craft.UiComponents.Enums;
 
-public enum ContainerSize
+public enum ContainerType
 {
     [Description("")]
     Default,
