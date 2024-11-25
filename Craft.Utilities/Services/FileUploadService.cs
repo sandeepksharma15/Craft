@@ -12,7 +12,7 @@ public class FileUploadService
     /// <param name="allowedSizeLimit">Maximum allowed file size in MB</param>
     /// <param name="progressCallback">Callback to report upload progress (0-100)</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public async Task UploadFileAsync(string? destFilePath, IBrowserFile sourceFile, Action<int> progressCallback = null,
+    public static async Task UploadFileAsync(string? destFilePath, IBrowserFile sourceFile, Action<int> progressCallback = null,
         long allowedSizeLimit = 10)
     {
         ArgumentNullException.ThrowIfNull(sourceFile);
