@@ -5,6 +5,9 @@ namespace Craft.Security.CurrentUserService;
 public interface ICurrentUser<TKey>
 {
     public TKey Id { get; }
+
+    public ClaimsPrincipal GetUser(); 
+
     public string Name { get; }
 
     public string GetEmail();

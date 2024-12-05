@@ -20,6 +20,8 @@ public class CurrentUser<TKey> : ICurrentUser<TKey>
 
     public TKey Id { get; set; }
 
+    public ClaimsPrincipal GetUser() => _user;
+
     public string Name => IsAuthenticated() ? _user?.GetFirstName() : string.Empty;
 
     public string GetEmail() => IsAuthenticated() ? _user?.GetEmail() : string.Empty;
