@@ -5,7 +5,7 @@ namespace Craft.Data.Helpers;
 
 public class CustomSeederRunner(IServiceProvider serviceProvider)
 {
-    private readonly ICustomSeeder[] _seeders = serviceProvider.GetServices<ICustomSeeder>().ToArray();
+    private readonly ICustomSeeder[] _seeders = [.. serviceProvider.GetServices<ICustomSeeder>()];
 
     public async Task RunSeedersAsync(CancellationToken cancellationToken)
     {

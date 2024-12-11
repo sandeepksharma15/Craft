@@ -20,7 +20,7 @@ public class ServerResponse
     public ServerResponse(IdentityResult identityResult)
     {
         IsSuccess = identityResult.Succeeded;
-        Errors = identityResult.Errors.Select(x => x.Description).ToList();
+        Errors = [.. identityResult.Errors.Select(x => x.Description)];
         Data = null;
     }
 

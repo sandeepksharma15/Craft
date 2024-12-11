@@ -88,10 +88,10 @@ public class SelectDescriptorJsonConverter<T, TResult> : JsonConverter<SelectDes
 
                 reader.Read();
 
-                if (propertyName == nameof(SelectDescriptor<T, TResult>.Assignor))
+                if (propertyName == nameof(SelectDescriptor<,>.Assignor))
                     selectInfo.Assignor = typeof(T).CreateMemberExpression(reader.GetString());
 
-                if (propertyName == nameof(SelectDescriptor<T, TResult>.Assignee))
+                if (propertyName == nameof(SelectDescriptor<,>.Assignee))
                     selectInfo.Assignee = typeof(TResult).CreateMemberExpression(reader.GetString());
             }
         }
@@ -107,8 +107,8 @@ public class SelectDescriptorJsonConverter<T, TResult> : JsonConverter<SelectDes
         var assignor = value.Assignor.Body as MemberExpression;
         var assignee = value.Assignee.Body as MemberExpression;
 
-        writer.WriteString(nameof(SelectDescriptor<T, TResult>.Assignor), assignor.Member.Name);
-        writer.WriteString(nameof(SelectDescriptor<T, TResult>.Assignee), assignee.Member.Name);
+        writer.WriteString(nameof(SelectDescriptor<,>.Assignor), assignor.Member.Name);
+        writer.WriteString(nameof(SelectDescriptor<,>.Assignee), assignee.Member.Name);
 
         writer.WriteEndObject();
     }

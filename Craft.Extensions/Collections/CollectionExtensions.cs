@@ -61,7 +61,7 @@ public static class CollectionExtensions
         ArgumentNullException.ThrowIfNull(source, nameof(source));
         ArgumentNullException.ThrowIfNull(predicate, nameof(predicate));
 
-        List<T> items = source.Where(predicate).ToList();
+        List<T> items = [.. source.Where(predicate)];
 
         foreach (var item in items)
             source.Remove(item);

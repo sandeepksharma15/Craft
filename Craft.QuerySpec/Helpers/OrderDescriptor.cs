@@ -51,10 +51,10 @@ public class OrderDescriptorJsonConverter<T> : JsonConverter<OrderDescriptor<T>>
 
                 reader.Read();
 
-                if (propertyName == nameof(OrderDescriptor<T>.OrderItem))
+                if (propertyName == nameof(OrderDescriptor<>.OrderItem))
                     orderInfo.OrderItem = typeof(T).CreateMemberExpression(reader.GetString());
 
-                if (propertyName == nameof(OrderDescriptor<T>.OrderType))
+                if (propertyName == nameof(OrderDescriptor<>.OrderType))
                     orderInfo.OrderType = (OrderTypeEnum)reader.GetInt32();
             }
         }
@@ -67,8 +67,8 @@ public class OrderDescriptorJsonConverter<T> : JsonConverter<OrderDescriptor<T>>
         writer.WriteStartObject();
 
         var memberName = value.OrderItem.GetPropertyInfo().Name;
-        writer.WriteString(nameof(OrderDescriptor<T>.OrderItem), memberName);
-        writer.WriteNumber(nameof(OrderDescriptor<T>.OrderType), (int)value.OrderType);
+        writer.WriteString(nameof(OrderDescriptor<>.OrderItem), memberName);
+        writer.WriteNumber(nameof(OrderDescriptor<>.OrderType), (int)value.OrderType);
 
         writer.WriteEndObject();
     }

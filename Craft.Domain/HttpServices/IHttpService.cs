@@ -30,7 +30,7 @@ public interface IHttpService<T, ViewT, DataTransferT, TKey> : IHttpChangeServic
     {
         query.SetPage(1, int.MaxValue);
 
-        return (await GetPagedListAsync(query, cancellationToken)).Items.ToList();
+        return [.. (await GetPagedListAsync(query, cancellationToken)).Items];
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public interface IHttpService<T, ViewT, DataTransferT, TKey> : IHttpChangeServic
     {
         query.SetPage(1, int.MaxValue);
 
-        return (await GetPagedListAsync(query, cancellationToken)).Items.ToList();
+        return [.. (await GetPagedListAsync(query, cancellationToken)).Items];
     }
 
     /// <summary>

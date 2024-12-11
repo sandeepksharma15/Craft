@@ -255,7 +255,7 @@ public partial class DataTable<TableItem> : IDataTable<TableItem>
 
             var result = await DataStore.GetPagedListAsync(_tableQuery);
 
-            _entities = result.Items.ToList();
+            _entities = [.. result.Items];
 
             _pagenInfo = new PageInfo
             {

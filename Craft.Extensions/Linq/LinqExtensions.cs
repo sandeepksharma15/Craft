@@ -31,11 +31,10 @@ public static class LinqExtensions
         orderList = orderList.RemovePostFix([","])!;
 
         // Separate All The Order Items In A List
-        List<string> orderItems = orderList
+        List<string> orderItems = [.. orderList
             .Trim()
             .Split(',')
-            .Select(x => x.Trim())
-            .ToList();
+            .Select(x => x.Trim())];
 
         // Get The Entity
         Type entity = typeof(T);

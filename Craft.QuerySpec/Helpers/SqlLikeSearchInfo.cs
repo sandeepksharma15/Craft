@@ -61,13 +61,13 @@ public class SqlLikeSearchInfoJsonConverter<T> : JsonConverter<SqlLikeSearchInfo
 
                 reader.Read();
 
-                if (propertyName == nameof(SqlLikeSearchInfo<T>.SearchItem))
+                if (propertyName == nameof(SqlLikeSearchInfo<>.SearchItem))
                     searchInfo.SearchItem = typeof(T).CreateMemberExpression(reader.GetString());
 
-                if (propertyName == nameof(SqlLikeSearchInfo<T>.SearchString))
+                if (propertyName == nameof(SqlLikeSearchInfo<>.SearchString))
                     searchInfo.SearchString = reader.GetString();
 
-                if (propertyName == nameof(SqlLikeSearchInfo<T>.SearchGroup))
+                if (propertyName == nameof(SqlLikeSearchInfo<>.SearchGroup))
                     searchInfo.SearchGroup = reader.GetInt32();
             }
         }
@@ -81,9 +81,9 @@ public class SqlLikeSearchInfoJsonConverter<T> : JsonConverter<SqlLikeSearchInfo
 
         var memberName = value.SearchItem.GetPropertyInfo().Name;
 
-        writer.WriteString(nameof(SqlLikeSearchInfo<T>.SearchItem), memberName);
-        writer.WriteString(nameof(SqlLikeSearchInfo<T>.SearchString), value.SearchString);
-        writer.WriteNumber(nameof(SqlLikeSearchInfo<T>.SearchGroup), value.SearchGroup);
+        writer.WriteString(nameof(SqlLikeSearchInfo<>.SearchItem), memberName);
+        writer.WriteString(nameof(SqlLikeSearchInfo<>.SearchString), value.SearchString);
+        writer.WriteNumber(nameof(SqlLikeSearchInfo<>.SearchGroup), value.SearchGroup);
 
         writer.WriteEndObject();
     }

@@ -10,5 +10,5 @@ public static class IdentityResultExtensions
     /// <param name="result">The <see cref="IdentityResult"/> instance.</param>
     /// <returns>A list of error descriptions.</returns>
     public static List<string> GetErrors(this IdentityResult result) =>
-        result.Errors.Select(e => e.Description).ToList();
+        [.. result.Errors.Select(e => e.Description)];
 }

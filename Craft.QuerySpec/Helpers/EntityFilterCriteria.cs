@@ -60,7 +60,7 @@ public class EntityFilterCriteriaJsonConverter<T> : JsonConverter<EntityFilterCr
 
                 reader.Read();
 
-                if (propertyName == nameof(EntityFilterCriteria<T>.Filter))
+                if (propertyName == nameof(EntityFilterCriteria<>.Filter))
                 {
                     var str = reader.GetString();
 
@@ -84,7 +84,7 @@ public class EntityFilterCriteriaJsonConverter<T> : JsonConverter<EntityFilterCr
     {
         writer.WriteStartObject();
 
-        writer.WriteString(nameof(EntityFilterCriteria<T>.Filter),
+        writer.WriteString(nameof(EntityFilterCriteria<>.Filter),
             RemoveAccessor(value.Filter.Body.ToString()));
 
         writer.WriteEndObject();

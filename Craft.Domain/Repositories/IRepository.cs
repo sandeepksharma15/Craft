@@ -27,7 +27,7 @@ public interface IRepository<T, TKey> : IChangeRepository<T, TKey> where T : cla
     {
         query.SetPage(1, int.MaxValue);
 
-        return (await GetPagedListAsync(query, cancellationToken)).Items.ToList();
+        return [.. (await GetPagedListAsync(query, cancellationToken)).Items];
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public interface IRepository<T, TKey> : IChangeRepository<T, TKey> where T : cla
     {
         query.SetPage(1, int.MaxValue);
 
-        return (await GetPagedListAsync(query, cancellationToken)).Items.ToList();
+        return [.. (await GetPagedListAsync(query, cancellationToken)).Items];
     }
 
     /// <summary>

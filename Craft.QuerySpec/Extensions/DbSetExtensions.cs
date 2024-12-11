@@ -26,7 +26,7 @@ public static class DbSetExtensions
 
         return query.PostProcessingAction == null
             ? result
-            : query.PostProcessingAction(result).ToList();
+            : [.. query.PostProcessingAction(result)];
     }
 
     public static IQueryable<TSource> WithQuery<TSource>(this IQueryable<TSource> source,
