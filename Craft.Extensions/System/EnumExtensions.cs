@@ -44,6 +44,52 @@ public static class EnumExtensions
     public static bool IsSet(this Enum input, Enum matchTo)
         => (Convert.ToUInt32(input) & Convert.ToUInt32(matchTo)) != 0;
 
+    public static T GetNextEnumValue<T>(this T enumValue) where T : struct, Enum
+    {
+        var values = Enum.GetValues(typeof(T))
+            .Cast<T>()
+            .OrderBy(x => Convert.ToInt32(x))
+            .ToList();
+
+        var currentIndex = values.IndexOf(enumValue);
+
+        if (currentIndex >= 0 && currentIndex < values.Count - 1)
+            return values[currentIndex + 1];
+
+        return values[0]; // Return first item if there is no next value
+    }
+
+    public static T GetPrevEnumValue<T>(this T enumValue) where T : struct, Enum
+    {
+        var values = Enum.GetValues(typeof(T))
+            .Cast<T>()
+            .OrderBy(x => Convert.ToInt32(x))
+            .ToList();
+
+        var currentIndex = values.IndexOf(enumValue);
+
+        if (currentIndex > 0 && currentIndex < values.Count)
+            return values[currentIndex - 1];
+
+        return values[^1]; // Return last item if there is no prev value
+    }
+
+    public static T GetHighestEnumValue<T>() where T : struct, Enum
+    {
+        return Enum.GetValues(typeof(T))
+            .Cast<T>()
+            .OrderByDescending(x => Convert.ToInt32(x))
+            .First();
+    }
+
+    public static T GetLowestEnumValue<T>() where T : struct, Enum
+    {
+        return Enum.GetValues(typeof(T))
+            .Cast<T>()
+            .OrderBy(x => Convert.ToInt32(x))
+            .First();
+    }
+
     public static T ToEnum<T>(this int value) where T : struct
     {
         Type enumType = typeof(T);
