@@ -1,0 +1,87 @@
+﻿@import "Customize.scss";
+
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/utilities";
+
+.icon-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    padding: 0.4rem;
+    color: var(--bs-btn-color);
+    box-shadow: var(--bs-btn-box-shadow);
+    border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+    .icon-button i {
+        margin-bottom: 0.25rem; /* Space between icon and label */
+        transition: transform 0.3s ease-in-out, font-size 0.3s ease-in-out;
+    }
+
+    .icon-button span {
+        font-size: 0.8rem;
+        font-weight: 400;
+    }
+
+    .icon-button:disabled {
+        color: var(--bs-btn-disabled-color);
+        pointer-events: none;
+        background-color: var(--bs-btn-disabled-bg);
+        background-image: none;
+        border-color: var(--bs-btn-disabled-border-color);
+        opacity: var(--bs-btn-disabled-opacity);
+        box-shadow: none;
+    }
+
+    .icon-button:not(:disabled):hover {
+        color: var(--bs-btn-hover-color);
+        background-color: var(--bs-btn-hover-bg);
+        border-color: var(--bs-btn-hover-border-color);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+        .icon-button:not(:disabled):hover i {
+            transform: scale(1.1);  
+        }
+
+    /* Button sizes with icon size changes */
+    .icon-button.sm {
+        font-size: 10px;
+    }
+
+        .icon-button.sm i {
+            font-size: 1.3rem; /* Larger icon for small button */
+        }
+
+    .icon-button.md {
+        font-size: 12px;
+    }
+
+        .icon-button.md i {
+            font-size: 1.7rem; /* Larger icon for medium button */
+        }
+
+    .icon-button.lg {
+        font-size: 14px;
+    }
+
+        .icon-button.lg i {
+            font-size: 2.1rem; /* Larger icon for large button */
+        }
+
+@each $color, $value in $theme-colors {
+    .icon-button-#{$color} {
+        @include button-outline-variant($value);
+    }
+}
+

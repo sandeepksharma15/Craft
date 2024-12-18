@@ -12849,3 +12849,211 @@ legend {
   background-color: #272b30;
   border-color: rgba(0, 0, 0, 0.6);
 }
+
+.icon-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  padding: 0.4rem;
+  color: var(--bs-btn-color);
+  box-shadow: var(--bs-btn-box-shadow);
+  border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.icon-button i {
+  margin-bottom: 0.25rem; /* Space between icon and label */
+  transition: transform 0.3s ease-in-out, font-size 0.3s ease-in-out;
+}
+
+.icon-button span {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.icon-button:disabled {
+  color: var(--bs-btn-disabled-color);
+  pointer-events: none;
+  background-color: var(--bs-btn-disabled-bg);
+  background-image: none;
+  border-color: var(--bs-btn-disabled-border-color);
+  opacity: var(--bs-btn-disabled-opacity);
+  box-shadow: none;
+}
+
+.icon-button:not(:disabled):hover {
+  color: var(--bs-btn-hover-color);
+  background-color: var(--bs-btn-hover-bg);
+  border-color: var(--bs-btn-hover-border-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.icon-button:not(:disabled):hover i {
+  transform: scale(1.1);
+}
+
+/* Button sizes with icon size changes */
+.icon-button.sm {
+  font-size: 10px;
+}
+
+.icon-button.sm i {
+  font-size: 1.3rem; /* Larger icon for small button */
+}
+
+.icon-button.md {
+  font-size: 12px;
+}
+
+.icon-button.md i {
+  font-size: 1.7rem; /* Larger icon for medium button */
+}
+
+.icon-button.lg {
+  font-size: 14px;
+}
+
+.icon-button.lg i {
+  font-size: 2.1rem; /* Larger icon for large button */
+}
+
+.icon-button-primary {
+  --bs-btn-color: #3a3f44;
+  --bs-btn-border-color: #3a3f44;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #3a3f44;
+  --bs-btn-hover-border-color: #3a3f44;
+  --bs-btn-focus-shadow-rgb: 58, 63, 68;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #3a3f44;
+  --bs-btn-active-border-color: #3a3f44;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #3a3f44;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #3a3f44;
+  --bs-gradient: none;
+}
+
+.icon-button-secondary {
+  --bs-btn-color: #7a8288;
+  --bs-btn-border-color: #7a8288;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #7a8288;
+  --bs-btn-hover-border-color: #7a8288;
+  --bs-btn-focus-shadow-rgb: 122, 130, 136;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #7a8288;
+  --bs-btn-active-border-color: #7a8288;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #7a8288;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #7a8288;
+  --bs-gradient: none;
+}
+
+.icon-button-success {
+  --bs-btn-color: #62c462;
+  --bs-btn-border-color: #62c462;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #62c462;
+  --bs-btn-hover-border-color: #62c462;
+  --bs-btn-focus-shadow-rgb: 98, 196, 98;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #62c462;
+  --bs-btn-active-border-color: #62c462;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #62c462;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #62c462;
+  --bs-gradient: none;
+}
+
+.icon-button-info {
+  --bs-btn-color: #5bc0de;
+  --bs-btn-border-color: #5bc0de;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #5bc0de;
+  --bs-btn-hover-border-color: #5bc0de;
+  --bs-btn-focus-shadow-rgb: 91, 192, 222;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #5bc0de;
+  --bs-btn-active-border-color: #5bc0de;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #5bc0de;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #5bc0de;
+  --bs-gradient: none;
+}
+
+.icon-button-warning {
+  --bs-btn-color: #f89406;
+  --bs-btn-border-color: #f89406;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #f89406;
+  --bs-btn-hover-border-color: #f89406;
+  --bs-btn-focus-shadow-rgb: 248, 148, 6;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #f89406;
+  --bs-btn-active-border-color: #f89406;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #f89406;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #f89406;
+  --bs-gradient: none;
+}
+
+.icon-button-danger {
+  --bs-btn-color: #ee5f5b;
+  --bs-btn-border-color: #ee5f5b;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #ee5f5b;
+  --bs-btn-hover-border-color: #ee5f5b;
+  --bs-btn-focus-shadow-rgb: 238, 95, 91;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #ee5f5b;
+  --bs-btn-active-border-color: #ee5f5b;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #ee5f5b;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #ee5f5b;
+  --bs-gradient: none;
+}
+
+.icon-button-light {
+  --bs-btn-color: #e9ecef;
+  --bs-btn-border-color: #e9ecef;
+  --bs-btn-hover-color: #000;
+  --bs-btn-hover-bg: #e9ecef;
+  --bs-btn-hover-border-color: #e9ecef;
+  --bs-btn-focus-shadow-rgb: 233, 236, 239;
+  --bs-btn-active-color: #000;
+  --bs-btn-active-bg: #e9ecef;
+  --bs-btn-active-border-color: #e9ecef;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #e9ecef;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #e9ecef;
+  --bs-gradient: none;
+}
+
+.icon-button-dark {
+  --bs-btn-color: #272b30;
+  --bs-btn-border-color: #272b30;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #272b30;
+  --bs-btn-hover-border-color: #272b30;
+  --bs-btn-focus-shadow-rgb: 39, 43, 48;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #272b30;
+  --bs-btn-active-border-color: #272b30;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #272b30;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #272b30;
+  --bs-gradient: none;
+}
