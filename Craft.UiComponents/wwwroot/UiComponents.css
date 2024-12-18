@@ -12856,7 +12856,7 @@ legend {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: none;
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out;
   padding: 0.4rem;
@@ -13056,4 +13056,22 @@ legend {
   --bs-btn-disabled-bg: transparent;
   --bs-btn-disabled-border-color: #272b30;
   --bs-gradient: none;
+}
+
+.btn-cool-label {
+  position: relative;
+  left: -16px;
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px 0 0 4px;
+}
+
+.btn-cool {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.btn {
+  margin-bottom: 10px;
 }

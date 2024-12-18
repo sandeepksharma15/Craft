@@ -3,14 +3,13 @@ using Craft.UiComponents.Enums;
 using Craft.Utilities.Builders;
 using Microsoft.AspNetCore.Components;
 
-namespace Craft.UiComponents.Components.IconButton;
+namespace Craft.UiComponents.Components.CoolButton;
 
-public partial class CraftIconButton : CraftComponent
+public partial class CraftCoolButton : CraftComponent
 {
-    protected string ClassName => new CssBuilder("icon-button")
-        .AddClass($"icon-button-{Color.GetDescription()}", Color != CraftColorScheme.Default)
+    protected string ClassName => new CssBuilder("btn btn-cool")
+        .AddClass($"btn-{Color.GetDescription()}", Color != CraftColorScheme.Default)
         .AddClass($"{Size.GetDescription()}")
-        .AddClass("text-nowrap", WrapText == false)
         .AddClass(Class)
         .Build();
 
@@ -21,9 +20,6 @@ public partial class CraftIconButton : CraftComponent
     [Parameter] public CraftColorScheme Color { get; set; } = CraftColorScheme.Default;
 
     [Parameter] public string Text { get; set; } = "Home";
-    [Parameter] public string TextClass { get; set; } = "small";
-
-    [Parameter] public bool WrapText { get; set; } = true;
 
     [Parameter] public EventCallback OnClick { get; set; }
 

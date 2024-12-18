@@ -1,0 +1,15 @@
+﻿@inherits CraftComponent
+
+@if (Visible)
+{
+    <button id="@Id" @ref="@ElementRef" type="button" class="@ClassName" style="@Style" @attributes="UserAttributes"
+            disabled="@IsDisabled" @onclick="HandleClick">
+
+        <span class="btn-cool-label">
+            <i class="@IconName"></i>
+        </span>
+
+        @Text
+
+    </button>
+}
