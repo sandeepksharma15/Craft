@@ -7,6 +7,11 @@ public interface ICoreRepository<T, TKey> : IRepository where T : class, IEntity
 {
     Task<DbContext> GetDbContextAsync();
     Task<DbSet<T>> GetDbSetAsync();
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    int SaveChanges();
+
 }
 
 public interface ICoreRepository<T> : ICoreRepository<T, KeyType> where T : class, IEntity, new ();
