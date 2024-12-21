@@ -3,6 +3,7 @@ using Craft.Domain.Repositories;
 using Craft.Infrastructure.CacheService;
 using Craft.MultiTenant.Contracts;
 using Craft.MultiTenant.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Craft.MultiTenant.Stores;
 
@@ -94,6 +95,21 @@ public class CacheStore<T>(ICacheService cacheService, IRepository<T> tenantRepo
     }
 
     public Task UpdateRangeAsync(IEnumerable<T> entities, bool autoSave = true, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DbContext> GetDbContextAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DbSet<T>> GetDbSetAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int SaveChanges()
     {
         throw new NotImplementedException();
     }

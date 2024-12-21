@@ -5,6 +5,7 @@ using Craft.MultiTenant.Enums;
 using Craft.MultiTenant.Exceptions;
 using Craft.MultiTenant.Models;
 using Craft.MultiTenant.Options;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace Craft.MultiTenant.Stores;
@@ -96,10 +97,25 @@ public class InMemoryStore<T> : ITenantStore<T> where T : class, ITenant, IEntit
         return await Task.FromResult(_tenantMap.Count);
     }
 
+    public Task<DbContext> GetDbContextAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DbSet<T>> GetDbSetAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<T> GetHostAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         var result = _tenantMap.Values.SingleOrDefault(ti => ti.Type == TenantType.Host);
         return await Task.FromResult(result);
+    }
+
+    public int SaveChanges()
+    {
+        throw new NotImplementedException();
     }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

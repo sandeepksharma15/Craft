@@ -110,6 +110,12 @@ public class DbStore<TStoreDbContext, T>(TStoreDbContext dbContext) : ITenantSto
             .LongCountAsync(cancellationToken);
     }
 
+    public Task<DbContext> GetDbContextAsync()
+        => Task.FromResult(_dbContext as DbContext);
+
+    public Task<DbSet<T>> GetDbSetAsync()
+        => Task.FromResult(_dbContext.Tenants);
+
     public virtual Task<T> GetHostAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return _dbContext
@@ -118,6 +124,9 @@ public class DbStore<TStoreDbContext, T>(TStoreDbContext dbContext) : ITenantSto
             .Where(ti => ti.Type == TenantType.Host)
             .FirstOrDefaultAsync(cancellationToken);
     }
+
+    public int SaveChanges()
+        => _dbContext.SaveChanges();
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

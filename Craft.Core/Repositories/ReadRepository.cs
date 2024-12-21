@@ -6,12 +6,8 @@ using Microsoft.Extensions.Logging;
 namespace Craft.Core.Repositories;
 
 public class ReadRepository<T, TKey>(DbContext appDbContext, ILogger<ReadRepository<T, TKey>> logger)
-    : IReadRepository<T, TKey> where T : class, IEntity<TKey>, new()
+    : CoreRepository<T, TKey>(appDbContext, logger), IReadRepository<T, TKey> where T : class, IEntity<TKey>, new()
 {
-    protected readonly DbContext _appDbContext = appDbContext;
-    protected readonly DbSet<T> _dbSet = appDbContext.Set<T>();
-    protected readonly ILogger<ReadRepository<T, TKey>> _logger = logger;
-
     public virtual async Task<List<T>> GetAllAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         _logger.LogDebug($"[ReadRepository] Type: [\"{typeof(T).GetClassName()}\"] Method: [\"GetAllAsync\"]");

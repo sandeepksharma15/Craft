@@ -2,6 +2,7 @@
 using Craft.MultiTenant.Contracts;
 using Craft.MultiTenant.Enums;
 using Craft.MultiTenant.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Craft.MultiTenant.Stores;
@@ -132,7 +133,22 @@ public class StoreWrapper<T> : ITenantStore<T> where T : class, ITenant, IEntity
         return _store.GetCountAsync(cancellationToken);
     }
 
+    public Task<DbContext> GetDbContextAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DbSet<T>> GetDbSetAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<T> GetHostAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int SaveChanges()
     {
         throw new NotImplementedException();
     }

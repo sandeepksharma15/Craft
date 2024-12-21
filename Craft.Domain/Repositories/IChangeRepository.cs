@@ -44,6 +44,12 @@ public interface IChangeRepository<T, TKey> : IReadRepository<T, TKey> where T :
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Persists changes to the database.
+    /// </summary>
+    /// <returns></returns>
+    int SaveChanges();
+
+    /// <summary>
     /// Updates an existing entity
     /// </summary>
     /// <param name="entity">Entity to be updated in the data store</param>

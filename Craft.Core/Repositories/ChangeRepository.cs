@@ -73,10 +73,11 @@ public class ChangeRepository<T, TKey>(DbContext appDbContext, ILogger<ChangeRep
             await _appDbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    public int SaveChanges()
+        => _appDbContext.SaveChanges();
+
     public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        return await _appDbContext.SaveChangesAsync(cancellationToken);
-    }
+        => await _appDbContext.SaveChangesAsync(cancellationToken);
 
     public virtual async Task<T> UpdateAsync(T entity, bool autoSave = true, CancellationToken cancellationToken = default)
     {

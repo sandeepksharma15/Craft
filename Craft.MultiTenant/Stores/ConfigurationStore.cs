@@ -3,6 +3,7 @@ using Craft.Domain.Contracts;
 using Craft.MultiTenant.Contracts;
 using Craft.MultiTenant.Enums;
 using Craft.MultiTenant.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 
@@ -130,6 +131,21 @@ public class ConfigurationStore<T> : ITenantStore<T> where T : class, ITenant, I
     }
 
     public Task UpdateRangeAsync(IEnumerable<T> entities, bool autoSave = true, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DbContext> GetDbContextAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<DbSet<T>> GetDbSetAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int SaveChanges()
     {
         throw new NotImplementedException();
     }
