@@ -16,4 +16,12 @@ public static class NavigationExtensions
 
         return uri.Split('?')[0];
     }
+
+    public static string CreateUriWithReturnPathToThisPage(this NavigationManager navigationManager,
+        string goToThisPage, string returnUrlQueryParameterName = "returnUrl")
+    {
+        var returnUrl = navigationManager.GetBaseRelativePathWithoutQueryParameters();
+
+        return $"{goToThisPage}?{returnUrlQueryParameterName}=/{returnUrl}";
+    }
 }
