@@ -1,7 +1,13 @@
-﻿namespace Craft.Infrastructure.CacheService;
+﻿
+namespace Craft.Infrastructure.CacheService;
 
 public class RedisCacheService : ICacheService
 {
+    public Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> valueFactory)
+    {
+        throw new NotImplementedException();
+    }
+
     public void Remove(string cacheKey)
     {
         throw new NotImplementedException();

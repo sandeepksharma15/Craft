@@ -19,6 +19,15 @@ public class MemoryCacheService : ICacheService
         };
     }
 
+    public Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> valueFactory)
+    {
+        return _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
+        {
+            entry.SetOptions(_cacheOptions);
+            return await valueFactory();
+        });
+    }
+
     public void Remove(string cacheKey)
     {
         _memoryCache.Remove(cacheKey);
