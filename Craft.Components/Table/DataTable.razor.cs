@@ -57,7 +57,7 @@ public partial class DataTable<TableItem> : IDataTable<TableItem>
     [CascadingParameter] public HandleError? handleError { get; set; }
     [Inject] private ILogger<IDataTable<TableItem>> _logger { get; set; }
     [Inject] private NavigationManager _navigationManager { get; set; }
-    [Inject] private ISnackbar _snackbar { get; set; }
+    //[Inject] private ISnackbar _snackbar { get; set; }
 
     [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public IHttpService<TableItem> DataStore { get; set; }

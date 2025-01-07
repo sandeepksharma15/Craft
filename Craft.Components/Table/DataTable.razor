@@ -8,7 +8,7 @@
 @typeparam TableItem
 
 <SpinLoader IsLoading="@(_entities == null)">
-    <ContentTemplate>
+    <Content>
         @* Display The Filter List Here *@
         @if (_filteredColumns.Count > 0)
         {
@@ -48,7 +48,7 @@
         }
 
         @_renderPageFooter
-    </ContentTemplate>
+    </Content>
 </SpinLoader>
 
 @code {
