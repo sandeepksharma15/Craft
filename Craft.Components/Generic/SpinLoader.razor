@@ -5,30 +5,28 @@
 
 @if (IsLoading)
 {
-    @if (LoadingTemplate is null)
+    @if (Loading is null)
     {
         <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
     }
     else
     {
-        @LoadingTemplate
+        @Loading
     }
 }
 else
 {
-    @*Display Content If All Goes Well Or Faulted Template Is Not Provided*@
+    @* Display Content If All Goes Well Or Faulted Template Is Not Provided *@
     if (!IsFaulted)
     {
-        @ContentTemplate
+        @Content
     }
 
-    @*Display Faulted Template If Something Is Wrong*@
+    @* Display Faulted Template If Something Is Wrong *@
     if (IsFaulted)
     {
         <MudAlert Severity="Severity.Error">
             Something has gone wrong :-( Please contact the administrator or report an issue
         </MudAlert>
-                
     }
 }
-
