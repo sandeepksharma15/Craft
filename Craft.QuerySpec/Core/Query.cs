@@ -39,9 +39,9 @@ public class Query<T, TResult> : Query<T>, IQuery<T, TResult>
 public class Query<T> : IQuery<T> where T : class
 {
     // Common query specifications.
-    public bool AsNoTracking { get; set; }
+    public bool AsNoTracking { get; set; } = true;
     public bool AsSplitQuery { get; set; }
-    public bool IgnoreAutoIncludes { get; set; }
+    public bool IgnoreAutoIncludes { get; set; } = true;
     public bool IgnoreQueryFilters { get; set; }
 
     // Pagination specifications.
@@ -83,9 +83,9 @@ public class Query<T> : IQuery<T> where T : class
         SetPage();
 
         // Reset common query specifications.
-        AsNoTracking = false;
+        AsNoTracking = true;
         AsSplitQuery = false;
-        IgnoreAutoIncludes = false;
+        IgnoreAutoIncludes = true;
         IgnoreQueryFilters = false;
 
         // Clear Builders
