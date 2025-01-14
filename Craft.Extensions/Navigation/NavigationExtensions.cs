@@ -17,6 +17,13 @@ public static class NavigationExtensions
         return uri.Split('?')[0];
     }
 
+    public static string GetPagePathSegment(this NavigationManager navigationManager)
+    {
+        var uri = new Uri(navigationManager.Uri);
+
+        return "/" + uri.Segments[1].TrimEnd('/');
+    }
+
     public static string CreateUriWithReturnPathToThisPage(this NavigationManager navigationManager,
         string goToThisPage, string returnUrlQueryParameterName = "returnUrl")
     {
