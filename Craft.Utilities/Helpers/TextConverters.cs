@@ -51,6 +51,7 @@ public static class TextConverters
             .Replace("</ul>", "")
             .Replace("<hr />", @"\par ") 
             .Replace("–", @"\'96")
+            .Replace("&quot;", "\"")
             .Replace("&amp;", "&")
             .Replace("---;", " ")       // May fix Right Align Issue (May introduce new ;-) )
             .Replace("&nbsp;", " ");
