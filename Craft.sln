@@ -74,6 +74,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UiComponents", "Craft
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.UiComponents.Tests", "Tests\Craft.UiComponents.Tests\Craft.UiComponents.Tests.csproj", "{BC4C24BE-B32D-4AFB-B8E4-DEDDDA9E6D11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.CustomerFeedback", "Craft.CustomerFeedback\Craft.CustomerFeedback.csproj", "{BA9BF708-1729-4BDA-BFB4-1E1A723C3C82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -208,6 +210,10 @@ Global
 		{BC4C24BE-B32D-4AFB-B8E4-DEDDDA9E6D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC4C24BE-B32D-4AFB-B8E4-DEDDDA9E6D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC4C24BE-B32D-4AFB-B8E4-DEDDDA9E6D11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA9BF708-1729-4BDA-BFB4-1E1A723C3C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA9BF708-1729-4BDA-BFB4-1E1A723C3C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA9BF708-1729-4BDA-BFB4-1E1A723C3C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA9BF708-1729-4BDA-BFB4-1E1A723C3C82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

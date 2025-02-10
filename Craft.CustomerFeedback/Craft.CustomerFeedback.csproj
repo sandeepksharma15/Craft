@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Craft.Core\Craft.Core.csproj" />
+    <ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />
+    <ProjectReference Include="..\Craft.Extensions\Craft.Extensions.csproj" />
+    <ProjectReference Include="..\Craft.QuerySpec\Craft.QuerySpec.csproj" />
+    <ProjectReference Include="..\Craft.Utilities\Craft.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>
