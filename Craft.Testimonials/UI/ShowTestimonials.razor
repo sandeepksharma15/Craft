@@ -1,0 +1,15 @@
+﻿@using Craft.Components.Generic
+
+<h3>Show Testimonials</h3>
+
+
+<Conditional Condition="@(_testimonials.Count > 0)">
+    <True>
+        @foreach (var item in _testimonials)
+        {
+            @item.Name
+            @item.Feedback
+            @item.Rating
+        }
+    </True>
+</Conditional>

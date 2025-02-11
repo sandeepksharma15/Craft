@@ -4,7 +4,7 @@ using Craft.Domain.Helpers;
 
 namespace Craft.Testimonials.Domain;
 
-public class TerstimonialVM : VmBase, ITestimonial
+public class TestimonialVM : VmBase, ITestimonial
 {
     [Required(ErrorMessage = DomainConstants.RequiredError)]
     [StringLength(Testimonial.NameLength, ErrorMessage = DomainConstants.LengthError)]

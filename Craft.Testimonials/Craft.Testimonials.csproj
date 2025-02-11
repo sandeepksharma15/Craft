@@ -1,21 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<EnableCssIsolation>true</EnableCssIsolation>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Craft.Core\Craft.Core.csproj" />
-    <ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />
-    <ProjectReference Include="..\Craft.Extensions\Craft.Extensions.csproj" />
-    <ProjectReference Include="..\Craft.UiComponents\Craft.UiComponents.csproj" />
-    <ProjectReference Include="..\Craft.Utilities\Craft.Utilities.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MudBlazor" Version="8.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Craft.Components\Craft.Components.csproj" />
+		<ProjectReference Include="..\Craft.Core\Craft.Core.csproj" />
+		<ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />
+		<ProjectReference Include="..\Craft.Extensions\Craft.Extensions.csproj" />
+		<ProjectReference Include="..\Craft.UiComponents\Craft.UiComponents.csproj" />
+		<ProjectReference Include="..\Craft.Utilities\Craft.Utilities.csproj" />
+	</ItemGroup>
 
 </Project>

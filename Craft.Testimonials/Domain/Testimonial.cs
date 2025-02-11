@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Craft.Domain.Base;
 
 namespace Craft.Testimonials.Domain;
 
+[Table("UR_Testimonials")]
 public class Testimonial : EntityBase, ITestimonial
 {
     public const int NameLength = 50;
