@@ -5,19 +5,23 @@ namespace Craft.Testimonials.Domain;
 
 public class Testimonial : EntityBase, ITestimonial
 {
+    public const int NameLength = 50;
+    public const int FeedbackLength = 1000;
+    public const int SearchTagsLength = 100;
+
     [Required]
-    [MaxLength(50)]
+    [MaxLength(NameLength)]
     public string Name { get; set; } = string.Empty;
 
     [Required]
-    [MaxLength(1000)]
+    [MaxLength(FeedbackLength)]
     public string Feedback { get; set; } = string.Empty;
 
     public int Rating { get; set; }
 
     public bool IsApproved { get; set; }
 
-    [MaxLength(100)]
+    [MaxLength(SearchTagsLength)]
     public string SearchTags { get; set; } = string.Empty;
 
     public KeyType UserId { get; set; }
