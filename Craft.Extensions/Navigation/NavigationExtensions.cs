@@ -21,7 +21,10 @@ public static class NavigationExtensions
     {
         var uri = new Uri(navigationManager.Uri);
 
-        return "/" + uri.Segments[1].TrimEnd('/');
+        if (uri.Segments.Length <= 1)
+            return "/";
+        else
+            return "/" + uri.Segments[1].TrimEnd('/');
     }
 
     public static string CreateUriWithReturnPathToThisPage(this NavigationManager navigationManager,
