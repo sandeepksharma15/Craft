@@ -20,7 +20,8 @@
         <CraftDiv class="d-flex flex-column">
             <MudRating @bind-SelectedValue="_testimonialVM!.Rating" Class="mt-3" 
                 HoveredValueChanged="HandleHoveredValueChanged" Size="Size.Large"
-                FullIcon="@Icons.Material.Filled.Favorite" EmptyIcon="@Icons.Material.Filled.FavoriteBorder" />
+                FullIcon="@Icons.Material.Filled.Favorite" EmptyIcon="@Icons.Material.Filled.FavoriteBorder"
+                Color="Color.Error"/>
 
             <MudText Typo="Typo.subtitle2" Class="highlight mt-2">@LabelText</MudText>
         </CraftDiv>
