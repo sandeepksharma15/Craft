@@ -10,42 +10,50 @@
     transition: .5s;
 }
 
+    /* Feedback Text */
     .testimonial p {
         font-size: 1.1rem;
         line-height: normal;
     }
 
-    .testimonial i {
-        font-size: 50px;
-        position: absolute;
-        color: #999;
-        transform: rotateY(0deg);
-        transition: .5s;
-    }
+/* Styling for the Quote Icons */
+.testimonial-quote {
+    font-size: 50px;
+    color: #999;
+    opacity: 0.6;
+    position: absolute;
+}
 
-        .testimonial i:nth-child(1)
-        {
-            left: 20px;
-            top: -25px;
-        }
+/* Positioning Top Quote */
+.fa-quote-left {
+    left: 20px;
+    top: -25px;
+}
 
-        .testimonial i:nth-child(2) {
-            right: 20px;
-            bottom: -25px;
-        }
+/* Positioning Bottom Quote */
+.fa-quote-right {
+    right: 20px;
+    bottom: -25px;
+}
 
+/* Styling for the Rating Section */
 .testimonial-rating {
     left: 0;
     right: 0;
     margin: auto;
     position: absolute;
-    bottom: 90px;
+    bottom: 80px;
 }
 
-    .testimonial-rating i {
-        font-size: 2rem;
-    }
+/* Styling for the Rating Stars */
+.rating-icon {
+    color: var(--bs-danger) !important;
+    font-size: 1.85rem;
+    margin-left: 2px;
+    margin-right: 2px;
+}
 
+/* User Profile Image */
 .testimonial-img {
     width: 110px;
     height: 110px;
@@ -66,7 +74,8 @@
         object-fit: cover;
         border-radius: 100px;
     }
-    
+
+/* User Name */
 .testimonial-user {
     width: 100%;
     height: auto;
@@ -76,24 +85,13 @@
     bottom: -80px;
 }
 
-    .testimonial-user span {
-        
-    }
-
-/*Hover Section*/
+/* Hover Effects */
 .testimonial:hover {
     transform: translateY(-3%);
-    /*transform: scale(103%);*/
 }
 
-    .testimonial:hover i:nth-child(1) {
+    /* Change Quote Colors on Hover */
+    .testimonial:hover .testimonial-quote {
         transform: rotateY(360deg);
-        transition: .5s;
-        color: var(--bs-info) !important;
-    }
-
-    .testimonial:hover i:nth-child(2) {
-        transform: rotateY(360deg);
-        transition: .5s;
         color: var(--bs-info) !important;
     }

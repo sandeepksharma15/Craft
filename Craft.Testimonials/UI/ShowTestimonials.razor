@@ -3,31 +3,34 @@
 
 <Conditional Condition="@(_testimonials.Count > 0)">
     <True>
-        <MudGrid>
+        <MudGrid Justify="Justify.SpaceEvenly" Spacing="">
             @foreach (var item in _testimonials)
             {
                 <MudItem xs="12" sm="6" md="4">
-                    @* User Feedback*@
+                    @* User Feedback *@
                     <div class="testimonial">
-                        <i class="fa fa-quote-left" aria-hidden="true"></i>
-                        <i class="fa fa-quote-right" aria-hidden="true"></i>
+                        <!-- Top Quote -->
+                        <i class="fa fa-quote-left testimonial-quote" aria-hidden="true"></i>
 
                         <p class="h5 highlight">@item.Feedback</p>
 
-                        @* User Provided Rating *@
+                        <!-- User Rating -->
                         <div class="testimonial-rating">
                             @for (int i = 1; i <= 5; i++)
                             {
-                                <i class="@(i <= item.Rating ? "fas fa-star" : "far fa-star")"></i>
+                                <i class="@(i <= item.Rating ? "fa-solid fa-heart" : "fa-regular fa-heart") rating-icon"></i>
                             }
                         </div>
 
-                        @* User Image *@
+                        <!-- Bottom Quote -->
+                        <i class="fa fa-quote-right testimonial-quote" aria-hidden="true"></i>
+
+                        <!-- User Image -->
                         <div class="testimonial-img">
                             <img src="images/avatar.png" alt="@item.Name" />
                         </div>
 
-                        @* User Name*@
+                        <!-- User Name -->
                         <div class="testimonial-user">
                             <span class="h5 highlight">@item.Name</span>
                         </div>
