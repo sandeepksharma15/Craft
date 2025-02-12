@@ -3,7 +3,7 @@
 
 <Conditional Condition="@(_testimonials.Count > 0)">
     <True>
-        <MudGrid Justify="Justify.SpaceEvenly" Spacing="">
+        <MudGrid Justify="Justify.SpaceEvenly" Class="@CssClass">
             @foreach (var item in _testimonials)
             {
                 <MudItem xs="12" sm="6" md="4">

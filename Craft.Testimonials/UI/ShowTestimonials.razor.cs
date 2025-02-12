@@ -14,6 +14,7 @@ public partial class ShowTestimonials
 
     [Parameter] public int Count { get; set; } = 3;
     [Parameter] public string SearchText { get; set; } = string.Empty;
+    [Parameter] public string CssClass { get; set; } = string.Empty;
 
     private List<Testimonial> _testimonials = [];
 
