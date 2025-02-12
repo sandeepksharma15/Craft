@@ -21,9 +21,8 @@ public partial class ShowTestimonials
     {
         try
         {
-            // TODO: Allow Only Approved Testimonials
             var query = new Query<Testimonial>()
-                //.Where(x => x.IsApproved)
+                .Where(x => x.IsApproved)
                 .OrderBy(x => Guid.NewGuid())
                 .Take(Count);
 
