@@ -6,6 +6,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<EnableCssIsolation>true</EnableCssIsolation>
+		<AssemblyVersion>1.0.6.6</AssemblyVersion>
+		<FileVersion>1.0.6.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

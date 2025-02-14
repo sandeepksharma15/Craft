@@ -7,6 +7,8 @@
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
 		<PrepareForBuildDependsOn>WebCompile</PrepareForBuildDependsOn>
+		<AssemblyVersion>1.0.6.6</AssemblyVersion>
+		<FileVersion>1.0.6.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
