@@ -6,6 +6,7 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
+		<PrepareForBuildDependsOn>WebCompile</PrepareForBuildDependsOn>
 	</PropertyGroup>
 
 	<ItemGroup>
