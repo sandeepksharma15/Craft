@@ -5,9 +5,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
-		<AssemblyVersion>1.0.4.4</AssemblyVersion>
-		<FileVersion>1.0.4.0</FileVersion>
+		<AssemblyVersion>1.0.6.6</AssemblyVersion>
+		<FileVersion>1.0.6.0</FileVersion>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="MailKit" Version="4.10.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />

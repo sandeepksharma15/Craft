@@ -6,13 +6,13 @@
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
 		<IsTestProject>false</IsTestProject>
-		<AssemblyVersion>1.0.4.4</AssemblyVersion>
-		<FileVersion>1.0.4.0</FileVersion>
+		<AssemblyVersion>1.0.6.6</AssemblyVersion>
+		<FileVersion>1.0.6.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Markdig" Version="0.40.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
 		<PackageReference Include="Mapster" Version="7.4.1-pre01" />
 
@@ -29,7 +29,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
 		<PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
-		<PackageReference Include="itext7" Version="9.0.0" />
+		<PackageReference Include="itext7" Version="9.1.0" />
 	</ItemGroup>
 
 </Project>

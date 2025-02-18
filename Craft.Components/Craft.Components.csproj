@@ -6,8 +6,8 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
-		<AssemblyVersion>1.0.6.6</AssemblyVersion>
-		<FileVersion>1.0.6.0</FileVersion>
+		<AssemblyVersion>1.0.8.8</AssemblyVersion>
+		<FileVersion>1.0.8.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -19,8 +19,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
-		<PackageReference Include="MudBlazor" Version="7.15.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
+		<PackageReference Include="MudBlazor" Version="8.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
