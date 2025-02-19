@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Craft.KeySafe": {
+      "commandName": "Project",
+      "commandLineArgs": "-e \"Hello World\"",
+      "environmentVariables": {
+        "AES_ENCRYPTION_KEY": "REv94eu2m+RaINiX5ETPQDPJ1crSLmWX7YMslPN3Xqg=",
+        "AES_ENCRYPTION_IV": "uu1FbeVkYSPn8iK7O9bzzg=="
+      }
+    }
+  }
+}

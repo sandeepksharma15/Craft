@@ -1,67 +1,51 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
-using Microsoft.Extensions.Configuration;
 
 namespace Craft.Utilities.Services;
 
 public class KeySafeService : IKeySafeService
 {
-    private readonly IConfiguration _configuration;
-    private readonly bool _isProduction;
-    private readonly string _keyString;
-    private readonly string _ivString;
+    private readonly byte[] _key;
+    private readonly byte[] _iv;
 
-    public KeySafeService(IConfiguration configuration, bool isProduction)
+    public KeySafeService()
     {
-        _keyString = Environment.GetEnvironmentVariable("AES_ENCRYPTION_KEY")
+        string keyString = Environment.GetEnvironmentVariable("AES_ENCRYPTION_KEY")
              ?? throw new InvalidOperationException("Encryption Key not found");
-        _ivString = Environment.GetEnvironmentVariable("AES_ENCRYPTION_IV")
+        string ivString = Environment.GetEnvironmentVariable("AES_ENCRYPTION_IV")
             ?? throw new InvalidOperationException("Encryption IV not found");
 
-        if (_keyString.Length != 32)
+        _key = Convert.FromBase64String(keyString);
+        _iv = Convert.FromBase64String(ivString);
+
+        if (_key.Length != 32)
             throw new InvalidOperationException("Encryption Key must be 32 bytes for AES-256");
 
-        if (_ivString.Length != 16)
+        if (_iv.Length != 16)
             throw new InvalidOperationException("Encryption IV must be 16 bytes");
-
-        _configuration = configuration;
-        _isProduction = isProduction;
     }
 
     public string Decrypt(string cipherText)
-        => Decrypt(cipherText, _keyString, _ivString);
+        => Decrypt(cipherText, _key, _iv);
 
     public string Encrypt(string plainText)
-        => Encrypt(plainText, _keyString, _ivString);
+        => Encrypt(plainText, _key, _iv);
 
-    public string GetConfigKeyValue(string key)
-    {
-        var secretValue = _configuration[key];
-
-        // Decrypt the secret if in production
-        if (_isProduction && !string.IsNullOrEmpty(secretValue))
-            return Decrypt(secretValue);
-
-        // Return as-is if not in production (development mode)
-        return secretValue; 
-    }
-
-    public static string Encrypt(string plainText, string key, string iv)
+    public static string Encrypt(string plainText, byte[] key, byte[] iv)
     {
         if (string.IsNullOrEmpty(plainText))
             throw new ArgumentException("Plain text cannot be null or empty.", nameof(plainText));
 
-        if (string.IsNullOrEmpty(key) || key.Length != 32)
+        if (key ==null ||  key.Length != 32)
             throw new ArgumentException("Encryption Key must be 32 bytes for AES-256.", nameof(key));
 
-        if (string.IsNullOrEmpty(iv) || iv.Length != 16)
+        if (iv == null || iv.Length != 16)
             throw new ArgumentException("Encryption IV must be 16 bytes.", nameof(iv));
 
         try
         {
             using Aes aes = Aes.Create();
-            aes.Key = Encoding.UTF8.GetBytes(key);
-            aes.IV = Encoding.UTF8.GetBytes(iv);
+            aes.Key = key;
+            aes.IV = iv;
 
             using var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
             using var ms = new MemoryStream();
@@ -82,22 +66,23 @@ public class KeySafeService : IKeySafeService
             throw new InvalidOperationException("An error occurred during encryption.", ex);
         }
     }
-    public static string Decrypt(string cipherText, string key, string iv)
+
+    public static string Decrypt(string cipherText, byte[] key, byte[] iv)
     {
         if (string.IsNullOrEmpty(cipherText))
             throw new ArgumentException("Cipher text cannot be null or empty.", nameof(cipherText));
 
-        if (string.IsNullOrEmpty(key) || key.Length != 32)
+        if (key == null || key.Length != 32)
             throw new ArgumentException("Encryption Key must be 32 bytes for AES-256.", nameof(key));
 
-        if (string.IsNullOrEmpty(iv) || iv.Length != 16)
+        if (iv == null || iv.Length != 16)
             throw new ArgumentException("Encryption IV must be 16 bytes.", nameof(iv));
 
         try
         {
             using Aes aes = Aes.Create();
-            aes.Key = Encoding.UTF8.GetBytes(key);
-            aes.IV = Encoding.UTF8.GetBytes(iv);
+            aes.Key = key;
+            aes.IV = iv;
 
             using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
             using var ms = new MemoryStream(Convert.FromBase64String(cipherText));
@@ -120,9 +105,9 @@ public class KeySafeService : IKeySafeService
         }
     }
 
-    public string GetIV() => _ivString;
+    public string GetIV() => Convert.ToBase64String(_iv);
 
-    public string GetKey() => _keyString;
+    public string GetKey() => Convert.ToBase64String(_key);
 }
 
 public interface IKeySafeService
@@ -132,5 +117,4 @@ public interface IKeySafeService
 
     string Encrypt(string plainText);
     string Decrypt(string cipherText);
-    string GetConfigKeyValue(string key);
 }

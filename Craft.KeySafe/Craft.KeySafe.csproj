@@ -1,13 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<OutputName>KeySafe</OutputName>
-		<AssemblyVersion>1.0.5.5</AssemblyVersion>
-		<FileVersion>1.0.5.2</FileVersion>
+		<AssemblyName>KeySafe</AssemblyName>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyVersion>1.0.7.7</AssemblyVersion>
+		<FileVersion>1.0.7.4</FileVersion>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Craft.Utilities\Craft.Utilities.csproj" />
+	</ItemGroup>
 
 </Project>

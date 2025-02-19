@@ -8,8 +8,9 @@
 		<IsTestProject>true</IsTestProject>
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
-		<AssemblyVersion>1.0.7.7</AssemblyVersion>
-		<FileVersion>1.0.7.7</FileVersion>
+		<AssemblyVersion>1.0.22.22</AssemblyVersion>
+		<FileVersion>1.0.22.22</FileVersion>
+		<IsPublishable>false</IsPublishable>
 	</PropertyGroup>
 
 	<ItemGroup>

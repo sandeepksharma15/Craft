@@ -1,109 +1,93 @@
 ﻿using System.Text;
 using Craft.Utilities.Services;
-using Microsoft.Extensions.Configuration;
-using Moq;
 
 namespace Craft.Utilities.Tests.Services;
 
 public class KeySafeServiceTests
 {
-    private readonly Mock<IConfiguration> _mockConfiguration;
     private readonly KeySafeService _keySafeService;
-    private const string ValidKey = "12345678901234567890123456789012"; // 32 bytes key
-    private const string ValidIV = "1234567890123456"; // 16 bytes IV
+    private readonly byte[] _validKey = Convert.FromBase64String("REv94eu2m+RaINiX5ETPQDPJ1crSLmWX7YMslPN3Xqg=");
+    private readonly byte[] _validIV = Convert.FromBase64String("uu1FbeVkYSPn8iK7O9bzzg==");
     private const string PlainText = "Hello, World!";
     private readonly string _encryptedText;
 
     public KeySafeServiceTests()
     {
-        Environment.SetEnvironmentVariable("AES_ENCRYPTION_KEY", ValidKey);
-        Environment.SetEnvironmentVariable("AES_ENCRYPTION_IV", ValidIV);
+        Environment.SetEnvironmentVariable("AES_ENCRYPTION_KEY", Convert.ToBase64String(_validKey));
+        Environment.SetEnvironmentVariable("AES_ENCRYPTION_IV", Convert.ToBase64String(_validIV));
 
-        _mockConfiguration = new Mock<IConfiguration>();
-        _keySafeService = new KeySafeService(_mockConfiguration.Object, true);
-        _encryptedText = KeySafeService.Encrypt(PlainText, ValidKey, ValidIV);
+        _keySafeService = new KeySafeService();
+        _encryptedText = KeySafeService.Encrypt(PlainText, _validKey, _validIV);
     }
 
     [Fact]
     public void Constructor_ShouldThrowException_WhenKeyNotFound()
     {
         Environment.SetEnvironmentVariable("AES_ENCRYPTION_KEY", null);
-        Assert.Throws<InvalidOperationException>(() => new KeySafeService(_mockConfiguration.Object, true));
+        Assert.Throws<InvalidOperationException>(() => new KeySafeService());
     }
 
     [Fact]
     public void Constructor_ShouldThrowException_WhenIVNotFound()
     {
         Environment.SetEnvironmentVariable("AES_ENCRYPTION_IV", null);
-        Assert.Throws<InvalidOperationException>(() => new KeySafeService(_mockConfiguration.Object, true));
+        Assert.Throws<InvalidOperationException>(() => new KeySafeService());
     }
 
     [Fact]
     public void Constructor_ShouldThrowException_WhenKeyLengthIsInvalid()
     {
-        Environment.SetEnvironmentVariable("AES_ENCRYPTION_KEY", "shortkey");
-        Assert.Throws<InvalidOperationException>(() => new KeySafeService(_mockConfiguration.Object, true));
+        Environment.SetEnvironmentVariable("AES_ENCRYPTION_KEY", Convert.ToBase64String(Encoding.UTF8.GetBytes("shortkey")));
+        Assert.Throws<InvalidOperationException>(() => new KeySafeService());
     }
 
     [Fact]
     public void Constructor_ShouldThrowException_WhenIVLengthIsInvalid()
     {
-        Environment.SetEnvironmentVariable("AES_ENCRYPTION_IV", "shortiv");
-        Assert.Throws<InvalidOperationException>(() => new KeySafeService(_mockConfiguration.Object, true));
+        Environment.SetEnvironmentVariable("AES_ENCRYPTION_IV", Convert.ToBase64String(Encoding.UTF8.GetBytes("shortiv")));
+        Assert.Throws<InvalidOperationException>(() => new KeySafeService());
     }
 
     [Fact]
     public void Encrypt_ShouldThrowArgumentException_WhenPlainTextIsNull()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(null, ValidKey, ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(null, _validKey, _validIV));
     }
 
     [Fact]
     public void Encrypt_ShouldThrowArgumentException_WhenPlainTextIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(string.Empty, ValidKey, ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(string.Empty, _validKey, _validIV));
     }
 
     [Fact]
     public void Encrypt_ShouldThrowArgumentException_WhenKeyIsNull()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, null, ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, null, _validIV));
     }
 
     [Fact]
     public void Encrypt_ShouldThrowArgumentException_WhenKeyIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, string.Empty, ValidIV));
-    }
-
-    [Fact]
-    public void Encrypt_ShouldThrowArgumentException_WhenKeyLengthIsInvalid()
-    {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, "shortkey", ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, new byte[0], _validIV));
     }
 
     [Fact]
     public void Encrypt_ShouldThrowArgumentException_WhenIVIsNull()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, ValidKey, null));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, _validKey, null));
     }
 
     [Fact]
     public void Encrypt_ShouldThrowArgumentException_WhenIVIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, ValidKey, string.Empty));
-    }
-
-    [Fact]
-    public void Encrypt_ShouldThrowArgumentException_WhenIVLengthIsInvalid()
-    {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, ValidKey, "shortiv"));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, _validKey, new byte[0]));
     }
 
     [Fact]
     public void Encrypt_ShouldReturnEncryptedString_WhenInputIsValid()
     {
-        var encryptedText = KeySafeService.Encrypt(PlainText, ValidKey, ValidIV);
+        var encryptedText = KeySafeService.Encrypt(PlainText, _validKey, _validIV);
         Assert.NotNull(encryptedText);
         Assert.NotEqual(PlainText, encryptedText);
     }
@@ -111,105 +95,70 @@ public class KeySafeServiceTests
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenCipherTextIsNull()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(null, ValidKey, ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(null, _validKey, _validIV));
     }
 
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenCipherTextIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(string.Empty, ValidKey, ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(string.Empty, _validKey, _validIV));
     }
 
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenKeyIsNull()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, null, ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, null, _validIV));
     }
 
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenKeyIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, string.Empty, ValidIV));
-    }
-
-    [Fact]
-    public void Decrypt_ShouldThrowArgumentException_WhenKeyLengthIsInvalid()
-    {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, "shortkey", ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, new byte[0], _validIV));
     }
 
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenIVIsNull()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, ValidKey, null));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, _validKey, null));
     }
 
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenIVIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, ValidKey, string.Empty));
-    }
-
-    [Fact]
-    public void Decrypt_ShouldThrowArgumentException_WhenIVLengthIsInvalid()
-    {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, ValidKey, "shortiv"));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, _validKey, new byte[0]));
     }
 
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenCipherTextIsNotBase64()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt("InvalidBase64", ValidKey, ValidIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt("InvalidBase64", _validKey, _validIV));
     }
 
     [Fact]
     public void Decrypt_ShouldThrowInvalidOperationException_WhenDecryptionFails()
     {
         var invalidEncryptedText = Convert.ToBase64String(Encoding.UTF8.GetBytes("InvalidEncryptedText"));
-        Assert.Throws<InvalidOperationException>(() => KeySafeService.Decrypt(invalidEncryptedText, ValidKey, ValidIV));
+        Assert.Throws<InvalidOperationException>(() => KeySafeService.Decrypt(invalidEncryptedText, _validKey, _validIV));
     }
 
     [Fact]
     public void Decrypt_ShouldReturnPlainText_WhenInputIsValid()
     {
-        var decryptedText = KeySafeService.Decrypt(_encryptedText, ValidKey, ValidIV);
+        var decryptedText = KeySafeService.Decrypt(_encryptedText, _validKey, _validIV);
         Assert.Equal(PlainText, decryptedText);
-    }
-
-    [Fact]
-    public void GetConfigKeyValue_ShouldReturnDecryptedValue_WhenInProduction()
-    {
-        var encryptedValue = KeySafeService.Encrypt("SecretValue", ValidKey, ValidIV);
-        _mockConfiguration.Setup(c => c["TestKey"]).Returns(encryptedValue);
-
-        var result = _keySafeService.GetConfigKeyValue("TestKey");
-
-        Assert.Equal("SecretValue", result);
-    }
-
-    [Fact]
-    public void GetConfigKeyValue_ShouldReturnPlainValue_WhenNotInProduction()
-    {
-        var plainValue = "PlainValue";
-        _mockConfiguration.Setup(c => c["TestKey"]).Returns(plainValue);
-
-        var keySafeService = new KeySafeService(_mockConfiguration.Object, false);
-        var result = keySafeService.GetConfigKeyValue("TestKey");
-
-        Assert.Equal(plainValue, result);
     }
 
     [Fact]
     public void GetKey_ShouldReturnKey()
     {
         var key = _keySafeService.GetKey();
-        Assert.Equal(ValidKey, key);
+        Assert.Equal(Convert.ToBase64String(_validKey), key);
     }
 
     [Fact]
     public void GetIV_ShouldReturnIV()
     {
         var iv = _keySafeService.GetIV();
-        Assert.Equal(ValidIV, iv);
+        Assert.Equal(Convert.ToBase64String(_validIV), iv);
     }
 }
