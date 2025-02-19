@@ -6,8 +6,8 @@
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
 		<IsTestProject>false</IsTestProject>
-		<AssemblyVersion>1.0.8.8</AssemblyVersion>
-		<FileVersion>1.0.8.0</FileVersion>
+		<AssemblyVersion>1.0.12.12</AssemblyVersion>
+		<FileVersion>1.0.12.4</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

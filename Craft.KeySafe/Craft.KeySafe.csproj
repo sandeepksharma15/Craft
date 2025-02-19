@@ -6,8 +6,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<OutputName>KeySafe</OutputName>
-		<AssemblyVersion>1.0.3.3</AssemblyVersion>
-		<FileVersion>1.0.3.0</FileVersion>
+		<AssemblyVersion>1.0.5.5</AssemblyVersion>
+		<FileVersion>1.0.5.2</FileVersion>
 	</PropertyGroup>
 
 </Project>
