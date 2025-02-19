@@ -5,9 +5,8 @@ namespace Craft.Infrastructure.ConfigurationProviders;
 
 public static class ConfigurationRootExtensions
 {
-    public static IConfigurationRoot Decrypt(this IConfigurationRoot root, string keyPath, string cipherPrefix)
+    public static IConfigurationRoot Decrypt(this IConfigurationRoot root, string cipherPrefix)
     {
-        var secret = root[keyPath];
         var cipher = new KeySafeService();
 
         DecryptInChildren(root);
