@@ -69,7 +69,7 @@ public class KeySafeServiceTests
     [Fact]
     public void Encrypt_ShouldThrowArgumentException_WhenKeyIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, new byte[0], _validIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, [], _validIV));
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class KeySafeServiceTests
     [Fact]
     public void Encrypt_ShouldThrowArgumentException_WhenIVIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, _validKey, new byte[0]));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Encrypt(PlainText, _validKey, []));
     }
 
     [Fact]
@@ -113,7 +113,7 @@ public class KeySafeServiceTests
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenKeyIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, new byte[0], _validIV));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, [], _validIV));
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public class KeySafeServiceTests
     [Fact]
     public void Decrypt_ShouldThrowArgumentException_WhenIVIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, _validKey, new byte[0]));
+        Assert.Throws<ArgumentException>(() => KeySafeService.Decrypt(_encryptedText, _validKey, []));
     }
 
     [Fact]

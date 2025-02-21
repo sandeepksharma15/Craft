@@ -6,8 +6,8 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
-		<AssemblyVersion>1.0.21.21</AssemblyVersion>
-		<FileVersion>1.0.21.11</FileVersion>
+		<AssemblyVersion>1.0.28.28</AssemblyVersion>
+		<FileVersion>1.0.28.18</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
