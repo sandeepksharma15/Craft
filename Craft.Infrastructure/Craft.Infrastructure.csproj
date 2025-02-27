@@ -5,8 +5,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
-		<AssemblyVersion>1.0.25.25</AssemblyVersion>
-		<FileVersion>1.0.25.17</FileVersion>
+		<AssemblyVersion>1.0.26.26</AssemblyVersion>
+		<FileVersion>1.0.26.18</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
