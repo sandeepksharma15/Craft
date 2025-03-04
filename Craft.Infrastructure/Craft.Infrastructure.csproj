@@ -6,16 +6,15 @@
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
 		<AssemblyVersion>1.0.28.28</AssemblyVersion>
-		<FileVersion>1.0.28.20</FileVersion>
+		<FileVersion>1.0.29.21</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <ShouldCreateLogs>True</ShouldCreateLogs>
 	  <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
-	  <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+	  <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
 	  <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
 	  <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
-	  <AssemblyVersionSettings>None.None.None.None</AssemblyVersionSettings>
 	  <UpdatePackageVersion>False</UpdatePackageVersion>
 	  <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
 	  <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>

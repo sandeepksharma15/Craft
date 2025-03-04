@@ -4,19 +4,31 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AssemblyVersion>1.0.27.27</AssemblyVersion>
-		<FileVersion>1.0.27.19</FileVersion>
+		<FileVersion>1.0.28.20</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <ShouldCreateLogs>True</ShouldCreateLogs>
 	  <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
-	  <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+	  <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
 	  <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
 	  <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
-	  <AssemblyVersionSettings>None.None.None.None</AssemblyVersionSettings>
 	  <UpdatePackageVersion>False</UpdatePackageVersion>
 	  <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
 	  <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <ShouldCreateLogs>True</ShouldCreateLogs>
+	  <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+	  <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
+	  <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+	  <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+	  <AssemblyVersionSettings>None.None.Increment.Increment</AssemblyVersionSettings>
+	  <UpdatePackageVersion>False</UpdatePackageVersion>
+	  <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+	  <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+	  <AssemblyFileVersionSettings>None.None.None.None</AssemblyFileVersionSettings>
 	</PropertyGroup>
 
 	<ItemGroup>
