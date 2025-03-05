@@ -1,0 +1,38 @@
+﻿<MudContainer Class="coming-soon-container">
+    <MudPaper Class="countdown-box p-3">
+        <MudText Typo="Typo.h4" Align="Align.Center">Coming Back Live In</MudText>
+        <MudGrid Justify="Justify.Center" Spacing="2">
+            <MudItem xs="3">
+                <div class="countdown-item">
+                    <span class="countdown-number">@_timeRemaining.Days</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+            </MudItem>
+            <MudItem xs="3">
+                <div class="countdown-item">
+                    <span class="countdown-number">@_timeRemaining.Hours</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+            </MudItem>
+            <MudItem xs="3">
+                <div class="countdown-item">
+                    <span class="countdown-number">@_timeRemaining.Minutes</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+            </MudItem>
+            <MudItem xs="3">
+                <div class="countdown-item">
+                    <span class="countdown-number">@_timeRemaining.Seconds</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <MudPaper Class="coming-soon-message mt-3 p-3">
+        <MudText Typo="Typo.h3" Align="Align.Center">🚀 Something Amazing is Coming 🚀</MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center" Class="mt-3 highlight">
+            Exciting upgrades are in progress! Stay tuned!! We will be back, better than ever!!💡✨
+        </MudText>
+    </MudPaper>
+</MudContainer>
