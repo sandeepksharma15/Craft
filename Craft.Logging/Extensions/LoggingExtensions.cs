@@ -23,9 +23,7 @@ public static class LoggingExtensions
             .UseSerilog((context, config) =>
                 config
                     .Enrich.FromLogContext()
-                    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                    .ReadFrom
-                    .Configuration(context.Configuration));
+                    .ReadFrom.Configuration(context.Configuration));
 
         return builder;
     }
