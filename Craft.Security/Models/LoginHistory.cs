@@ -26,8 +26,11 @@ public class LoginHistory<TKey> : ILoginHistory<TKey> where TKey : IEquatable<TK
 
     public DateTime? LastLoginOn { get; set; }
 
+    public string? Provider { get; set; }
+
     [ForeignKey("UserId")]
     public TKey UserId { get; set; }
+
 }
 
 [NoAudit]

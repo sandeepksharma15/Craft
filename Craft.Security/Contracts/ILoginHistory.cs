@@ -7,6 +7,8 @@ public interface ILoginHistory<TKey> : IHasId<TKey>, IHasUser<TKey>, ISoftDelete
     public string LastIpAddress { get; set; }
 
     public DateTime? LastLoginOn { get; set; }
+
+    public string? Provider { get; set; }
 }
 
 public interface ILoginHistory : ILoginHistory<KeyType>, IHasId, IHasUser, IEntity, IModel;
