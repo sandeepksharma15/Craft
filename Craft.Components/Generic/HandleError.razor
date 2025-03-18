@@ -1,6 +1,16 @@
 ﻿@inherits ComponentBase
 
-<CascadingValue Value=this IsFixed="true">
-    @ChildContent
-</CascadingValue>
+@using Craft.Components.Generic
+
+<CustomErrorBoundary ErrorPageUri="@ErrorPageUri">
+    <ChildContent>
+        <CascadingValue Value=this IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+    </ChildContent>
+
+    <ErrorContent>
+        An Erro has occurred. Still working
+    </ErrorContent>
+</CustomErrorBoundary>
 
