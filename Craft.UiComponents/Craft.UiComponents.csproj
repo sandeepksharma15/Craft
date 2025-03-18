@@ -36,7 +36,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="BuildWebCompiler2022" Version="1.14.10" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
 	</ItemGroup>
 
 	<ItemGroup>

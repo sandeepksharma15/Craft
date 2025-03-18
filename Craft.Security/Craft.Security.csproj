@@ -10,14 +10,14 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <ShouldCreateLogs>True</ShouldCreateLogs>
-	  <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
-	  <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
-	  <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
-	  <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
-	  <UpdatePackageVersion>False</UpdatePackageVersion>
-	  <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
-	  <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+		<ShouldCreateLogs>True</ShouldCreateLogs>
+		<AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+		<UpdateAssemblyVersion>False</UpdateAssemblyVersion>
+		<UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+		<UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+		<UpdatePackageVersion>False</UpdatePackageVersion>
+		<AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+		<InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
 	</PropertyGroup>
 
 	<ItemGroup>

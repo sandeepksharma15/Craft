@@ -32,10 +32,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />
 	</ItemGroup>
 
