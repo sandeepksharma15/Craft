@@ -6,7 +6,6 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
-		<PrepareForBuildDependsOn>WebCompile</PrepareForBuildDependsOn>
 		<AssemblyVersion>1.0.30.30</AssemblyVersion>
 		<FileVersion>1.0.31.21</FileVersion>
 	</PropertyGroup>
@@ -23,19 +22,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Remove="compilerconfig.json" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Include="compilerconfig.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="BuildWebCompiler2022" Version="1.14.10" />
 	</ItemGroup>
 
 	<ItemGroup>
