@@ -19,7 +19,7 @@ public static class IconContent
     public const string OpenInNew = "fa-solid fa-up-right-from-square";
     public const string Warning = "fa-solid fa-triangle-exclamation";
     public const string Danger = "fa-solid fa-skull-crossbones";
-    public const string Info = "fa-regular fa-circle-info";
+    public const string Info = "fa-solid fa-info";
     public const string OpenFolder = "fa-regular fa-folder-open";
     
     public const string LogIn = "fa-solid fa-right-to-bracket";
