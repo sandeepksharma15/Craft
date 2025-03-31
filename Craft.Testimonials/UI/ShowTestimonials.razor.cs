@@ -1,6 +1,7 @@
 using Craft.QuerySpec.Core;
 using Craft.Testimonials.Domain;
 using Craft.Testimonials.Services;
+using Craft.UiComponents.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,8 @@ public partial class ShowTestimonials
     [Parameter] public string CssClass { get; set; } = string.Empty;
 
     private List<Testimonial> _testimonials = [];
+    private readonly string _iconHeartFilled = IconContent.HeartFilled;
+    private readonly string _iconHeartBorder = IconContent.HeartBorder;
 
     protected override async Task OnInitializedAsync()
     {

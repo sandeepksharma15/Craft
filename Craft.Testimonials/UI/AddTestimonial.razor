@@ -1,4 +1,5 @@
 ﻿@using Craft.Testimonials.Domain
+@using Craft.UiComponents.Constants
 @using Craft.UiComponents.Semantic
 @using Microsoft.AspNetCore.Components.Sections
 @using MudBlazor
@@ -20,7 +21,7 @@
         <CraftDiv class="d-flex flex-column">
             <MudRating @bind-SelectedValue="_testimonialVM!.Rating" Class="mt-3" 
                 HoveredValueChanged="HandleHoveredValueChanged" Size="Size.Large"
-                FullIcon="fa-solid fa-heart" EmptyIcon="fa-regular fa-heart"
+                FullIcon="@IconContent.HeartFilled" EmptyIcon="@IconContent.HeartBorder"
                 Color="Color.Error"/>
 
             <MudText Typo="Typo.subtitle2" Class="highlight mt-2">@LabelText</MudText>
@@ -29,9 +30,9 @@
 
     <CraftDiv Class="p-3 mb-1">
         <MudButton Variant="Variant.Filled" Color="Color.Success"
-                   StartIcon="@Icons.Material.Filled.Save" OnClick="SaveTestimonial"> Save </MudButton>
+                   StartIcon="@IconContent.Save" OnClick="SaveTestimonial"> Save </MudButton>
         <MudButton Variant="Variant.Outlined" Color="Color.Warning" class="ml-2"
-                   StartIcon="@Icons.Material.Filled.Cancel" OnClick="CancelTestimonial"> Cancel </MudButton>
+                   StartIcon="@IconContent.Cancel" OnClick="CancelTestimonial"> Cancel </MudButton>
     </CraftDiv>
 
 </MudForm>

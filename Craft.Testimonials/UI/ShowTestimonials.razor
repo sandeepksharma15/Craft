@@ -18,7 +18,7 @@
                         <div class="testimonial-rating">
                             @for (int i = 1; i <= 5; i++)
                             {
-                                <i class="@(i <= item.Rating ? "fa-solid fa-heart" : "fa-regular fa-heart") rating-icon"></i>
+                                <i class="@(i <= item.Rating ? _iconHeartFilled : _iconHeartBorder) rating-icon"></i>
                             }
                         </div>
 
