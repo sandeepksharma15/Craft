@@ -7,7 +7,7 @@
 		<LangVersion>preview</LangVersion>
 		<IsTestProject>false</IsTestProject>
 		<AssemblyVersion>1.0.35.35</AssemblyVersion>
-		<FileVersion>1.0.36.28</FileVersion>
+		<FileVersion>1.0.36.29</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

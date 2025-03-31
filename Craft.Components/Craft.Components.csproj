@@ -7,7 +7,7 @@
 		<Authors>Sandeep SHARMA</Authors>
 		<LangVersion>preview</LangVersion>
 		<AssemblyVersion>1.0.31.31</AssemblyVersion>
-		<FileVersion>1.0.32.22</FileVersion>
+		<FileVersion>1.0.32.23</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
