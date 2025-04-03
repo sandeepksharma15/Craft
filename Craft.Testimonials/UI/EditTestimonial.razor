@@ -1,0 +1,31 @@
+﻿@using Craft.Testimonials.Domain
+@using Craft.UiComponents.Constants
+@using Craft.UiComponents.Semantic
+@using Microsoft.AspNetCore.Components.Sections
+@using MudBlazor
+
+<MudForm>
+    <MudPaper Class="p-3 mb-3">
+        <MudTextField @bind-Value="_testimonialVM!.Name" Label="Name" Typo="Typo.body1"
+                      Placeholder="Your Name" Class="mt-4" Variant="Variant.Outlined"
+                      Counter="Testimonial.NameLength" MaxLength="Testimonial.NameLength" 
+                      Immediate="true" />
+
+        <MudTextField @bind-Value="_testimonialVM!.Feedback" Label="Feedback" Typo="Typo.body1"
+                      Placeholder="Your Feedback" Class="mt-3" Variant="Variant.Outlined"
+                      Counter="Testimonial.FeedbackLength" MaxLength="Testimonial.FeedbackLength"
+                      Immediate="true" Lines="5" />
+
+    </MudPaper>
+
+    <CraftDiv Class="p-3 mb-1">
+        <MudButton Variant="Variant.Filled" Color="Color.Success"
+                   StartIcon="@IconContent.Save" OnClick="SaveTestimonial"> Save </MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Warning" class="ml-2"
+                   StartIcon="@IconContent.Cancel" OnClick="CancelTestimonial"> Cancel </MudButton>
+    </CraftDiv>
+
+</MudForm>
+
+
+

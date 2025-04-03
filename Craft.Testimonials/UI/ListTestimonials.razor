@@ -1,0 +1,57 @@
+﻿@using Craft.UiComponents.Semantic
+@using Microsoft.AspNetCore.Components.Forms
+@using MudBlazor
+@using Craft.Testimonials.Domain
+
+<MudTable @ref="_table" T="Testimonial" Class="mt-3" Dense="true" Hover="true"
+          Striped="true" FooterClass="mt-3" Elevation="0" HeaderClass="mt-3" ServerData="LoadServerData">
+    <ToolBarContent>
+        <MudText Typo="Typo.h5">Manage Testimonials</MudText>
+
+        <MudSpacer />
+
+        <InputRadioGroup TValue="int" Value="_selectedRadio" ValueExpression="@(() => _selectedRadio)"
+                         ValueChanged="OnFilterChange">
+            <CraftDiv Class="py-2 m-1">
+                <InputRadio TValue="int" Value="0" class="btn-check btn-sm" id="all" autocomplete="off" />
+                <label class="btn btn-outline-secondary btn-sm" for="all">All</label>
+            </CraftDiv>
+            <CraftDiv Class="py-2 m-1">
+                <InputRadio TValue="int" Value="1" class="btn-check btn-sm" id="approved" autocomplete="off" />
+                <label class="btn btn-outline-secondary btn-sm" for="approved">Approved</label>
+            </CraftDiv>
+            <CraftDiv Class="py-2 m-1">
+                <InputRadio TValue="int" Value="2" class="btn-check btn-sm" id="pending" autocomplete="off" />
+                <label class="btn btn-outline-secondary btn-sm" for="pending">Pending</label>
+            </CraftDiv>
+
+        </InputRadioGroup>
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Feedback</MudTh>
+        <MudTh Style="text-align: center;">Rating</MudTh>
+        <MudTh Style="text-align: center;">Approved</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Feedback">
+            <div class="d-inline-block text-truncate">@context.Feedback</div>
+        </MudTd>
+        <MudTd DataLabel="Rating" Style="text-align: center;">@context.Rating</MudTd>
+        <MudTd DataLabel="Approved" Style="text-align: center;">@context.IsApproved</MudTd>
+        <MudTd DataLabel="Actions">
+            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Secondary" OnClick="() => EditTestimonial(context.Id)">Edit</MudButton>
+            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Error" OnClick="() => DeleteTestimonial(context.Id)">Delete</MudButton>
+        </MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+        <CraftDiv Class="mt-2">
+            <MudTablePager />
+        </CraftDiv>
+    </PagerContent>
+</MudTable>

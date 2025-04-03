@@ -10,6 +10,8 @@ namespace Craft.Testimonials.UI;
 
 public partial class AddTestimonial
 {
+    #region Parameters & Injects
+
     [Inject] public required ISnackbar Snackbar { get; set; }
     [Inject] private ILogger<AddTestimonial>? _logger { get; set; }
     [Inject] public required ICurrentUser CurrentUser { get; set; }
@@ -18,8 +20,14 @@ public partial class AddTestimonial
     [Parameter] public EventCallback OnTestimonialCancel { get; set; }
     [Parameter] public EventCallback OnTestimonialSave { get; set; }
 
+    #endregion
+
+    #region Private Members
+
     private readonly TestimonialVM _testimonialVM = new();
     private int? _currentVal;
+
+    #endregion
 
     private async Task SaveTestimonial()
     {
