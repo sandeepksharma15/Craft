@@ -7,7 +7,11 @@
 {
     @if (Loading is null)
     {
-        <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+        <div class="position-fixed top-0 start-0 w-100 z-3 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50">
+            <div class="spinner-border text-info" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     }
     else
     {
@@ -25,8 +29,8 @@ else
     @* Display Faulted Template If Something Is Wrong *@
     if (IsFaulted)
     {
-        <MudAlert Severity="Severity.Error">
+        <div class="alert alert-danger" role="alert">
             Something has gone wrong :-( Please contact the administrator or report an issue
-        </MudAlert>
+        </div>
     }
 }
