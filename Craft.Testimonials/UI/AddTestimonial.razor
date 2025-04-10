@@ -5,8 +5,8 @@
 @using MudBlazor
 
 <MudForm>
-    <MudPaper Class="p-3 mb-3">
-        <MudText Typo="Typo.h5">Your Valuable Feedback</MudText>
+    <MudPaper Class="p-3 mb-1">
+        <MudText Typo="Typo.h5" Class="text-heading">Your Valuable Feedback</MudText>
 
         <MudTextField @bind-Value="_testimonialVM!.Name" Label="Name" Typo="Typo.body1"
                       Placeholder="Your Name" Class="mt-4" Variant="Variant.Outlined"
@@ -28,7 +28,7 @@
         </CraftDiv>
     </MudPaper>
 
-    <CraftDiv Class="p-3 mb-1">
+    <CraftDiv Class="py-3">
         <MudButton Variant="Variant.Filled" Color="Color.Success"
                    StartIcon="@IconContent.Save" OnClick="SaveTestimonial"> Save </MudButton>
         <MudButton Variant="Variant.Outlined" Color="Color.Warning" class="ml-2"
