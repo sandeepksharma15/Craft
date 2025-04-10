@@ -1,7 +1,7 @@
 ﻿.testimonial {
     margin: 10px 0px 10px 0px;
     height: 70%;
-    background: var(--bs-primary) !important;
+    background: rgba(58, 63, 68, 1) !important;
     padding: 30px 20px 20px 20px;
     position: relative;
     text-align: center;

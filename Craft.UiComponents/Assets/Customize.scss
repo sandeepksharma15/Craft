@@ -14,7 +14,7 @@ $gray-600: #7a8288 !default;
 $gray-700: #52575c !default;
 $gray-800: #3a3f44 !default;
 $gray-900: #272b30 !default;
-$black: #000 !default;
+$black: rgba(39, 39, 47, 1) !default;
 
 $blue: #007bff !default;
 $indigo: #6610f2 !default;
@@ -27,22 +27,22 @@ $green: #62c462 !default;
 $teal: #20c997 !default;
 $cyan: #5bc0de !default;
 
-$primary: $gray-800 !default;
-$secondary: $gray-600 !default;
-$success: $green !default;
-$info: $cyan !default;
-$warning: $yellow !default;
-$danger: $red !default;
+$primary: rgba(13, 110, 253, 1) !default;
+$secondary: rgba(176, 190, 197, 1) !default;
+$success: rgba(76, 175, 80, 1) !default;
+$info: rgba(0, 191, 255, 1) !default;
+$warning: rgba(255, 152, 0, 1) !default;
+$danger: rgba(255, 87, 51, 1) !default;
 $light: $gray-200 !default;
-$dark: $gray-900 !default;
+$dark: rgba(39,39,47,1) !default;
 
-$primary-bg-subtle: lighten($gray-800, 10%) !default;
+$primary-bg-subtle: lighten($primary, 10%) !default;
 
 $min-contrast-ratio: 1.95 !default;
 
 // Body
 
-$body-bg: $gray-900 !default;
+$body-bg: rgba(45,45,56,1) !default;
 $body-color: #aaa !default;
 
 // Links
