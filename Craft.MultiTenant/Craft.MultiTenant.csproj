@@ -21,6 +21,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Craft.Domain\Craft.Domain.csproj" />
 		<ProjectReference Include="..\Craft.Infrastructure\Craft.Infrastructure.csproj" />
 	</ItemGroup>
