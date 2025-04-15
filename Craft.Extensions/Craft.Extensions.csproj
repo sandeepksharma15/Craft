@@ -21,9 +21,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.14" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.15" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.15" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.14" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.15" />
 	</ItemGroup>
 </Project>
