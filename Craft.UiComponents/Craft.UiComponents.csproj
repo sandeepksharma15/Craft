@@ -30,6 +30,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="MudBlazor" Version="8.5.1" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Craft.Extensions\Craft.Extensions.csproj" />
 		<ProjectReference Include="..\Craft.Utilities\Craft.Utilities.csproj" />
 	</ItemGroup>
