@@ -1,5 +1,7 @@
 ﻿@namespace Craft.UiComponents.Components
 
+@using Craft.UiComponents.Semantic
+
 @inherits CraftComponent
 
 @if (IsProcessing)
@@ -7,11 +9,22 @@
 
     <MudProgressLinear Color="Color.Tertiary" Striped="true" Indeterminate="true" Size="Size.Medium" />
 
-    <div class="position-fixed z-3 top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50">
+    <MudPaper Class="ux-process-box d-flex flex-column align-items-center justify-center p-6" Elevation="6">
+        <MudText Typo="Typo.body2" Class="text-muted">Please wait…</MudText>
+
+        <CraftDiv class="loader-ring mb-4">
+            <MudProgressCircular Indeterminate="true" Size="Size.Medium" Color="Color.Primary" />
+        </CraftDiv>
+
+        <MudText Typo="Typo.subtitle2" Class="step-message">@_currentMessage</MudText>
+    </MudPaper>
+
+@*     <div class="position-fixed z-3 top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50">
         <div class="spinner-border text-info" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
+ *@
 }
 
 
