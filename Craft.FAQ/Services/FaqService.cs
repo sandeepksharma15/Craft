@@ -112,9 +112,7 @@ public class FaqService : Repository<FaqSection>, IFaqService
         if (searchText.IsNullOrWhiteSpace())
             return true;
 
-        var lower = searchText.ToLower();
-
-        return question.Contains(lower, StringComparison.CurrentCultureIgnoreCase)
-            || answer.Contains(lower, StringComparison.CurrentCultureIgnoreCase);
+        return question.Contains(searchText, StringComparison.CurrentCultureIgnoreCase)
+            || answer.Contains(searchText, StringComparison.CurrentCultureIgnoreCase);
     }
 }
