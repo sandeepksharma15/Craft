@@ -1,0 +1,46 @@
+﻿@using Craft.FAQ.Domain
+@using MudBlazor
+
+@* Search Text *@
+<MudPaper Elevation="25" Class="px-3 pt-3 pb-1 mb-6">
+    <MudTextField T="string" Label="Search FAQs" Placeholder="Search" Clearable="true" Underline="false"
+                  IconSize="Size.Medium" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                  ValueChanged="OnSearchTextChange"></MudTextField>
+</MudPaper>
+
+<MudExpansionPanels MultiExpansion="true">
+    @foreach (FaqSection faq in _filteredSections!)
+    {
+        <MudExpansionPanel Text="@faq.Title" Class="mt-2 text-accent-1">
+
+            @if (faq.SubSections?.Any() == true)
+            {
+                @* Queries With Sub Sections *@
+                <MudExpansionPanels MultiExpansion="true" Class="mt-2">
+                    @foreach (var sub in faq.SubSections)
+                    {
+                        <MudExpansionPanel Text="@sub.Title" Class="mb-3 text-body-secondary">
+                            @foreach (var entry in sub.Queries)
+                            {
+                                <MudExpansionPanel Text="@entry.Question" Class="mt-3 text-info">
+                                    <MudText Class="text-body">@((MarkupString)entry.Answer)</MudText>
+                                </MudExpansionPanel>
+                            }
+                        </MudExpansionPanel>
+                    }
+                </MudExpansionPanels>
+            }
+            else
+            {
+                @* Queries Without Sub Sections *@
+                @foreach (var entry in faq.Queries)
+                {
+                    <MudExpansionPanel Text="@entry.Question" Class="mt-3 text-info">
+                        <MudText Class="text-body">@((MarkupString)entry.Answer)</MudText>
+                    </MudExpansionPanel>
+                }
+            }
+        </MudExpansionPanel>
+    }
+</MudExpansionPanels>
+
