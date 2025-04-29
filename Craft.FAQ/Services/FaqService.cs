@@ -43,46 +43,14 @@ public class FaqService : Repository<FaqSection>, IFaqService
     /// match the specified search text. If no matches are found, an empty list is returned.</returns>
     public List<FaqSection> GetFilteredSections(List<FaqSection> sections, string searchText = null)
     {
-        if (string.IsNullOrWhiteSpace(searchText))
+        if (searchText.IsNullOrWhiteSpace())
             return sections;
 
-        string lower = searchText.ToLower();
+        string lowerSearchText = searchText.ToLower();
 
         return [.. sections
             .Where(section => section != null)
-            .Select(section =>
-            {
-                // Filter top-level FAQs
-                var matchingFaqs = section!.Queries?
-                    .Where(q => IsMatch(q.Question, q.Answer, searchText))
-                    .ToList();
-
-                // Filter subsections with matching FAQs
-                var matchingSubSections = section.SubSections?
-                    .Select(sub => new FaqSubSection
-                    {
-                        Id = sub.Id,
-                        Title = sub.Title,
-                        Queries = [.. sub.Queries
-                            .Where(q => IsMatch(q.Question, q.Answer, searchText))]
-                    })
-                    .Where(sub => sub.Queries.Count > 0)
-                    .ToList();
-
-                // Return section only if it has matches
-                if ((matchingFaqs?.Count > 0) || (matchingSubSections?.Count > 0))
-                {
-                    return new FaqSection
-                    {
-                        Id = section.Id,
-                        Title = section.Title,
-                        Queries = matchingFaqs,
-                        SubSections = matchingSubSections
-                    };
-                }
-
-                return null;
-            })
+            .Select(section => FilterSection(section, lowerSearchText))
             .Where(filteredSection => filteredSection != null)];
     }
 
@@ -97,6 +65,46 @@ public class FaqService : Repository<FaqSection>, IFaqService
         var sections = await GetSectionsAsync();
 
         return GetFilteredSections(sections, searchText);
+    }
+
+    /// <summary>
+    /// Filters a single FAQ section based on the search text.
+    /// </summary>
+    private static FaqSection? FilterSection(FaqSection section, string searchText)
+    {
+        var matchingFaqs = FilterQueries(section.Queries, searchText);
+
+        var matchingSubSections = section.SubSections?
+            .Select(sub => FilterSubSection(sub, searchText))
+            .Where(sub => sub.Queries.Count != 0)
+            .ToList();
+
+        if (matchingFaqs.Count != 0 || matchingSubSections?.Count != 0)
+            return new FaqSection { Id = section.Id, Title = section.Title, Queries = matchingFaqs, SubSections = matchingSubSections };
+
+        return null;
+    }
+
+    /// <summary>
+    /// Filters a single FAQ subsection based on the search text.
+    /// </summary>
+    private static FaqSubSection FilterSubSection(FaqSubSection subSection, string searchText)
+    {
+        return new FaqSubSection { 
+            Id = subSection.Id,
+            Title = subSection.Title,
+            Queries = FilterQueries(subSection.Queries, searchText)
+        };
+    }
+
+    /// <summary>
+    /// Filters a list of queries based on the search text.
+    /// </summary>
+    private static List<FaqQuery> FilterQueries(IEnumerable<FaqQuery> queries, string searchText)
+    {
+        return queries?
+            .Where(q => IsMatch(q.Question, q.Answer, searchText))
+            .ToList() ?? [];
     }
 
     private static bool IsMatch(string question, string answer, string searchText)
