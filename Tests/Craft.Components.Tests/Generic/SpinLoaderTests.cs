@@ -14,7 +14,7 @@ public class SpinLoaderTests : TestContext
         using var cut = RenderComponent<SpinLoader>(parameters => parameters
             .Add(p => p.IsLoading, false)
             .Add(p => p.IsFaulted, false)
-            .Add(p => p.ContentTemplate, "<div>Content Loaded.</div>"));
+            .Add(p => p.Content, "<div>Content Loaded.</div>"));
 
         //Assert
         cut.Find("div").TextContent.Should().Be("Content Loaded.");
@@ -50,7 +50,7 @@ public class SpinLoaderTests : TestContext
         //Arrange
         using var cut = RenderComponent<SpinLoader>(parameters => parameters
             .Add(p => p.IsLoading, true)
-            .Add(p => p.LoadingTemplate, "<div>Loading...</div>"));
+            .Add(p => p.Loading, "<div>Loading...</div>"));
 
         //Assert
         cut.Find("div").TextContent.Should().Be("Loading...");

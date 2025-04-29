@@ -97,7 +97,9 @@ public class EntityFilterCriteriaTests
     public void WhereInfoJsonConverter_Read_InvalidJson_ThrowsJsonException()
     {
         // Arrange
+#pragma warning disable JSON001 // Invalid JSON pattern
         const string json = "{\"Filter\": {"; // Missing closing brace
+#pragma warning restore JSON001 // Invalid JSON pattern
 
         // Act & Assert
         Action act = () => JsonSerializer.Deserialize<EntityFilterCriteria<MyEntity>>(json, options);
@@ -119,7 +121,9 @@ public class EntityFilterCriteriaTests
     public void WhereInfoJsonConverter_Read_InvalidSyntax_ThrowsJsonException()
     {
         // Arrange
+#pragma warning disable JSON001 // Invalid JSON pattern
         const string json = "{\"Filter\": \"InvalidSyntax\""; // Missing expression body
+#pragma warning restore JSON001 // Invalid JSON pattern
 
         // Act & Assert
         Action act = () => JsonSerializer.Deserialize<EntityFilterCriteria<MyEntity>>(json, options);

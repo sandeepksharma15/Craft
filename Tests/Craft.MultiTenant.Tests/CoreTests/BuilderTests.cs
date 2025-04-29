@@ -4,6 +4,7 @@ using Craft.MultiTenant.Contracts;
 using Craft.MultiTenant.Models;
 using Craft.MultiTenant.Stores;
 using Craft.MultiTenant.Strategies;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -516,6 +517,21 @@ public class BuilderTests
         }
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<DbContext> GetDbContextAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<DbSet<TTenant>> GetDbSetAsync()
         {
             throw new NotImplementedException();
         }

@@ -80,6 +80,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComingUp", "ComingUp\Coming
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maintenance", "Maintenance\Maintenance.csproj", "{A9BF709A-F424-6028-ACB6-D837B7DCD116}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craft.FAQ", "Craft.FAQ\Craft.FAQ.csproj", "{B1BBFE09-184C-4E4F-959C-69ECE3578B05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -226,6 +228,10 @@ Global
 		{A9BF709A-F424-6028-ACB6-D837B7DCD116}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9BF709A-F424-6028-ACB6-D837B7DCD116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9BF709A-F424-6028-ACB6-D837B7DCD116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1BBFE09-184C-4E4F-959C-69ECE3578B05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1BBFE09-184C-4E4F-959C-69ECE3578B05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1BBFE09-184C-4E4F-959C-69ECE3578B05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1BBFE09-184C-4E4F-959C-69ECE3578B05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
