@@ -1,6 +1,6 @@
-﻿using System.Data.SqlClient;
-using Craft.Data.Contracts;
+﻿using Craft.Data.Contracts;
 using Craft.Data.Options;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using Npgsql;
@@ -40,7 +40,7 @@ public class ConnectionStringSecurer(IOptions<DatabaseOptions> dbSettings) : ICo
 
     private static string MakeSecureSqlConnectionString(string connectionString)
     {
-        var builder = new SqlConnectionStringBuilder(connectionString);
+        var builder = new SqlConnectionStringBuilder(connectionString); // Updated to Microsoft.Data.SqlClient.SqlConnectionStringBuilder
 
         if (!(string.IsNullOrEmpty(builder.Password) && builder.IntegratedSecurity))
             builder.Password = HiddenValueDefault;

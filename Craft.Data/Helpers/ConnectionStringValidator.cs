@@ -1,6 +1,6 @@
-﻿using System.Data.SqlClient;
-using Craft.Data.Contracts;
+﻿using Craft.Data.Contracts;
 using Craft.Data.Options;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
