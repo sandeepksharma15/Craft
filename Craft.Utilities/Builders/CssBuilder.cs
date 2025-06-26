@@ -42,7 +42,8 @@ public readonly struct CssBuilder(string value)
     }
 
     public readonly string Build()
-                                            => stringBuffer != null ? stringBuffer.ToString().Trim() : string.Empty;
+        => stringBuffer != null ? stringBuffer.ToString().Trim() : string.Empty;
 
-    public override readonly string ToString() => Build();
+    public override readonly string ToString() 
+        => Build();
 }
